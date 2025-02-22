@@ -34,7 +34,11 @@ const Header = () => {
               2
             </span>
           </div>
-          <img src={Avartar} className="h-9 w-9 rounded-full" alt="" />
+          <img
+            src={Avartar}
+            className="h-9 w-9 rounded-full object-cover border-[1px]"
+            alt=""
+          />
         </div>
       </div>
     </div>
