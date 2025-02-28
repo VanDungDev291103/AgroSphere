@@ -1,9 +1,11 @@
-import AboutUs from "./pages/AboutUs";
+// import AboutUs from "./pages/AboutUs"; 
+import Register from "./pages/Register";
 
 function App() {
   return (
     <>
-      <AboutUs />
+      {/* <AboutUs /> */}
+      <Register />
     </>
   );
 }

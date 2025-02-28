@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; // eslint-disable-line no-unused-vars
 import bgDesciption from "../assets/images/team-desciption.jpg";
 import teamMember from "../assets/images/team-member.jpg";
 import bgMember1 from "../assets/images/bg-member1.jpg";
