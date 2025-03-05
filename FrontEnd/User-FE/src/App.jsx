@@ -5,6 +5,8 @@ import FarmHub from "./components/FarmHub";
 import ChatAI from "./components/ChatAI";
 import New from "./components/New";
 import ProductType from "./components/ProductType";
+// import AboutUs from "./pages/AboutUs"; 
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
                 </Routes>
             </BrowserRouter>
         </div>
+      {/* <AboutUs /> */}
+      <Register />
     </>
   );
 }
