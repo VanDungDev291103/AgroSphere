@@ -1,17 +1,18 @@
-import AboutUs from "./pages/AboutUs";
-import { BrowserRouter,Routes,Route } from "react-router";
-import Home from "./components/Home";
-import FarmHub from "./components/FarmHub";
-import ChatAI from "./components/ChatAI";
-import New from "./components/New";
-import ProductType from "./components/ProductType";
+// import AboutUs from "./pages/AboutUs";
+// import { BrowserRouter,Routes,Route } from "react-router";
+// import Home from "./components/Home";
+// import FarmHub from "./components/FarmHub";
+// import ChatAI from "./components/ChatAI";
+// import New from "./components/New";
+// import ProductType from "./components/ProductType";
+import Login from "./pages/Login";
 // import AboutUs from "./pages/AboutUs"; 
-import Register from "./pages/Register";
+// import Register from "./pages/Register";
 
 function App() {
   return (
     <>
-      <div>
+      {/* <div>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" exact element={<Home/>}/>
@@ -23,8 +24,9 @@ function App() {
                 </Routes>
             </BrowserRouter>
         </div>
-      {/* <AboutUs /> */}
-      <Register />
+      <AboutUs /> */}
+      {/* <Register /> */}
+      <Login/>
     </>
   );
 }
