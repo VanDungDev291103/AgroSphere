@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import Footer from "./Footer";
 
 function ProductType() {
     return (
@@ -39,7 +40,8 @@ function ProductType() {
                 </div>
             </div>
 
-            <div className="bg-black h-20 rounded-b-lg h-50"></div>
+            {/* <div className="bg-black h-20 rounded-b-lg h-50"></div> */}
+            <Footer/>
         </div>
     );
 }
