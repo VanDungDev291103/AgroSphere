@@ -21,7 +21,7 @@ const Header = () => {
           })}
         </ul>
         <div className="max-w-[500px] relative">
-          <input className="w-full input-box pl-8 rounded-lg" type="text" />
+          <input className="w-full input-box pl-8 rounded-lg" type="text" placeholder="Tìm kiếm nội dung bất kỳ" />
           <IoIosSearch
             size={20}
             className="absolute left-2 top-1/2 transform -translate-y-1/2"

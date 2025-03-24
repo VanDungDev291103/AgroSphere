@@ -5,7 +5,7 @@ import FarmHub from "./components/FarmHub";
 import ChatAI from "./components/ChatAI";
 import New from "./components/New";
 import ProductType from "./components/ProductType";
-// import AboutUs from "./pages/AboutUs"; 
+ import AboutUs from "./pages/AboutUs"; 
 import Register from "./pages/Register";
 import Evaluation from "./components/Evaluation";
 
@@ -24,7 +24,6 @@ function App() {
                     <Route path="/register" exact element={<Register/>}/>
                     <Route path="/aboutUs" exact element={<AboutUs/>}/>
                     <Route path="/evaluation" exact element={<Evaluation/>}/>
-
                 </Routes>
             </BrowserRouter>
         </div>
@@ -33,5 +32,4 @@ function App() {
     </>
   );
 }
-
 export default App;
