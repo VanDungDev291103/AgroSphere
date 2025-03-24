@@ -1,3 +1,4 @@
+import Footer from "./Footer";
 import Header from "./Header";
 
 
@@ -62,8 +63,8 @@ function FarmHub() {
                     </div>
                 </div>
 
-                <div className="w-full bg-black h-50 rounded-b-xl"></div>
-            </div>
+                <Footer/>
+                </div>
         </>
     );
 }

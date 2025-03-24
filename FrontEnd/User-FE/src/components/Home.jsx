@@ -52,7 +52,7 @@ function Home() {
                                         <img
                                             src={avatarImages}
                                             alt="avatar"
-                                            className="w-10 h-10 rounded-full"
+                                            className= "w-10 h-10 rounded-full"
                                         />
                                         <h2 className="font-bold">Title</h2>
                                     </div>
@@ -64,7 +64,7 @@ function Home() {
                                     <div className="bg-black text-white text-center py-16 my-4 rounded-lg">
                                         IMAGE
                                     </div>
-                                    <div className="flex justify-between text-gray-500">
+                                    <div className="flex justify-center items-center gap-12  text-gray-500">
                                         <button>Like</button>
                                         <button>Comment</button>
                                         <button>Share</button>

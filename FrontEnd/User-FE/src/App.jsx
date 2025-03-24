@@ -7,6 +7,7 @@ import New from "./components/New";
 import ProductType from "./components/ProductType";
 // import AboutUs from "./pages/AboutUs"; 
 import Register from "./pages/Register";
+import Evaluation from "./components/Evaluation";
 
 function App() {
   return (
@@ -20,11 +21,15 @@ function App() {
                     <Route path="/chatAI" exact element={<ChatAI/>}/>
                     <Route path="/new" exact element={<New/>}/>
                     <Route path="/farmHub/product/type" exact element={<ProductType/>}/>
+                    <Route path="/register" exact element={<Register/>}/>
+                    <Route path="/aboutUs" exact element={<AboutUs/>}/>
+                    <Route path="/evaluation" exact element={<Evaluation/>}/>
+
                 </Routes>
             </BrowserRouter>
         </div>
       {/* <AboutUs /> */}
-      <Register />
+      {/* <Register /> */}
     </>
   );
 }
