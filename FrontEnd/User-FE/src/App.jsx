@@ -12,7 +12,7 @@ import Evaluation from "./components/Evaluation";
 function App() {
   return (
     <>
-      <div>
+       <div>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" exact element={<Home/>}/>
@@ -27,8 +27,7 @@ function App() {
                 </Routes>
             </BrowserRouter>
         </div>
-      {/* <AboutUs /> */}
-      {/* <Register /> */}
+      
     </>
   );
 }
