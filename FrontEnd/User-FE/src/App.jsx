@@ -1,35 +1,34 @@
-// import AboutUs from "./pages/AboutUs";
-// import { BrowserRouter,Routes,Route } from "react-router";
-// import Home from "./components/Home";
-// import FarmHub from "./components/FarmHub";
-// import ChatAI from "./components/ChatAI";
-// import New from "./components/New";
-// import ProductType from "./components/ProductType";
+import AboutUs from "./pages/AboutUs";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Home from "./components/Home";
+import FarmHub from "./components/FarmHub";
+import ChatAI from "./components/ChatAI";
+import New from "./components/New";
+import ProductType from "./components/ProductType";
+import Evaluation from "./components/Evaluation";
 import Login from "./pages/Login";
-// import AboutUs from "./pages/AboutUs"; 
 import Register from "./pages/Register";
 
 function App() {
   return (
     <>
-      {/* <div>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" exact element={<Home/>}/>
-                    <Route path="/aboutUs" exact element={<AboutUs/>}/>
-                    <Route path="/farmHub" exact element={<FarmHub/>}/>
-                    <Route path="/chatAI" exact element={<ChatAI/>}/>
-                    <Route path="/new" exact element={<New/>}/>
-                    <Route path="/farmHub/product/type" exact element={<ProductType/>}/>
-                    <Route path="/register" exact element={<Register/>}/>
-                    <Route path="/aboutUs" exact element={<AboutUs/>}/>
-                    <Route path="/evaluation" exact element={<Evaluation/>}/>
-
-                </Routes>
-            </BrowserRouter>
-        </div>
-      {/* <AboutUs /> */}
+      <div>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/aboutUs" element={<AboutUs />} />
+            <Route path="/farmHub" element={<FarmHub />} />
+            <Route path="/chatAI" element={<ChatAI />} />
+            <Route path="/new" element={<New />} />
+            <Route path="/farmHub/product/type" element={<ProductType />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/evaluation" element={<Evaluation />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+      <AboutUs /> 
       <Register />
+      <Login />
     </>
   );
 }
