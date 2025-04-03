@@ -239,16 +239,6 @@ CREATE TABLE order_tracking
     FOREIGN KEY (updated_by) REFERENCES users (id) ON DELETE SET NULL
 );
 
-CREATE TABLE shares
-(
-    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
-    forum_post_id BIGINT NOT NULL,
-    user_id       BIGINT NOT NULL,
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (forum_post_id) REFERENCES forum_post (id),
-    FOREIGN KEY (user_id) REFERENCES user (id)
-);
-
 
 ALTER TABLE notifications
     ADD COLUMN title VARCHAR(255) NOT NULL,
