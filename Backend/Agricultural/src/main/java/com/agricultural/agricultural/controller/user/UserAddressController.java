@@ -16,18 +16,14 @@ import java.util.List;
 public class UserAddressController {
     private final UserAddressService addressService;
 
-    /**
-     * 🟢 Lấy tất cả địa chỉ của user
-     */
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<UserAddressDTO>> getUserAddresses(@PathVariable int userId) {
         List<UserAddressDTO> addresses = addressService.getUserAddresses(userId);
         return ResponseEntity.ok(addresses);
     }
 
-    /**
-     * 🟢 Lấy chi tiết một địa chỉ
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getAddressById(@PathVariable int id) {
         try {
@@ -38,9 +34,7 @@ public class UserAddressController {
         }
     }
 
-    /**
-     * 🟢 Thêm địa chỉ mới cho User (Có validation)
-     */
+
     @PostMapping("/user")
     public ResponseEntity<?> addAddress(@Valid @RequestBody UserAddressDTO addressDTO) {
         try {
@@ -52,9 +46,7 @@ public class UserAddressController {
     }
 
 
-    /**
-     * 🟢 Cập nhật địa chỉ (Có validation)
-     */
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAddress(@PathVariable int id, @Valid @RequestBody UserAddressDTO addressDTO) {
         try {
@@ -65,9 +57,7 @@ public class UserAddressController {
         }
     }
 
-    /**
-     * 🟢 Xóa địa chỉ
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAddress(@PathVariable int id) {
         try {

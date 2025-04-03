@@ -13,6 +13,7 @@ CREATE TABLE users
     email     VARCHAR(255) UNIQUE NOT NULL,
     phone     VARCHAR(20),
     role_id   INT                 NOT NULL,
+    image_url VARCHAR(255),
     FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE RESTRICT
 );
 
