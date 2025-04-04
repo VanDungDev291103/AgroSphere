@@ -34,4 +34,7 @@ public class MarketPlace {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
 } 
