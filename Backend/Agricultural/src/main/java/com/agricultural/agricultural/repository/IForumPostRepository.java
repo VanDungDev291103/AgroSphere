@@ -2,7 +2,8 @@ package com.agricultural.agricultural.repository;
 
 import com.agricultural.agricultural.entity.ForumPost;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
-public interface ForumPostRepository extends JpaRepository<ForumPost, Integer> {
+@Repository
+public interface IForumPostRepository extends JpaRepository<ForumPost, Integer> {
 }

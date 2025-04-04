@@ -96,7 +96,7 @@ public class UserService implements IUserService {
         User newUser = userMapper.toEntity(userDTO);
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Mã hóa mật khẩu
         newUser.setRole(role); // Gán Role
-        
+
         // Thêm imageUrl nếu có
         if (userDTO.getImageUrl() != null && !userDTO.getImageUrl().isEmpty()) {
             newUser.setImageUrl(userDTO.getImageUrl());
@@ -104,24 +104,24 @@ public class UserService implements IUserService {
 
         return userRepository.save(newUser);
     }
-    
+
     @Override
     public User registerUserWithImage(UserDTO userDTO, MultipartFile image) throws Exception {
         if (image == null || image.isEmpty()) {
             return createUser(userDTO);
         }
-        
+
         // Kiểm tra định dạng file
         String contentType = image.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Chỉ chấp nhận file ảnh");
         }
-        
+
         // Upload ảnh lên Cloudinary
         Map uploadResult = uploadUtils.uploadImage(image);
         String imageUrl = (String) uploadResult.get("secure_url");
         userDTO.setImageUrl(imageUrl);
-        
+
         // Tạo user với ảnh đại diện
         return createUser(userDTO);
     }
@@ -162,7 +162,7 @@ public class UserService implements IUserService {
                     if (newUser.getRole() != null) {
                         existingUser.setRole(newUser.getRole());
                     }
-                    
+
                     // Cập nhật imageUrl nếu có
                     if (newUser.getImageUrl() != null && !newUser.getImageUrl().isEmpty()) {
                         existingUser.setImageUrl(newUser.getImageUrl());
@@ -172,13 +172,8 @@ public class UserService implements IUserService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
     }
-    
-    /**
-     * Cập nhật ảnh đại diện cho người dùng
-     * @param id ID của người dùng
-     * @param imageUrl URL của ảnh đã upload lên Cloudinary
-     * @return UserDTO đã cập nhật
-     */
+
+
     @Override
     public UserDTO updateProfileImage(int id, String imageUrl) {
         return userRepository.findById(id)
@@ -188,24 +183,24 @@ public class UserService implements IUserService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
     }
-    
+
 
     @Override
     public UserDTO uploadAndUpdateProfileImage(int id, MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Vui lòng chọn file ảnh");
         }
-        
+
         // Kiểm tra định dạng file
         String contentType = file.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Chỉ chấp nhận file ảnh");
         }
-        
+
         // Upload ảnh lên Cloudinary
         Map uploadResult = uploadUtils.uploadImage(file);
         String imageUrl = (String) uploadResult.get("secure_url");
-        
+
         // Cập nhật ảnh cho user
         return updateProfileImage(id, imageUrl);
     }
