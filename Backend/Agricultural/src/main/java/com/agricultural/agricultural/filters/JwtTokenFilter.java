@@ -132,6 +132,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Pair.of("/api/v1/users/login", "POST"),
                 Pair.of("/api/users/login", "POST"),
                 
+                // API refresh token và logout
+                Pair.of(String.format("%s/auth/refresh-token", apiPrefix), "POST"),
+                Pair.of(String.format("%s/auth/logout", apiPrefix), "POST"),
+                
                 // Chỉ bypass các API công khai liên quan đến thời tiết
                 Pair.of(String.format("%s/weather/locations", apiPrefix), "GET"),
                 Pair.of(String.format("%s/weather/locations/[0-9]+$", apiPrefix), "GET"),
