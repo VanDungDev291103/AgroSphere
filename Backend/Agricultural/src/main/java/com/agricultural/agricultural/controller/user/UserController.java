@@ -1,6 +1,8 @@
 package com.agricultural.agricultural.controller.user;
 
+import com.agricultural.agricultural.dto.response.ErrorResponse;
 import com.agricultural.agricultural.dto.LoginDTO;
+import com.agricultural.agricultural.dto.response.LoginResponse;
 import com.agricultural.agricultural.dto.UserDTO;
 import com.agricultural.agricultural.entity.User;
 import com.agricultural.agricultural.mapper.UserMapper;
@@ -151,10 +153,18 @@ public class UserController {
         }
 
         try {
-            String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(Map.of("token", token));
+            LoginResponse loginResponse = userService.loginWithResponse(
+                userLoginDTO.getEmail(), 
+                userLoginDTO.getPassword()
+            );
+            return ResponseEntity.ok(loginResponse);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                ErrorResponse.builder()
+                    .error(true)
+                    .message(e.getMessage())
+                    .build()
+            );
         }
     }
 

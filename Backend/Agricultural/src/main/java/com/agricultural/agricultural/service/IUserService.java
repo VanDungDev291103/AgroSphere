@@ -2,6 +2,7 @@ package com.agricultural.agricultural.service;
 
 import com.agricultural.agricultural.entity.User;
 import com.agricultural.agricultural.dto.UserDTO;
+import com.agricultural.agricultural.dto.response.LoginResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,7 +25,9 @@ public interface IUserService {
     
     User registerUserWithImage(UserDTO userDTO, MultipartFile image) throws Exception;
 
-    String login(String phoneNumber, String password) throws Exception;
+    String login(String email, String password) throws Exception;
+
+    LoginResponse loginWithResponse(String email, String password) throws Exception;
 
     UserDTO updateUser(int id, User newUser);
 
