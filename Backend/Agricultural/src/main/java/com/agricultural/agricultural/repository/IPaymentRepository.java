@@ -1,7 +1,7 @@
 package com.agricultural.agricultural.repository;
 
 import com.agricultural.agricultural.entity.Payment;
-import com.agricultural.agricultural.entity.PaymentStatus;
+import com.agricultural.agricultural.entity.enumeration.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

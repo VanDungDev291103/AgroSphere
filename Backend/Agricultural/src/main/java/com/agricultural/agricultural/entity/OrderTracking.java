@@ -1,5 +1,6 @@
 package com.agricultural.agricultural.entity;
 
+import com.agricultural.agricultural.entity.enumeration.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,10 @@ public class OrderTracking {
     
     @Column(name = "updated_by")
     private Integer updatedBy;
+    
+    @ManyToOne
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private Order order;
     
     @PrePersist
     protected void onCreate() {
