@@ -5,6 +5,8 @@ import com.agricultural.agricultural.dto.request.PaymentRequest;
 import com.agricultural.agricultural.dto.response.OrderTrackingResponse;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.entity.*;
+import com.agricultural.agricultural.entity.enumeration.OrderStatus;
+import com.agricultural.agricultural.entity.enumeration.PaymentStatus;
 import com.agricultural.agricultural.exception.BadRequestException;
 import com.agricultural.agricultural.exception.ResourceNotFoundException;
 import com.agricultural.agricultural.mapper.OrderMapper;
@@ -140,16 +142,66 @@ public class OrderServiceImpl implements IOrderService {
         OrderDetail detail = new OrderDetail();
         detail.setOrderId(savedOrder.getId());
         detail.setProductId(product.getId());
+        detail.setProductName(product.getProductName());
+        detail.setProductImage(product.getImageUrl());
         detail.setQuantity(detailDTO.getQuantity());
+        
+        // Lưu giá 
+        detail.setOriginalPrice(product.getPrice());
         detail.setPrice(product.getPrice());
+        detail.setDiscountAmount(BigDecimal.ZERO);
+        
+        // Thiết lập mối quan hệ
         detail.setOrder(savedOrder);
         detail.setProduct(product);
+        
+        // Nếu sản phẩm có biến thể, lưu thông tin biến thể
+        ProductVariant variant = null;
+        if (detailDTO.getVariantId() != null) {
+            // Tìm biến thể từ danh sách biến thể của sản phẩm
+            for (ProductVariant v : product.getVariants()) {
+                if (v.getId().equals(detailDTO.getVariantId())) {
+                    variant = v;
+                    break;
+                }
+            }
+            
+            if (variant != null) {
+                detail.setVariantId(variant.getId());
+                detail.setVariantName(variant.getName());
+                detail.setVariant(variant);
+                
+                // Sử dụng getFinalPrice từ biến thể
+                BigDecimal variantPrice = variant.getFinalPrice();
+                detail.setOriginalPrice(variantPrice);
+                detail.setPrice(variantPrice);
+                
+                // Nếu sản phẩm chính đang có giảm giá, tính lại số tiền giảm giá cho biến thể
+                if (product.isOnSale()) {
+                    // Tính phần trăm giảm giá từ sản phẩm chính
+                    BigDecimal basePrice = product.getPrice();
+                    BigDecimal salePrice = product.getSalePrice();
+                    if (basePrice.compareTo(BigDecimal.ZERO) > 0 && salePrice != null) {
+                        BigDecimal discountRatio = BigDecimal.ONE.subtract(salePrice.divide(basePrice, 4, BigDecimal.ROUND_HALF_UP));
+                        
+                        // Áp dụng tỷ lệ giảm giá tương tự cho giá biến thể
+                        BigDecimal originalVariantPrice = product.getPrice().add(variant.getPriceAdjustment());
+                        BigDecimal discountAmount = originalVariantPrice.multiply(discountRatio).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        detail.setDiscountAmount(discountAmount);
+                    }
+                }
+            }
+        }
 
         // Cập nhật số lượng sản phẩm trong kho
         product.setQuantity(product.getQuantity() - detailDTO.getQuantity());
+        
+        // Tăng số lượng mua
+        product.setPurchaseCount(product.getPurchaseCount() + detailDTO.getQuantity());
+        
         marketPlaceRepository.save(product);
 
-        // Lưu chi tiết đơn hàng
+        // Lưu chi tiết đơn hàng - totalPrice sẽ được tính tự động qua @PrePersist
         OrderDetail savedDetail = orderDetailRepository.save(detail);
         orderDetails.add(savedDetail);
         
@@ -450,7 +502,7 @@ public class OrderServiceImpl implements IOrderService {
         
         // Xử lý thanh toán theo phương thức
         switch (paymentRequest.getPaymentMethod()) {
-            case CASH_ON_DELIVERY:
+            case COD:
                 // Thanh toán khi nhận hàng, không cần xử lý gì thêm
                 payment.setStatus(PaymentStatus.PENDING);
                 payment.setTransactionId("COD-" + orderId);
