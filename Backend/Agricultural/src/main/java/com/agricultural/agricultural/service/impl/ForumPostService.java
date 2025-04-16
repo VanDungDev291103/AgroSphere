@@ -3,7 +3,8 @@ package com.agricultural.agricultural.service.impl;
 import com.agricultural.agricultural.dto.ForumPostDTO;
 import com.agricultural.agricultural.entity.ForumPost;
 import com.agricultural.agricultural.entity.User;
-import com.agricultural.agricultural.repository.IForumPostRepository;
+import com.agricultural.agricultural.exception.BadRequestException;
+import com.agricultural.agricultural.exception.ResourceNotFoundException;
 import com.agricultural.agricultural.repository.IForumPostRepository;
 import com.agricultural.agricultural.repository.impl.UserRepository;
 import com.agricultural.agricultural.service.IForumPostService;
@@ -36,12 +37,24 @@ public class ForumPostService implements IForumPostService {
     private final ForumPostMapper forumPostMapper = ForumPostMapper.INSTANCE; // Khởi tạo Mapper
 
     public ForumPostDTO createPost(ForumPostDTO forumPostDto) {
+        if (forumPostDto == null) {
+            throw new BadRequestException("Thông tin bài viết không được để trống");
+        }
+        
+        if (forumPostDto.getTitle() == null || forumPostDto.getTitle().trim().isEmpty()) {
+            throw new BadRequestException("Tiêu đề bài viết không được để trống");
+        }
+        
+        if (forumPostDto.getContent() == null || forumPostDto.getContent().trim().isEmpty()) {
+            throw new BadRequestException("Nội dung bài viết không được để trống");
+        }
+        
         // Lấy user từ SecurityContextHolder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> userOptional = userRepository.findByUserName(username);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("Không tìm thấy thông tin người dùng");
         }
 
         User user = userOptional.get();
@@ -62,18 +75,28 @@ public class ForumPostService implements IForumPostService {
         return forumPostMapper.toDTO(forumPost);
     }
 
-
-
     public ForumPostDTO updatePost(int id, ForumPostDTO forumPostDto) throws AccessDeniedException {
+        if (forumPostDto == null) {
+            throw new BadRequestException("Thông tin bài viết không được để trống");
+        }
+        
+        if (forumPostDto.getTitle() == null || forumPostDto.getTitle().trim().isEmpty()) {
+            throw new BadRequestException("Tiêu đề bài viết không được để trống");
+        }
+        
+        if (forumPostDto.getContent() == null || forumPostDto.getContent().trim().isEmpty()) {
+            throw new BadRequestException("Nội dung bài viết không được để trống");
+        }
+        
         // 📌 1. Lấy user hiện tại từ SecurityContextHolder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 
         ForumPost forumPost = forumPostRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bài viết với ID: " + id));
 
         if (!forumPost.getUser().getUsername().equals(currentUsername)) {
-            throw new AccessDeniedException("Bạn không có quyền chỉnh sửa bài viết này!");
+            throw new BadRequestException("Bạn không có quyền chỉnh sửa bài viết này");
         }
 
         forumPost.setTitle(forumPostDto.getTitle());
@@ -88,6 +111,9 @@ public class ForumPostService implements IForumPostService {
 
     // Xóa bài viết
     public void deletePost(int id) {
+        if (!forumPostRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Không tìm thấy bài viết với ID: " + id);
+        }
         forumPostRepository.deleteById(id);
     }
 
@@ -101,7 +127,8 @@ public class ForumPostService implements IForumPostService {
 
     // Lấy bài viết theo ID
     public ForumPostDTO getPostById(int id) {
-        Optional<ForumPost> forumPost = forumPostRepository.findById(id);
-        return forumPost.map(forumPostMapper::toDTO).orElse(null); // Nếu bài viết không tồn tại
+        return forumPostRepository.findById(id)
+                .map(forumPostMapper::toDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bài viết với ID: " + id));
     }
 }

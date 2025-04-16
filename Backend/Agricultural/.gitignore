@@ -1,11 +1,17 @@
+# Spring Boot
 HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-### STS ###
+# IDE - Intellij IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IDE - Eclipse
 .apt_generated
 .classpath
 .factorypath
@@ -13,25 +19,69 @@ build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
+# IDE - VS Code
 .vscode/
+
+# Logs
+logs/
+*.log
+log/
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven Wrapper
+!maven-wrapper.jar
+
+# Gradle
+.gradle
+**/build/
+!src/**/build/
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Miscellaneous
+*.class
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Các thư mục build và biên dịch
+**/target/
+**/bin/
+**/build/
+**/out/
+
+# Logs
+**/logs/
+**/*.log
+
+# Các file hệ thống
+.DS_Store
+Thumbs.db

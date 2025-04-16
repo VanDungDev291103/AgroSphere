@@ -6,8 +6,8 @@ import com.agricultural.agricultural.entity.User;
 import com.agricultural.agricultural.components.JwtTokenUtil;
 import com.agricultural.agricultural.dto.response.LoginResponse;
 import com.agricultural.agricultural.dto.UserDTO;
-import com.agricultural.agricultural.exception.DataNotFoundException;
-import com.agricultural.agricultural.exception.PermissionDenyException;
+import com.agricultural.agricultural.exception.BusinessException;
+import com.agricultural.agricultural.exception.ResourceNotFoundException;
 import com.agricultural.agricultural.mapper.UserMapper;
 import com.agricultural.agricultural.repository.IRoleRepository;
 import com.agricultural.agricultural.repository.impl.UserRepository;
@@ -91,14 +91,14 @@ public class UserService implements IUserService {
     @Override
     public User createUser(UserDTO userDTO) throws Exception {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new DataIntegrityViolationException("Email đã tồn tại");
+            throw new BusinessException("Email đã tồn tại");
         }
 
         Role role = roleRepository.findByName("USER")
-                .orElseThrow(() -> new DataNotFoundException("Role not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy role USER"));
 
         if (role.getName().equalsIgnoreCase("ADMIN")) {
-            throw new PermissionDenyException("Bạn không thể đăng ký tài khoản ADMIN");
+            throw new BusinessException("Bạn không thể đăng ký tài khoản ADMIN");
         }
 
         // Sử dụng Mapper để chuyển đổi DTO -> Entity
@@ -139,7 +139,7 @@ public class UserService implements IUserService {
     public String login(String email, String password) throws Exception {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isEmpty()) {
-            throw new DataNotFoundException("Sai email hoặc password");
+            throw new ResourceNotFoundException("Sai email hoặc password");
         }
 
         User existingUser = optionalUser.get();
@@ -159,7 +159,7 @@ public class UserService implements IUserService {
     public LoginResponse loginWithResponse(String email, String password) throws Exception {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isEmpty()) {
-            throw new DataNotFoundException("Sai email hoặc password");
+            throw new ResourceNotFoundException("Sai email hoặc password");
         }
 
         User existingUser = optionalUser.get();

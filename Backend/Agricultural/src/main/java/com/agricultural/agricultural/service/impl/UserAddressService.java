@@ -3,11 +3,12 @@ package com.agricultural.agricultural.service.impl;
 import com.agricultural.agricultural.dto.UserAddressDTO;
 import com.agricultural.agricultural.entity.User;
 import com.agricultural.agricultural.entity.UserAddress;
+import com.agricultural.agricultural.exception.BadRequestException;
+import com.agricultural.agricultural.exception.ResourceNotFoundException;
 import com.agricultural.agricultural.mapper.UserAddressMapper;
 import com.agricultural.agricultural.repository.IUserAddressRepository;
 import com.agricultural.agricultural.repository.IUserRepository;
 import com.agricultural.agricultural.service.IUserAddressService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,22 @@ public class UserAddressService implements IUserAddressService {
     @Override
     @Transactional
     public UserAddressDTO addAddress(UserAddressDTO addressDTO) {
+        if (addressDTO == null) {
+            throw new BadRequestException("Thông tin địa chỉ không được để trống");
+        }
+        
         // Lấy userId từ DTO
         Integer userId = addressDTO.getUserId();
+        if (userId == null) {
+            throw new BadRequestException("ID người dùng không được để trống");
+        }
+        
+        if (addressDTO.getAddress() == null || addressDTO.getAddress().trim().isEmpty()) {
+            throw new BadRequestException("Địa chỉ không được để trống");
+        }
+        
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng với ID: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng với ID: " + userId));
         
         UserAddress userAddress = userAddressMapper.toEntity(addressDTO);
         userAddress.setUser(user);
@@ -47,8 +60,16 @@ public class UserAddressService implements IUserAddressService {
     @Override
     @Transactional
     public UserAddressDTO updateAddress(int addressId, UserAddressDTO addressDTO) {
+        if (addressDTO == null) {
+            throw new BadRequestException("Thông tin địa chỉ không được để trống");
+        }
+        
+        if (addressDTO.getAddress() == null || addressDTO.getAddress().trim().isEmpty()) {
+            throw new BadRequestException("Địa chỉ không được để trống");
+        }
+        
         UserAddress address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId));
 
         // Cập nhật thông tin địa chỉ
         address.setAddress(addressDTO.getAddress());
@@ -68,7 +89,7 @@ public class UserAddressService implements IUserAddressService {
     @Transactional
     public void deleteAddress(int addressId) {
         if (!addressRepository.existsById(addressId)) {
-            throw new EntityNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId);
+            throw new ResourceNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId);
         }
         addressRepository.deleteById(addressId);
     }
@@ -80,7 +101,7 @@ public class UserAddressService implements IUserAddressService {
     public List<UserAddressDTO> getUserAddresses(int userId) {
         // Kiểm tra người dùng có tồn tại không
         if (!userRepository.existsById(userId)) {
-            throw new EntityNotFoundException("Không tìm thấy người dùng với ID: " + userId);
+            throw new ResourceNotFoundException("Không tìm thấy người dùng với ID: " + userId);
         }
         
         return addressRepository.findByUserId(userId)
@@ -95,7 +116,7 @@ public class UserAddressService implements IUserAddressService {
     @Override
     public UserAddressDTO getAddressById(int addressId) {
         UserAddress address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy địa chỉ với ID: " + addressId));
 
         return userAddressMapper.toDTO(address);
     }
