@@ -1,7 +1,7 @@
 package com.agricultural.agricultural.components;
 
 import com.agricultural.agricultural.entity.User;
-import com.agricultural.agricultural.exception.InvalidParamException;
+import com.agricultural.agricultural.exception.BadRequestException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
@@ -66,9 +66,7 @@ public class JwtTokenUtil {
                     .compact();
             return token;
         }catch (Exception e) {
-            //you can "inject" Logger, instead System.out.println
-            throw new InvalidParamException("Cannot create jwt token, error: "+e.getMessage());
-            //return null;
+            throw new BadRequestException("Không thể tạo JWT token, lỗi: " + e.getMessage());
         }
     }
     
@@ -82,7 +80,7 @@ public class JwtTokenUtil {
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
         } catch (Exception e) {
-            throw new InvalidParamException("Cannot create refresh token, error: " + e.getMessage());
+            throw new BadRequestException("Không thể tạo refresh token, lỗi: " + e.getMessage());
         }
     }
 

@@ -50,12 +50,12 @@ public class MarketPlaceServiceImpl implements IMarketPlaceService {
                 user = allUsers.stream()
                         .filter(u -> u.getUsername().equals(username))
                         .findFirst()
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng"));
             }
         } catch (Exception e) {
             // Xử lý nếu có lỗi khác
-            log.error("Error finding user: {}", e.getMessage());
-            throw new RuntimeException("Error finding user: " + e.getMessage());
+            log.error("Lỗi khi tìm kiếm người dùng: {}", e.getMessage());
+            throw new BadRequestException("Lỗi khi tìm kiếm người dùng: " + e.getMessage());
         }
         
         // Validate thông tin khuyến mãi
@@ -63,7 +63,7 @@ public class MarketPlaceServiceImpl implements IMarketPlaceService {
 
         MarketPlace product = marketPlaceMapper.toEntity(productDTO);
         if (product == null) {
-            throw new BadRequestException("Chuyển đổi DTO sang entity thất bại.");
+            throw new BadRequestException("Chuyển đổi DTO sang entity thất bại");
         }
 
         // Thêm giá trị mặc định cho image_url nếu nó null

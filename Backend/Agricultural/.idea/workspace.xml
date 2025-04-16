@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/components/JwtTokenUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/components/JwtTokenUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/AgriculturalAdviceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/AgriculturalAdviceDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/CartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/CartDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/CartItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/CartItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumPostDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumPostDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumReplyDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumReplyDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/LoginDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/LoginDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderDetailDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderDetailDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderTrackingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/OrderTrackingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ProductCategoryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ProductCategoryDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ProductVariantDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ProductVariantDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ResetPasswordDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ResetPasswordDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/UserWeatherSubscriptionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/UserWeatherSubscriptionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/WeatherDataDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/WeatherDataDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/WeatherMonitoredLocationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/WeatherMonitoredLocationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/PaymentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/PaymentRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CloudinaryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CloudinaryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumPostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumPostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumReplyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumReplyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NotificationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/OrderDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/OrderDetailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/OrderTrackingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/OrderTrackingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/PasswordResetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserAddressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserAddressService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/WeatherLocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/WeatherLocationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/WeatherService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/WeatherService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="agricultural" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="PhamDuyTruyen" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2vAT9ZoDiAdNKHTyqIs6qahMcXX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build Agricultural.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AgriculturalApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;PhamDuyTruyen&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/KLTN_BE_DTU/Backend/Agricultural&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="AgriculturalApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="agricultural.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.agricultural.agricultural.AgriculturalApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="" />
+      <created>1743586728265</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1743586728265</updated>
+      <workItem from="1743586729947" duration="5231000" />
+      <workItem from="1743648824451" duration="7715000" />
+      <workItem from="1743742283729" duration="14523000" />
+      <workItem from="1743870764618" duration="676000" />
+      <workItem from="1744129278086" duration="3941000" />
+      <workItem from="1744216985376" duration="521000" />
+      <workItem from="1744217888673" duration="672000" />
+      <workItem from="1744258131994" duration="9631000" />
+      <workItem from="1744438296277" duration="6591000" />
+      <workItem from="1744445744024" duration="4570000" />
+      <workItem from="1744472584084" duration="7634000" />
+      <workItem from="1744526901538" duration="2451000" />
+      <workItem from="1744738123271" duration="6567000" />
+      <workItem from="1744785922418" duration="3043000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
