@@ -4,6 +4,7 @@ import com.agricultural.agricultural.dto.*;
 import com.agricultural.agricultural.dto.request.PaymentRequest;
 import com.agricultural.agricultural.dto.response.OrderTrackingResponse;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
+import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
 import com.agricultural.agricultural.entity.*;
 import com.agricultural.agricultural.entity.enumeration.OrderStatus;
 import com.agricultural.agricultural.entity.enumeration.PaymentMethod;
@@ -13,10 +14,13 @@ import com.agricultural.agricultural.exception.BusinessException;
 import com.agricultural.agricultural.exception.ResourceNotFoundException;
 import com.agricultural.agricultural.mapper.OrderMapper;
 import com.agricultural.agricultural.mapper.OrderDetailMapper;
+import com.agricultural.agricultural.mapper.OrderTrackingMapper;
 import com.agricultural.agricultural.repository.*;
-import com.agricultural.agricultural.service.IOrderService;
 import com.agricultural.agricultural.service.INotificationService;
+import com.agricultural.agricultural.service.IOrderService;
+import com.agricultural.agricultural.service.IPaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -25,11 +29,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.agricultural.agricultural.entity.enumeration.PaymentMethod.COD;
+import static com.agricultural.agricultural.entity.enumeration.PaymentMethod.CREDIT_CARD;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements IOrderService {
     private final IOrderRepository orderRepository;
     private final IOrderDetailRepository orderDetailRepository;
@@ -39,6 +48,7 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderTrackingRepository orderTrackingRepository;
     private final IPaymentRepository paymentRepository;
     private final INotificationService notificationService;
+    private final IPaymentService paymentService;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -178,7 +188,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setShippingPostalCode(orderDTO.getShippingPostalCode());
         
         // Thiết lập các thông tin khác
-        order.setPaymentMethod(orderDTO.getPaymentMethod() != null ? orderDTO.getPaymentMethod() : PaymentMethod.COD);
+        order.setPaymentMethod(orderDTO.getPaymentMethod() != null ? orderDTO.getPaymentMethod() : COD);
         order.setPaymentStatus(PaymentStatus.PENDING);
         order.setNotes(orderDTO.getNotes());
         order.setShippingFee(orderDTO.getShippingFee() != null ? orderDTO.getShippingFee() : BigDecimal.ZERO);
@@ -668,157 +678,80 @@ public class OrderServiceImpl implements IOrderService {
     public PaymentResponse processPayment(Integer orderId, PaymentRequest paymentRequest) {
         Order order = orderRepository.findOrderWithDetails(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
-        
+
         User currentUser = getCurrentUser();
-        
+
         // Kiểm tra quyền thanh toán
         if (!Objects.equals(currentUser.getId(), order.getBuyerId())) {
             throw new BadRequestException("Bạn không có quyền thanh toán đơn hàng này");
         }
-        
+
         // Kiểm tra trạng thái đơn hàng
         if (order.getStatus() != OrderStatus.PENDING) {
             throw new BadRequestException("Chỉ có thể thanh toán đơn hàng ở trạng thái PENDING");
         }
-        
+
         // Tính tổng tiền đơn hàng
-        BigDecimal totalAmount = BigDecimal.ZERO;
+        Long totalAmount = 0L;
         for (OrderDetail detail : order.getOrderDetails()) {
-            BigDecimal subtotal = detail.getPrice().multiply(new BigDecimal(detail.getQuantity()));
-            totalAmount = totalAmount.add(subtotal);
+            Long subtotal = detail.getPrice().longValue() * detail.getQuantity();
+            totalAmount += subtotal;
         }
-        
-        // Tạo bản ghi thanh toán
-        Payment payment = new Payment();
-        payment.setPaymentId(UUID.randomUUID().toString());
-        payment.setOrderId(orderId);
-        payment.setUserId(currentUser.getId());
-        payment.setAmount(totalAmount);
-        payment.setPaymentMethod(paymentRequest.getPaymentMethod());
-        payment.setStatus(PaymentStatus.PENDING);
-        payment.setPaymentNote(paymentRequest.getPaymentNote());
-        
-        // Xử lý thanh toán theo phương thức
-        switch (paymentRequest.getPaymentMethod()) {
-            case COD:
-                // Thanh toán khi nhận hàng, không cần xử lý gì thêm
-                payment.setStatus(PaymentStatus.PENDING);
-                payment.setTransactionId("COD-" + orderId);
-                break;
-                
-            case CREDIT_CARD:
-                // Giả lập xử lý thanh toán thẻ tín dụng
-                if (paymentRequest.getCardNumber() == null || paymentRequest.getCardHolderName() == null ||
-                    paymentRequest.getExpiryDate() == null || paymentRequest.getCvv() == null) {
-                    throw new BadRequestException("Thông tin thẻ tín dụng không đầy đủ");
-                }
-                
-                // Giả lập gọi API thanh toán
-                boolean paymentSuccess = simulatePaymentGateway(paymentRequest.getCardNumber(), totalAmount);
-                
-                if (paymentSuccess) {
-                    payment.setStatus(PaymentStatus.COMPLETED);
-                    payment.setTransactionId("CC-" + UUID.randomUUID().toString());
-                    
-                    // Cập nhật trạng thái đơn hàng thành SHIPPED nếu thanh toán thành công
-                    order.setStatus(OrderStatus.SHIPPED);
-                    orderRepository.save(order);
-                    
-                    // Tạo bản ghi theo dõi đơn hàng
-                    OrderTracking tracking = new OrderTracking();
-                    tracking.setOrderId(orderId);
-                    tracking.setStatus(OrderStatus.SHIPPED);
-                    tracking.setDescription("Đơn hàng đã được thanh toán và đang được gửi đi");
-                    tracking.setUpdatedBy(currentUser.getId());
-                    orderTrackingRepository.save(tracking);
-                    
-                    // Gửi thông báo cho người bán
-                    notificationService.sendOrderNotification(
-                        order.getSellerId(),
-                        "Đơn hàng đã được thanh toán",
-                        "Đơn hàng #" + orderId + " đã được thanh toán thành công"
-                    );
-                } else {
-                    payment.setStatus(PaymentStatus.FAILED);
-                    payment.setTransactionId("FAILED-" + UUID.randomUUID().toString());
-                }
-                break;
-                
-            case BANK_TRANSFER:
-            case E_WALLET:
-            case MOMO:
-            case ZALOPAY:
-            case VNPAY:
-                // Giả lập xử lý thanh toán ví điện tử
-                if (paymentRequest.getWalletId() == null) {
-                    throw new BadRequestException("Thông tin ví điện tử không đầy đủ");
-                }
-                
-                // Giả lập gọi API thanh toán
-                boolean eWalletSuccess = simulateEWalletPayment(paymentRequest.getWalletId(), totalAmount);
-                
-                if (eWalletSuccess) {
-                    payment.setStatus(PaymentStatus.COMPLETED);
-                    payment.setTransactionId("EW-" + UUID.randomUUID().toString());
-                    
-                    // Cập nhật trạng thái đơn hàng thành SHIPPED nếu thanh toán thành công
-                    order.setStatus(OrderStatus.SHIPPED);
-                    orderRepository.save(order);
-                    
-                    // Tạo bản ghi theo dõi đơn hàng
-                    OrderTracking tracking = new OrderTracking();
-                    tracking.setOrderId(orderId);
-                    tracking.setStatus(OrderStatus.SHIPPED);
-                    tracking.setDescription("Đơn hàng đã được thanh toán và đang được gửi đi");
-                    tracking.setUpdatedBy(currentUser.getId());
-                    orderTrackingRepository.save(tracking);
-                    
-                    // Gửi thông báo cho người bán
-                    notificationService.sendOrderNotification(
-                        order.getSellerId(),
-                        "Đơn hàng đã được thanh toán",
-                        "Đơn hàng #" + orderId + " đã được thanh toán thành công"
-                    );
-                } else {
-                    payment.setStatus(PaymentStatus.FAILED);
-                    payment.setTransactionId("FAILED-" + UUID.randomUUID().toString());
-                }
-                break;
-        }
-        
-        // Lưu bản ghi thanh toán
-        Payment savedPayment = paymentRepository.save(payment);
-        
-        // Tạo response
-        PaymentResponse response = new PaymentResponse();
-        response.setPaymentId(savedPayment.getPaymentId());
-        response.setOrderId(orderId);
-        response.setAmount(totalAmount);
-        response.setPaymentMethod(savedPayment.getPaymentMethod());
-        response.setStatus(savedPayment.getStatus());
-        response.setPaymentDate(savedPayment.getPaymentDate());
-        response.setTransactionId(savedPayment.getTransactionId());
-        
-        if (savedPayment.getStatus() == PaymentStatus.COMPLETED) {
-            response.setMessage("Thanh toán thành công");
-        } else if (savedPayment.getStatus() == PaymentStatus.PENDING) {
-            response.setMessage("Đơn hàng sẽ được thanh toán khi nhận hàng");
+
+        // Tạo payment request mới cho PayOS
+        PaymentRequest payosRequest = new PaymentRequest();
+        payosRequest.setOrderId(orderId.longValue());
+        payosRequest.setAmount(totalAmount);
+        payosRequest.setPaymentMethod(paymentRequest.getPaymentMethod());
+        payosRequest.setDescription("Thanh toán đơn hàng #" + orderId);
+        payosRequest.setBuyerName(currentUser.getUsername());
+        payosRequest.setBuyerEmail(currentUser.getEmail());
+        payosRequest.setBuyerPhone(currentUser.getPhone());
+
+        // Xử lý theo phương thức thanh toán
+        if ("COD".equalsIgnoreCase(paymentRequest.getPaymentMethod())) {
+            // Thanh toán COD
+            Payment payment = new Payment();
+            payment.setOrderId((int) orderId.longValue());
+            payment.setUserId((int) currentUser.getId());
+            payment.setAmount(totalAmount);
+            payment.setPaymentMethod("COD");
+            payment.setStatus(PaymentStatus.PENDING);
+            payment.setTransactionId("COD-" + orderId);
+            payment.setPaymentNote("Thanh toán khi nhận hàng");
+            payment.setCreatedAt(LocalDateTime.now());
+
+            Payment savedPayment = paymentRepository.save(payment);
+
+            return PaymentResponse.builder()
+                    .success(true)
+                    .message("Đơn hàng sẽ được thanh toán khi nhận hàng")
+                    .orderId(orderId.longValue())
+                    .amount(totalAmount)
+                    .paymentMethod("COD")
+                    .transactionId(savedPayment.getTransactionId())
+                    .timestamp(LocalDateTime.now())
+                    .build();
         } else {
-            response.setMessage("Thanh toán thất bại, vui lòng thử lại");
+            // Thanh toán online
+            try {
+                PaymentUrlResponse urlResponse = paymentService.processPayment(payosRequest);
+
+                return PaymentResponse.builder()
+                        .success(true)
+                        .message(urlResponse.getMessage() != null ? urlResponse.getMessage() : "Thanh toán trực tuyến được khởi tạo")
+                        .orderId(urlResponse.getOrderId() != null ? urlResponse.getOrderId().longValue() : orderId.longValue())
+                        .amount(urlResponse.getAmount() != null ? urlResponse.getAmount() : totalAmount)
+                        .paymentMethod(paymentRequest.getPaymentMethod())
+                        .transactionId(urlResponse.getTransactionId())
+                        .redirectUrl(urlResponse.getPaymentUrl())
+                        .timestamp(LocalDateTime.now())
+                        .build();
+            } catch (Exception e) {
+                log.error("Lỗi khi xử lý thanh toán: {}", e.getMessage());
+                throw new BadRequestException("Không thể xử lý thanh toán: " + e.getMessage());
+            }
         }
-        
-        return response;
     }
-    
-    // Phương thức giả lập thanh toán thẻ tín dụng
-    private boolean simulatePaymentGateway(String cardNumber, BigDecimal amount) {
-        // Giả lập thanh toán thành công với thẻ kết thúc bằng số chẵn
-        return cardNumber.charAt(cardNumber.length() - 1) % 2 == 0;
-    }
-    
-    // Phương thức giả lập thanh toán ví điện tử
-    private boolean simulateEWalletPayment(String walletId, BigDecimal amount) {
-        // Giả lập thanh toán thành công với ví có độ dài chẵn
-        return walletId.length() % 2 == 0;
-    }
+
 }

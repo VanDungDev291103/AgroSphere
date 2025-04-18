@@ -54,6 +54,9 @@ replay_pid*
 .gradle
 **/build/
 !src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 
 # Node modules
 node_modules/
@@ -85,3 +88,77 @@ Thumbs.db
 # Các file hệ thống
 .DS_Store
 Thumbs.db
+
+# IntelliJ IDEA
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Spring Boot
+.spring-boot-devtools
+
+# Application properties with sensitive data
+src/main/resources/application-local.yml
+src/main/resources/application-local.properties
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# Eclipse
+.settings/
+.project
+.classpath
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Spring Boot
+application-dev.yml
+application-prod.yml
+application-local.yml
+
+# Database
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# App
+log/
+logs/
