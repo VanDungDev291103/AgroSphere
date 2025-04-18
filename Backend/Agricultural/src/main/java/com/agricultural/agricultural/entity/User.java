@@ -1,6 +1,7 @@
 package com.agricultural.agricultural.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +25,7 @@ import java.util.List;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "authorities"})
 @AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 
@@ -66,6 +68,7 @@ public class User extends BaseEntity implements UserDetails {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"users", "hibernateLazyInitializer", "handler"})
     private Role role;
 
     /**

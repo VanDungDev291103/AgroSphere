@@ -3,6 +3,7 @@ package com.agricultural.agricultural.service.impl;
 import com.agricultural.agricultural.config.VNPAYConfig;
 import com.agricultural.agricultural.dto.request.PaymentRequest;
 import com.agricultural.agricultural.dto.request.RefundRequest;
+import com.agricultural.agricultural.dto.response.PaymentDTO;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
 import com.agricultural.agricultural.entity.Order;
@@ -193,10 +194,84 @@ public class PaymentServiceImpl implements IPaymentService {
 
 
     @Override
+    @Transactional
     public PaymentResponse processRefund(RefundRequest refundRequest) {
+        log.info("=== BẮT ĐẦU XỬ LÝ HOÀN TIỀN ===");
+        log.info("Yêu cầu hoàn tiền: transactionId={}, amount={}", refundRequest.getTransactionId(), refundRequest.getAmount());
+        
+        // Kiểm tra yêu cầu hoàn tiền
+        if (refundRequest.getTransactionId() == null || refundRequest.getAmount() == null) {
+            throw new BadRequestException("TransactionId và amount không được để trống");
+        }
+        
+        // Tìm payment dựa trên transactionId
+        Payment payment = paymentRepository.findByTransactionId(refundRequest.getTransactionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy giao dịch với ID: " + refundRequest.getTransactionId()));
+        
+        // Kiểm tra trạng thái thanh toán
+        if (payment.getStatus() != PaymentStatus.COMPLETED) {
+            log.error("Không thể hoàn tiền cho giao dịch chưa hoàn tất: {}", payment.getTransactionId());
+            throw new BadRequestException("Không thể hoàn tiền cho giao dịch chưa hoàn tất");
+        }
+        
+        // Kiểm tra số tiền hoàn
+        if (refundRequest.getAmount() > payment.getAmount()) {
+            log.error("Số tiền hoàn ({}) vượt quá số tiền giao dịch ban đầu ({})", 
+                      refundRequest.getAmount(), payment.getAmount());
+            throw new BadRequestException("Số tiền hoàn không thể vượt quá số tiền giao dịch ban đầu");
+        }
+        
+        // Xử lý hoàn tiền tùy thuộc vào phương thức thanh toán
+        boolean refundSuccess = false;
+        String refundMessage = "";
+        
+        try {
+            if ("VNPAY".equals(payment.getPaymentMethod())) {
+                // Triển khai API hoàn tiền VNPAY ở đây nếu có
+                // Hiện tại chỉ cập nhật trạng thái hoàn tiền
+                refundSuccess = true;
+                refundMessage = "Hoàn tiền thành công qua VNPAY";
+                
+                // Cập nhật trạng thái payment
+                payment.setStatus(PaymentStatus.REFUNDED);
+                payment.setPaymentNote(payment.getPaymentNote() + " | Refunded: " + refundRequest.getAmount() + " at " + LocalDateTime.now());
+                paymentRepository.save(payment);
+                
+                // Cập nhật trạng thái đơn hàng
+                Order order = orderRepository.findById(payment.getOrderId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + payment.getOrderId()));
+                order.setStatus(OrderStatus.REFUNDED);
+                orderRepository.save(order);
+                
+                log.info("Hoàn tiền thành công: transactionId={}, amount={}", payment.getTransactionId(), refundRequest.getAmount());
+            } else {
+                // Xử lý hoàn tiền cho các phương thức thanh toán khác
+                refundSuccess = true;
+                refundMessage = "Hoàn tiền thành công qua " + payment.getPaymentMethod();
+                
+                // Cập nhật trạng thái payment
+                payment.setStatus(PaymentStatus.REFUNDED);
+                payment.setPaymentNote(payment.getPaymentNote() + " | Refunded: " + refundRequest.getAmount() + " at " + LocalDateTime.now());
+                paymentRepository.save(payment);
+                
+                // Cập nhật trạng thái đơn hàng
+                Order order = orderRepository.findById(payment.getOrderId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + payment.getOrderId()));
+                order.setStatus(OrderStatus.REFUNDED);
+                orderRepository.save(order);
+                
+                log.info("Hoàn tiền thành công: transactionId={}, amount={}", payment.getTransactionId(), refundRequest.getAmount());
+            }
+        } catch (Exception e) {
+            log.error("Lỗi khi xử lý hoàn tiền: {}", e.getMessage(), e);
+            throw new BadRequestException("Không thể xử lý hoàn tiền: " + e.getMessage());
+        }
+        
+        log.info("=== KẾT THÚC XỬ LÝ HOÀN TIỀN ===");
+        
         return PaymentResponse.builder()
-                .success(true)
-                .message("Hoàn tiền thành công")
+                .success(refundSuccess)
+                .message(refundMessage)
                 .transactionId(refundRequest.getTransactionId())
                 .amount(refundRequest.getAmount())
                 .timestamp(LocalDateTime.now())
@@ -204,15 +279,63 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public Optional<Payment> getPaymentHistory(Long orderId) {
-        return paymentRepository.findByOrderIdOrderByCreatedAtDesc(Math.toIntExact(orderId));
+    public Optional<PaymentDTO> getPaymentHistory(Long orderId) {
+        Optional<Payment> paymentOpt = paymentRepository.findByOrderIdOrderByCreatedAtDesc(Math.toIntExact(orderId));
+        return paymentOpt.map(PaymentDTO::fromEntity);
+    }
+
+    /**
+     * Lấy tất cả lịch sử thanh toán của một đơn hàng
+     *
+     * @param orderId ID đơn hàng
+     * @return Danh sách các giao dịch thanh toán
+     */
+    @Override
+    public List<PaymentDTO> getAllPaymentHistoryByOrderId(Long orderId) {
+        log.info("Lấy tất cả lịch sử thanh toán cho đơn hàng: {}", orderId);
+        
+        // Kiểm tra đơn hàng tồn tại
+        Order order = orderRepository.findById(Math.toIntExact(orderId))
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
+        
+        // Lấy danh sách các giao dịch thanh toán
+        List<Payment> payments = paymentRepository.findAllByOrderIdOrderByCreatedAtDesc(Math.toIntExact(orderId));
+        
+        log.info("Tìm thấy {} giao dịch thanh toán cho đơn hàng {}", payments.size(), orderId);
+        return PaymentDTO.fromEntities(payments);
     }
 
     @Override
     public PaymentResponse checkPaymentStatus(String transactionId) {
+        log.info("=== BẮT ĐẦU KIỂM TRA TRẠNG THÁI THANH TOÁN ===");
+        log.info("Kiểm tra trạng thái thanh toán cho giao dịch: {}", transactionId);
+        
         try {
             Payment payment = paymentRepository.findByTransactionId(transactionId)
                     .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy giao dịch với ID: " + transactionId));
+            
+            log.info("Giao dịch [{}]: phương thức={}, trạng thái={}, số tiền={}", 
+                     transactionId, payment.getPaymentMethod(), payment.getStatus(), payment.getAmount());
+            
+            // Lấy thông tin đơn hàng
+            Order order = orderRepository.findById(payment.getOrderId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + payment.getOrderId()));
+            
+            Map<String, Object> additionalInfo = new HashMap<>();
+            additionalInfo.put("orderId", order.getId());
+            additionalInfo.put("orderStatus", order.getStatus());
+            additionalInfo.put("paymentId", payment.getPaymentId());
+            additionalInfo.put("createdAt", payment.getCreatedAt());
+            
+            if (payment.getPaymentNote() != null) {
+                additionalInfo.put("paymentNote", payment.getPaymentNote());
+            }
+            
+            if (payment.getTransactionReference() != null) {
+                additionalInfo.put("transactionReference", payment.getTransactionReference());
+            }
+            
+            log.info("=== KẾT THÚC KIỂM TRA TRẠNG THÁI THANH TOÁN ===");
 
             return PaymentResponse.builder()
                     .success(payment.getStatus() == PaymentStatus.COMPLETED)
@@ -221,6 +344,7 @@ public class PaymentServiceImpl implements IPaymentService {
                     .paymentMethod(payment.getPaymentMethod())
                     .amount(payment.getAmount())
                     .timestamp(LocalDateTime.now())
+                    .additionalInfo(additionalInfo)
                     .build();
         } catch (Exception e) {
             log.error("Lỗi khi kiểm tra trạng thái thanh toán: {}", e.getMessage());

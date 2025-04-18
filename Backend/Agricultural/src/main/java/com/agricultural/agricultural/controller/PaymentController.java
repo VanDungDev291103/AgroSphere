@@ -3,6 +3,7 @@ package com.agricultural.agricultural.controller;
 import com.agricultural.agricultural.dto.request.PaymentRequest;
 import com.agricultural.agricultural.dto.request.RefundRequest;
 import com.agricultural.agricultural.dto.response.ApiResponse;
+import com.agricultural.agricultural.dto.response.PaymentDTO;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
 import com.agricultural.agricultural.entity.Payment;
@@ -102,15 +103,31 @@ public class PaymentController {
     }
 
     @GetMapping("/history/{orderId}")
-    public ResponseEntity<ApiResponse<Payment>> getPaymentHistory(@PathVariable Long orderId) {
+    public ResponseEntity<ApiResponse<PaymentDTO>> getPaymentHistory(@PathVariable Long orderId) {
         log.info("Lấy lịch sử thanh toán cho đơn hàng ID: {}", orderId);
-        Optional<Payment> paymentOpt = paymentService.getPaymentHistory(orderId);
+        Optional<PaymentDTO> paymentOpt = paymentService.getPaymentHistory(orderId);
         
         if (paymentOpt.isEmpty()) {
             return ResponseEntity.ok(new ApiResponse<>(false, "Không tìm thấy thanh toán cho đơn hàng này", null));
         }
         
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy lịch sử thanh toán thành công", paymentOpt.get()));
+    }
+
+    /**
+     * Lấy tất cả lịch sử thanh toán của một đơn hàng
+     * GET /api/v1/payment/history/all/{orderId}
+     */
+    @GetMapping("/history/all/{orderId}")
+    public ResponseEntity<ApiResponse<List<PaymentDTO>>> getAllPaymentHistory(@PathVariable Long orderId) {
+        log.info("Lấy tất cả lịch sử thanh toán cho đơn hàng ID: {}", orderId);
+        List<PaymentDTO> payments = paymentService.getAllPaymentHistoryByOrderId(orderId);
+        
+        if (payments.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse<>(false, "Không tìm thấy thanh toán cho đơn hàng này", Collections.emptyList()));
+        }
+        
+        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy tất cả lịch sử thanh toán thành công", payments));
     }
 
     @GetMapping("/check/{transactionId}")
