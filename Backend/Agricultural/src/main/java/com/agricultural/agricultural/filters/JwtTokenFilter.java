@@ -120,8 +120,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private boolean isBypassToken(@NonNull HttpServletRequest request) {
         // Log URL để debug
-        System.out.println("Current request URL: " + request.getRequestURI());
-        System.out.println("Current request method: " + request.getMethod());
+        String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+        System.out.println("Current request URL: " + requestURI);
+        System.out.println("Current request method: " + method);
+        
+        // Loại bỏ tham số URL (nếu có) để lấy đường dẫn cơ bản
+        String baseURI = requestURI;
+        if (baseURI.contains("?")) {
+            baseURI = baseURI.substring(0, baseURI.indexOf("?"));
+        } else if (baseURI.contains("&")) {
+            // Xử lý trường hợp URL không đúng định dạng, có & thay vì ?
+            baseURI = baseURI.substring(0, baseURI.indexOf("&"));
+        }
+        System.out.println("Base URI for bypass check: " + baseURI);
         
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
                 Pair.of(String.format("%s/roles", apiPrefix), "GET"),
@@ -142,7 +154,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 
                 // Tạm thời bypass để debug
                 Pair.of(String.format("%s/weather-subscriptions", apiPrefix), "GET"),
-                Pair.of(String.format("%s/user-addresses", apiPrefix), "GET")
+                Pair.of(String.format("%s/user-addresses", apiPrefix), "GET"),
+                
+                // VNPAY callback URLs - không yêu cầu xác thực
+                Pair.of(String.format("%s/payment/vnpay-return", apiPrefix), "GET"),
+                Pair.of(String.format("%s/payment/vnpay-return", apiPrefix), "POST"),
+                Pair.of(String.format("%s/payment/vnpay-ipn", apiPrefix), "GET"),
+                Pair.of(String.format("%s/payment/vnpay-ipn", apiPrefix), "POST")
         );
 
         // In ra tất cả các pattern bypass để debug
@@ -155,20 +173,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         for (Pair<String, String> bypassToken : bypassTokens) {
             String pattern = bypassToken.getFirst();
             if ((pattern.contains("[") && 
-                 request.getRequestURI().matches(pattern) &&
+                 baseURI.matches(pattern) &&
                  request.getMethod().equalsIgnoreCase(bypassToken.getSecond())) ||
-                (request.getRequestURI().equals(pattern) &&
+                (baseURI.equals(pattern) &&
                  request.getMethod().equalsIgnoreCase(bypassToken.getSecond())) ||
                 // Thêm kiểm tra URL kết thúc bằng pattern để đảm bảo phủ hết các trường hợp
-                (request.getRequestURI().endsWith(pattern) && 
+                (baseURI.endsWith(pattern) && 
                  request.getMethod().equalsIgnoreCase(bypassToken.getSecond()))) {
-                System.out.println("URL bypassed: " + request.getRequestURI());
+                System.out.println("URL bypassed: " + requestURI);
                 return true;
             }
         }
         
         // Log URL không được bypass để debug
-        System.out.println("URL not bypassed: " + request.getRequestURI());
+        System.out.println("URL not bypassed: " + requestURI);
         return false;
     }
 }

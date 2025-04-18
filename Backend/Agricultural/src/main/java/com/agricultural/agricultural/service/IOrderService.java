@@ -28,6 +28,6 @@ public interface IOrderService {
     Map<OrderStatus, List<OrderDTO>> getBuyerOrderHistory();
     Map<OrderStatus, List<OrderDTO>> getSellerOrderHistory();
     
-    // Phương thức mới cho thanh toán
+    // Phương thức xử lý thanh toán
     PaymentResponse processPayment(Integer orderId, PaymentRequest paymentRequest);
 } 

@@ -51,6 +51,13 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'  // Thêm vào phần dependencies
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// Springdoc OpenAPI
+	implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+	implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 tasks.named('test') {
