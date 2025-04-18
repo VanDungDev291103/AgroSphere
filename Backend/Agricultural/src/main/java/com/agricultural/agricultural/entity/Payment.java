@@ -1,6 +1,7 @@
 package com.agricultural.agricultural.entity;
 
 import com.agricultural.agricultural.entity.enumeration.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,10 +61,12 @@ public class Payment {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"payments", "buyer", "seller", "hibernateLazyInitializer", "handler"})
     private Order order;
  
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"payments", "orders", "hibernateLazyInitializer", "handler"})
     private User user;
     
     @PrePersist

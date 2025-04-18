@@ -4,6 +4,7 @@ import com.agricultural.agricultural.entity.enumeration.OrderStatus;
 import com.agricultural.agricultural.entity.enumeration.PaymentMethod;
 import com.agricultural.agricultural.entity.enumeration.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -120,10 +122,12 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "buyer_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"orders", "payments", "hibernateLazyInitializer", "handler"})
     private User buyer;
 
     @ManyToOne
     @JoinColumn(name = "seller_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"orders", "payments", "hibernateLazyInitializer", "handler"})
     private User seller;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

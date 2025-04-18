@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 @Builder
@@ -20,4 +21,5 @@ public class PaymentResponse {
     private String transactionId;
     private String redirectUrl; // thêm để redirect online payment
     private LocalDateTime timestamp;
+    private Map<String, Object> additionalInfo; // Thêm thông tin bổ sung
 }

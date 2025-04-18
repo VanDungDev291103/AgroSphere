@@ -2,6 +2,7 @@ package com.agricultural.agricultural.service;
 
 import com.agricultural.agricultural.dto.request.PaymentRequest;
 import com.agricultural.agricultural.dto.request.RefundRequest;
+import com.agricultural.agricultural.dto.response.PaymentDTO;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
 import com.agricultural.agricultural.entity.Payment;
@@ -33,7 +34,15 @@ public interface IPaymentService {
      * @param orderId ID đơn hàng
      * @return Thanh toán gần nhất
      */
-    Optional<Payment> getPaymentHistory(Long orderId);
+    Optional<PaymentDTO> getPaymentHistory(Long orderId);
+
+    /**
+     * Lấy tất cả lịch sử thanh toán của một đơn hàng
+     *
+     * @param orderId ID đơn hàng
+     * @return Danh sách các giao dịch thanh toán
+     */
+    List<PaymentDTO> getAllPaymentHistoryByOrderId(Long orderId);
 
     /**
      * Kiểm tra trạng thái thanh toán
