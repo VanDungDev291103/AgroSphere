@@ -7,15 +7,11 @@ import com.agricultural.agricultural.dto.response.PaymentDTO;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
 import com.agricultural.agricultural.dto.response.PaymentQRDTO;
-import com.agricultural.agricultural.entity.Payment;
 import com.agricultural.agricultural.service.IPaymentService;
 import com.agricultural.agricultural.utils.VNPayUtils;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

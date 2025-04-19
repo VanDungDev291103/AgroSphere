@@ -11,7 +11,7 @@ import com.agricultural.agricultural.repository.IUserWeatherSubscriptionReposito
 import com.agricultural.agricultural.repository.IWeatherMonitoredLocationRepository;
 import com.agricultural.agricultural.repository.IUserRepository;
 import com.agricultural.agricultural.service.IUserWeatherSubscriptionService;
-import com.agricultural.agricultural.util.SecurityUtils;
+import com.agricultural.agricultural.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
