@@ -5,8 +5,12 @@ import com.agricultural.agricultural.dto.request.RefundRequest;
 import com.agricultural.agricultural.dto.response.PaymentDTO;
 import com.agricultural.agricultural.dto.response.PaymentResponse;
 import com.agricultural.agricultural.dto.response.PaymentUrlResponse;
+import com.agricultural.agricultural.dto.response.PaymentQRDTO;
+import com.agricultural.agricultural.dto.response.PaymentViewResponse;
+import com.agricultural.agricultural.dto.response.PaymentStatusResponse;
 import com.agricultural.agricultural.entity.Payment;
 
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,4 +71,36 @@ public interface IPaymentService {
      * @return Kết quả xử lý
      */
     PaymentResponse processVnpayIpn(Map<String, String> vnpParams);
+
+    /**
+     * Lấy lịch sử thanh toán theo trang
+     * 
+     * @param pageNo Số trang
+     * @param pageSize Kích thước trang
+     * @param userId ID người dùng
+     * @return Trang kết quả thanh toán
+     */
+    Page<PaymentViewResponse> getPaymentHistory(Integer pageNo, Integer pageSize, Long userId);
+    
+    /**
+     * Xử lý callback từ VNPAY (tên thay thế)
+     * @param params Tham số từ VNPAY
+     * @return Kết quả xử lý
+     */
+    PaymentResponse processVNPayReturn(Map<String, String> params);
+    
+    /**
+     * Xử lý IPN từ VNPAY (tên thay thế)
+     * @param params Tham số từ VNPAY
+     * @return Kết quả xử lý
+     */
+    PaymentResponse processVNPayIPN(Map<String, String> params);
+    
+    /**
+     * Tạo mã QR thanh toán
+     * 
+     * @param paymentRequest Yêu cầu thanh toán
+     * @return Thông tin mã QR thanh toán
+     */
+    PaymentQRDTO createPaymentQRCode(PaymentRequest paymentRequest);
 } 
