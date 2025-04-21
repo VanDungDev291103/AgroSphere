@@ -5,70 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/create-tables.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db/migration/V2023_12_15_01__create_flash_sale_tables.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/config/SchedulerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/FlashSaleController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/FlashSaleItemRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/FlashSaleRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/response/FlashSaleItemResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/response/FlashSaleResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/FlashSale.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/FlashSaleItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/enums/FlashSaleStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/FlashSaleItemRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/FlashSaleRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/CouponScheduler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/FlashSaleScheduler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/IFlashSaleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/FlashSaleServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221/storage_v2/_src_/schema/agricultural_forum.wSg3UA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221/storage_v2/_src_/schema/agricultural_forum.wSg3UA.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/ForumReplyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/ForumReplyController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/user/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/user/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/user/UserAddressController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/controller/user/UserAddressController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/ErrorCode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/FormatTimeAppUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/Log.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/ResponseData$ResponseDataBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/ResponseData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/ResponseObject$ResponseObjectBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/ResponseObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/SecurityUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/SuccessCode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/util/UploadUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/db/init_database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/db/init_database.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/ForumReplyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/ForumReplyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/user/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/user/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/user/UserAddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/user/UserAddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/ICouponRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/ICouponRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserWeatherSubscriptionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/FormatTimeAppUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/FormatTimeAppUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/Log.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/ResponseData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/ResponseData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/ResponseObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/ResponseObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/SecurityUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/SuccessCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/SuccessCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/util/UploadUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/UploadUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/MomoUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/MomoUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/VNPayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/utils/VNPayUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/init_database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/init_database.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +135,7 @@
       <workItem from="1744991665527" duration="2972000" />
       <workItem from="1745040946560" duration="1003000" />
       <workItem from="1745085536320" duration="1710000" />
-      <workItem from="1745088621341" duration="2195000" />
+      <workItem from="1745088621341" duration="2619000" />
     </task>
     <servers />
   </component>
