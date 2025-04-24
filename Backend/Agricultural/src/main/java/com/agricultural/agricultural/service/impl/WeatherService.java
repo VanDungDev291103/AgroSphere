@@ -384,11 +384,11 @@ public class WeatherService implements IWeatherService {
         
         // Tạo hoạt động đề xuất
         StringBuilder activities = new StringBuilder();
-        if (advice.getIsSuitableForPlanting()) {
+        if (Boolean.TRUE.equals(advice.getIsSuitableForPlanting())) {
             activities.append("Trồng cây mới. ");
         }
         
-        if (advice.getIsSuitableForHarvesting()) {
+        if (Boolean.TRUE.equals(advice.getIsSuitableForHarvesting())) {
             activities.append("Thu hoạch nông sản. ");
         }
         
