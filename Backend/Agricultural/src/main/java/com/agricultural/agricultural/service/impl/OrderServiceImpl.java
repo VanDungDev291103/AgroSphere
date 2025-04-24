@@ -73,33 +73,33 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         try {
-            User currentUser = getCurrentUser();
+        User currentUser = getCurrentUser();
 
             // Validate đầu vào
             validateOrderInput(orderDTO);
 
-            // Lấy thông tin sản phẩm đầu tiên để lấy seller_id
-            OrderDetailDTO firstDetail = orderDTO.getOrderDetails().get(0);
+        // Lấy thông tin sản phẩm đầu tiên để lấy seller_id
+        OrderDetailDTO firstDetail = orderDTO.getOrderDetails().get(0);
             MarketPlace firstProduct = findAndValidateProduct(firstDetail.getProductId());
 
-            Integer sellerId = firstProduct.getUser().getId();
-            if (sellerId == null) {
-                throw new BadRequestException("Không tìm thấy thông tin người bán của sản phẩm");
-            }
+        Integer sellerId = firstProduct.getUser().getId();
+        if (sellerId == null) {
+            throw new BadRequestException("Không tìm thấy thông tin người bán của sản phẩm");
+        }
 
-            // Tạo đơn hàng mới với đầy đủ thông tin
+        // Tạo đơn hàng mới với đầy đủ thông tin
             Order order = initializeOrder(orderDTO, currentUser, sellerId, firstProduct);
-            
-            // Lưu đơn hàng để lấy ID
-            Order savedOrder = orderRepository.save(order);
-            
-            // Xử lý chi tiết đơn hàng
-            List<OrderDetail> orderDetails = new ArrayList<>();
-            
-            // Xử lý sản phẩm đầu tiên
-            processOrderDetail(firstProduct, firstDetail, savedOrder, orderDetails);
-            
-            // Xử lý các sản phẩm còn lại
+
+        // Lưu đơn hàng để lấy ID
+        Order savedOrder = orderRepository.save(order);
+
+        // Xử lý chi tiết đơn hàng
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
+        // Xử lý sản phẩm đầu tiên
+        processOrderDetail(firstProduct, firstDetail, savedOrder, orderDetails);
+
+        // Xử lý các sản phẩm còn lại
             processRemainingOrderDetails(orderDTO, sellerId, savedOrder, orderDetails);
             
             // Tạo bản ghi theo dõi đơn hàng
@@ -219,8 +219,8 @@ public class OrderServiceImpl implements IOrderService {
 
             processOrderDetail(product, detailDTO, savedOrder, orderDetails);
         }
-    }
-    
+        }
+
     /**
      * Tạo bản ghi theo dõi cho đơn hàng mới
      */
@@ -238,19 +238,19 @@ public class OrderServiceImpl implements IOrderService {
      */
     private void processOrderDetail(MarketPlace product, OrderDetailDTO detailDTO, Order savedOrder, List<OrderDetail> orderDetails) {
         try {
-            // Kiểm tra số lượng tồn kho
-            if (detailDTO.getQuantity() > product.getQuantity()) {
-                throw new BadRequestException(String.format("Sản phẩm '%s' chỉ còn %d sản phẩm trong kho",
-                    product.getProductName(), product.getQuantity()));
-            }
-    
-            // Tạo chi tiết đơn hàng
-            OrderDetail detail = new OrderDetail();
-            detail.setOrderId(savedOrder.getId());
-            detail.setProductId(product.getId());
+        // Kiểm tra số lượng tồn kho
+        if (detailDTO.getQuantity() > product.getQuantity()) {
+            throw new BadRequestException(String.format("Sản phẩm '%s' chỉ còn %d sản phẩm trong kho",
+                product.getProductName(), product.getQuantity()));
+        }
+
+        // Tạo chi tiết đơn hàng
+        OrderDetail detail = new OrderDetail();
+        detail.setOrderId(savedOrder.getId());
+        detail.setProductId(product.getId());
             detail.setProductName(product.getProductName());
             detail.setProductImage(product.getImageUrl());
-            detail.setQuantity(detailDTO.getQuantity());
+        detail.setQuantity(detailDTO.getQuantity());
             
             // Đảm bảo giá không null
             if (product.getPrice() == null) {
@@ -259,12 +259,12 @@ public class OrderServiceImpl implements IOrderService {
             
             // Lưu giá 
             detail.setOriginalPrice(product.getPrice());
-            detail.setPrice(product.getPrice());
+        detail.setPrice(product.getPrice());
             detail.setDiscountAmount(BigDecimal.ZERO);
             
             // Thiết lập mối quan hệ
-            detail.setOrder(savedOrder);
-            detail.setProduct(product);
+        detail.setOrder(savedOrder);
+        detail.setProduct(product);
             
             // Nếu sản phẩm có biến thể, lưu thông tin biến thể
             ProductVariant variant = null;
@@ -310,27 +310,27 @@ public class OrderServiceImpl implements IOrderService {
                     }
                 }
             }
-    
-            // Cập nhật số lượng sản phẩm trong kho
-            product.setQuantity(product.getQuantity() - detailDTO.getQuantity());
+
+        // Cập nhật số lượng sản phẩm trong kho
+        product.setQuantity(product.getQuantity() - detailDTO.getQuantity());
             
             // Tăng số lượng mua
             product.setPurchaseCount(product.getPurchaseCount() + detailDTO.getQuantity());
             
-            marketPlaceRepository.save(product);
+        marketPlaceRepository.save(product);
     
             // Đảm bảo tính toán totalPrice trước khi lưu
             detail.calculateTotalPrice();
-            
-            // Lưu chi tiết đơn hàng
-            OrderDetail savedDetail = orderDetailRepository.save(detail);
-            orderDetails.add(savedDetail);
-            
-            // Cập nhật danh sách orderDetails trong order
-            if (savedOrder.getOrderDetails() == null) {
-                savedOrder.setOrderDetails(new ArrayList<>());
-            }
-            savedOrder.getOrderDetails().add(savedDetail);
+
+        // Lưu chi tiết đơn hàng
+        OrderDetail savedDetail = orderDetailRepository.save(detail);
+        orderDetails.add(savedDetail);
+        
+        // Cập nhật danh sách orderDetails trong order
+        if (savedOrder.getOrderDetails() == null) {
+            savedOrder.setOrderDetails(new ArrayList<>());
+        }
+        savedOrder.getOrderDetails().add(savedDetail);
         } catch (Exception e) {
             // Log lỗi chi tiết
             System.err.println("Lỗi khi xử lý chi tiết đơn hàng: " + e.getMessage());
@@ -383,26 +383,26 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDTO updateOrderStatus(Integer orderId, OrderStatus newStatus) {
         try {
             // Tìm đơn hàng cần cập nhật
-            Order order = orderRepository.findById(orderId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
 
-            User currentUser = getCurrentUser();
-            
-            // Kiểm tra quyền cập nhật
-            if (!Objects.equals(currentUser.getId(), order.getSellerId()) && 
-                !currentUser.getRole().getRoleName().equals("ADMIN")) {
-                throw new BadRequestException("Bạn không có quyền cập nhật trạng thái đơn hàng này");
-            }
+        User currentUser = getCurrentUser();
+        
+        // Kiểm tra quyền cập nhật
+        if (!Objects.equals(currentUser.getId(), order.getSellerId()) && 
+            !currentUser.getRole().getRoleName().equals("ADMIN")) {
+            throw new BadRequestException("Bạn không có quyền cập nhật trạng thái đơn hàng này");
+        }
 
-            // Kiểm tra trạng thái hợp lệ
-            if (order.getStatus() == OrderStatus.CANCELLED) {
-                throw new BadRequestException("Không thể cập nhật trạng thái cho đơn hàng đã hủy");
-            }
-            if (order.getStatus() == OrderStatus.DELIVERED) {
-                throw new BadRequestException("Không thể cập nhật trạng thái cho đơn hàng đã giao");
-            }
+        // Kiểm tra trạng thái hợp lệ
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new BadRequestException("Không thể cập nhật trạng thái cho đơn hàng đã hủy");
+        }
+        if (order.getStatus() == OrderStatus.DELIVERED) {
+            throw new BadRequestException("Không thể cập nhật trạng thái cho đơn hàng đã giao");
+        }
 
-            // Kiểm tra quy trình trạng thái
+        // Kiểm tra quy trình trạng thái
             validateStatusTransition(order.getStatus(), newStatus);
 
             // Cập nhật trạng thái
@@ -523,29 +523,29 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     public void deleteOrder(Integer orderId) {
         try {
-            Order order = orderRepository.findById(orderId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
 
-            // Chỉ cho phép xóa đơn hàng đã hủy
-            if (order.getStatus() != OrderStatus.CANCELLED) {
-                throw new BadRequestException("Chỉ có thể xóa đơn hàng đã hủy");
-            }
+        // Chỉ cho phép xóa đơn hàng đã hủy
+        if (order.getStatus() != OrderStatus.CANCELLED) {
+            throw new BadRequestException("Chỉ có thể xóa đơn hàng đã hủy");
+        }
 
             // Kiểm tra quyền xóa (chỉ người mua hoặc admin có thể xóa)
             User currentUser = getCurrentUser();
             if (!Objects.equals(currentUser.getId(), order.getBuyerId()) && 
                 !currentUser.getRole().getRoleName().equals("ADMIN")) {
                 throw new BadRequestException("Bạn không có quyền xóa đơn hàng này");
-            }
+        }
 
-            // Xóa chi tiết đơn hàng
-            orderDetailRepository.deleteByOrderId(orderId);
+        // Xóa chi tiết đơn hàng
+        orderDetailRepository.deleteByOrderId(orderId);
 
             // Xóa bản ghi theo dõi đơn hàng
             orderTrackingRepository.deleteByOrderId(orderId);
 
-            // Xóa đơn hàng
-            orderRepository.deleteById(orderId);
+        // Xóa đơn hàng
+        orderRepository.deleteById(orderId);
             
         } catch (ResourceNotFoundException | BadRequestException e) {
             // Đây là các lỗi dự kiến, chỉ cần ném lại để GlobalExceptionHandler xử lý
@@ -678,19 +678,19 @@ public class OrderServiceImpl implements IOrderService {
     public PaymentResponse processPayment(Integer orderId, PaymentRequest paymentRequest) {
         Order order = orderRepository.findOrderWithDetails(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng với ID: " + orderId));
-
+        
         User currentUser = getCurrentUser();
-
+        
         // Kiểm tra quyền thanh toán
         if (!Objects.equals(currentUser.getId(), order.getBuyerId())) {
             throw new BadRequestException("Bạn không có quyền thanh toán đơn hàng này");
         }
-
+        
         // Kiểm tra trạng thái đơn hàng
         if (order.getStatus() != OrderStatus.PENDING) {
             throw new BadRequestException("Chỉ có thể thanh toán đơn hàng ở trạng thái PENDING");
         }
-
+        
         // Tính tổng tiền đơn hàng
         Long totalAmount = 0L;
         for (OrderDetail detail : order.getOrderDetails()) {
@@ -711,18 +711,18 @@ public class OrderServiceImpl implements IOrderService {
         // Xử lý theo phương thức thanh toán
         if ("COD".equalsIgnoreCase(paymentRequest.getPaymentMethod())) {
             // Thanh toán COD
-            Payment payment = new Payment();
+        Payment payment = new Payment();
             payment.setOrderId((int) orderId.longValue());
             payment.setUserId((int) currentUser.getId());
-            payment.setAmount(totalAmount);
+        payment.setAmount(totalAmount);
             payment.setPaymentMethod("COD");
-            payment.setStatus(PaymentStatus.PENDING);
-            payment.setTransactionId("COD-" + orderId);
+                payment.setStatus(PaymentStatus.PENDING);
+                payment.setTransactionId("COD-" + orderId);
             payment.setPaymentNote("Thanh toán khi nhận hàng");
             payment.setCreatedAt(LocalDateTime.now());
 
-            Payment savedPayment = paymentRepository.save(payment);
-
+        Payment savedPayment = paymentRepository.save(payment);
+        
             return PaymentResponse.builder()
                     .success(true)
                     .message("Đơn hàng sẽ được thanh toán khi nhận hàng")

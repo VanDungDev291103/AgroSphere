@@ -1040,7 +1040,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="303" parent="1" name="agricultural_forum">
-      <LastIntrospectionLocalTimestamp>2025-04-19.19:12:34</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-04-22.18:11:32</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="304" parent="1" name="student_management_n1224c1">
@@ -1978,7 +1978,7 @@ post_id</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="504" parent="325" name="id">
-      <AutoIncrement>1</AutoIncrement>
+      <AutoIncrement>2</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
@@ -3244,7 +3244,7 @@ is_read</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="763" parent="341" name="id">
-      <AutoIncrement>39</AutoIncrement>
+      <AutoIncrement>38</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>bigint|0s</StoredType>
