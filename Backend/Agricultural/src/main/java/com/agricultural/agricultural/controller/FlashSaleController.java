@@ -29,7 +29,7 @@ public class FlashSaleController {
      * @return Thông tin flash sale đã tạo
      */
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<FlashSaleResponse>> createFlashSale(@Valid @RequestBody FlashSaleRequest request) {
         log.info("Yêu cầu tạo flash sale mới: {}", request);
         FlashSaleResponse response = flashSaleService.createFlashSale(request);
@@ -44,7 +44,7 @@ public class FlashSaleController {
      * @return Thông tin flash sale đã cập nhật
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<FlashSaleResponse>> updateFlashSale(
             @PathVariable Integer id, 
             @Valid @RequestBody FlashSaleRequest request) {
@@ -59,7 +59,7 @@ public class FlashSaleController {
      * @return Thông báo kết quả
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<Void>> deleteFlashSale(@PathVariable Integer id) {
         log.info("Yêu cầu xóa flash sale ID: {}", id);
         flashSaleService.deleteFlashSale(id);
@@ -119,7 +119,7 @@ public class FlashSaleController {
      * @return Thông tin flash sale đã cập nhật
      */
     @PostMapping("/{flashSaleId}/products")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<FlashSaleResponse>> addProductToFlashSale(
             @PathVariable Integer flashSaleId, 
             @Valid @RequestBody FlashSaleItemRequest request) {
@@ -136,7 +136,7 @@ public class FlashSaleController {
      * @return Thông tin flash sale đã cập nhật
      */
     @DeleteMapping("/{flashSaleId}/products/{productId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<FlashSaleResponse>> removeProductFromFlashSale(
             @PathVariable Integer flashSaleId, 
             @PathVariable Integer productId) {
@@ -152,7 +152,7 @@ public class FlashSaleController {
      * @return Thông tin flash sale đã cập nhật
      */
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<FlashSaleResponse>> updateFlashSaleStatus(
             @PathVariable Integer id, 
             @RequestParam FlashSaleStatus status) {
