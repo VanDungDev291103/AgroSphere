@@ -78,7 +78,12 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName().toUpperCase()));
+        
+        // Thêm cả quyền gốc và quyền với tiền tố ROLE_
+        authorityList.add(new SimpleGrantedAuthority(getRole().getRoleName())); // Quyền gốc: "Admin"
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + getRole().getRoleName())); // Quyền với tiền tố: "ROLE_Admin"
+        
+        System.out.println("USER AUTHORITIES: " + authorityList);
         return authorityList;
     }
 

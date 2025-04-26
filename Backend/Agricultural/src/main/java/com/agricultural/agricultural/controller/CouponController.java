@@ -26,7 +26,7 @@ public class CouponController {
     private final ICouponService couponService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<CouponDTO>> createCoupon(@Valid @RequestBody CouponRequest request) {
         CouponDTO couponDTO = couponService.createCoupon(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -69,7 +69,7 @@ public class CouponController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<CouponDTO>> updateCoupon(
             @PathVariable Integer id,
             @Valid @RequestBody CouponRequest request
@@ -81,7 +81,7 @@ public class CouponController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ApiResponse<Void>> deleteCoupon(@PathVariable Integer id) {
         couponService.deleteCoupon(id);
         return ResponseEntity.ok(
