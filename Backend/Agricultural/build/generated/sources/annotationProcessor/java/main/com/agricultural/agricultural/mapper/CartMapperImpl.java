@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-27T02:47:54+0700",
+    date = "2025-04-29T03:10:07+0700",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -121,6 +121,7 @@ public class CartMapperImpl implements CartMapper {
         cartItem.quantity( cartItemDTO.getQuantity() );
         cartItem.unitPrice( cartItemDTO.getUnitPrice() );
         cartItem.totalPrice( cartItemDTO.getTotalPrice() );
+        cartItem.discountAmount( cartItemDTO.getDiscountAmount() );
         cartItem.notes( cartItemDTO.getNotes() );
         cartItem.addedAt( cartItemDTO.getAddedAt() );
         cartItem.updatedAt( cartItemDTO.getUpdatedAt() );
@@ -181,6 +182,7 @@ public class CartMapperImpl implements CartMapper {
         entity.setQuantity( dto.getQuantity() );
         entity.setUnitPrice( dto.getUnitPrice() );
         entity.setTotalPrice( dto.getTotalPrice() );
+        entity.setDiscountAmount( dto.getDiscountAmount() );
         entity.setNotes( dto.getNotes() );
         entity.setAddedAt( dto.getAddedAt() );
         entity.setUpdatedAt( dto.getUpdatedAt() );
