@@ -14,7 +14,7 @@ import Register from "./pages/Register";
 import Main from "./pages/Main";
 import RequireAuth from "./auth/requireAuth";
 import NoFoundPage from "./pages/NoFoundPage";
-import FarmHub2 from "./pages/FarmHub2";
+
 
 const ROLES = {
   User: "User",
@@ -33,7 +33,7 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="home" element={<Home />} />
-            <Route path="farmhub2" element={<FarmHub2/>}/>
+
             <Route path="farmhub" element={<FarmHub />} />
             <Route path="chat-ai" element={<ChatAI />} />
             <Route path="news" element={<News />} />
