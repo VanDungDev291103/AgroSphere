@@ -15,6 +15,7 @@ import Main from "./pages/Main";
 import RequireAuth from "./auth/requireAuth";
 import NoFoundPage from "./pages/NoFoundPage";
 
+
 const ROLES = {
   User: "User",
   Admin: "Admin",
@@ -32,6 +33,7 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="home" element={<Home />} />
+
             <Route path="farmhub" element={<FarmHub />} />
             <Route path="chat-ai" element={<ChatAI />} />
             <Route path="news" element={<News />} />
