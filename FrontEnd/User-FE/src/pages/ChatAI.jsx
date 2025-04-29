@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/solid";
 import { motion, AnimatePresence } from "framer-motion";
+import Header from "../layout/Header";
 
 function ChatAI() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -13,7 +13,7 @@ function ChatAI() {
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100">
       <div className="bg-white shadow-xl rounded-lg overflow-hidden max-w-screen-2xl mx-auto">
         <Header />
-        <div className="flex">
+        <div className="flex mt-20">
           <AnimatePresence>
             {isSidebarOpen && (
               <motion.div
