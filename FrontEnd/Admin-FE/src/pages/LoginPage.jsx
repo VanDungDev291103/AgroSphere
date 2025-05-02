@@ -43,8 +43,7 @@ const LoginContainer = styled(Box)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundImage:
-    "linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('/assets/images/agriculture-background.jpg')",
+  backgroundImage: "url('/assets/images/agriculture-background.jpg')",
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
@@ -54,6 +53,16 @@ const LoginContainer = styled(Box)({
   width: "100vw",
   height: "100vh",
   overflow: "hidden",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 0,
+  },
 });
 
 const LoginCard = styled(Card)({
@@ -64,6 +73,8 @@ const LoginCard = styled(Card)({
   overflow: "hidden",
   backgroundColor: "#fff",
   border: "1px solid #4e73df",
+  position: "relative",
+  zIndex: 1,
 });
 
 const LoginHeader = styled(Box)({

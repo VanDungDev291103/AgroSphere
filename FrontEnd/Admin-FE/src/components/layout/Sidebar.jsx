@@ -28,6 +28,7 @@ import {
   MonetizationOn as MonetizationOnIcon,
   ListAlt as ListAltIcon,
   Notifications as NotificationsIcon,
+  Home as HomeIcon,
 } from "@mui/icons-material";
 
 // Styled components
@@ -146,6 +147,11 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
       path: "/users",
     },
     {
+      text: "Địa chỉ người dùng",
+      icon: <HomeIcon />,
+      path: "/user-addresses",
+    },
+    {
       text: "Mã giảm giá",
       icon: <LocalOfferIcon />,
       path: "/coupons",
@@ -170,7 +176,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
   const drawerContent = (
     <>
       <SidebarLogo>
-        <img src="/logo.png" alt="Logo" />
+        <img src="/vite.svg" alt="Logo" />
         <h3>AgroSphere Admin</h3>
       </SidebarLogo>
       <List sx={{ px: 2 }}>
