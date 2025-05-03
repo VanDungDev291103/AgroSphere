@@ -189,32 +189,17 @@ const WeatherRecommendationPage = () => {
         );
 
       console.log("Response từ API weatherRecommendations:", response);
-      console.log("Kiểm tra cấu trúc response:", {
-        hasSuccessProperty: response?.success !== undefined,
-        hasDataProperty: response?.data !== undefined,
-        dataType: typeof response?.data,
-        isWeatherDataAvailable: response?.data?.weatherData !== undefined,
-        isSeasonalProductsAvailable:
-          response?.data?.seasonalProducts !== undefined,
-        seasonalProductsType: typeof response?.data?.seasonalProducts,
-        seasonalProductsHasContent: Array.isArray(
-          response?.data?.seasonalProducts?.content
-        ),
-        hasCodeProperty: response?.code !== undefined,
-      });
 
       // Kiểm tra cấu trúc và xử lý dữ liệu
       if (response && response.success && response.data) {
-        console.log("Xử lý dữ liệu theo cấu trúc success-data:", {
-          weatherData: response.data.weatherData,
-          seasonalProducts: response.data.seasonalProducts,
-          seasonalProductsContent: response.data.seasonalProducts?.content,
-          contentLength: response.data.seasonalProducts?.content?.length || 0,
-        });
+        console.log("Xử lý dữ liệu API thành công");
 
         // Lấy dữ liệu thời tiết
         if (response.data.weatherData) {
+          console.log("Dữ liệu thời tiết:", response.data.weatherData);
           setWeatherData(response.data.weatherData);
+        } else {
+          console.warn("Không tìm thấy dữ liệu thời tiết trong response");
         }
 
         // Lấy danh sách sản phẩm
@@ -223,12 +208,21 @@ const WeatherRecommendationPage = () => {
         // Trường hợp 1: seasonalProducts có cấu trúc Page (có content)
         if (
           response.data.seasonalProducts &&
-          response.data.seasonalProducts.content
+          response.data.seasonalProducts.content &&
+          Array.isArray(response.data.seasonalProducts.content)
         ) {
+          console.log("Sản phẩm ở dạng Page:", response.data.seasonalProducts);
           productList = response.data.seasonalProducts.content;
         }
         // Trường hợp 2: seasonalProducts là mảng trực tiếp
-        else if (Array.isArray(response.data.seasonalProducts)) {
+        else if (
+          response.data.seasonalProducts &&
+          Array.isArray(response.data.seasonalProducts)
+        ) {
+          console.log(
+            "Sản phẩm ở dạng mảng trực tiếp:",
+            response.data.seasonalProducts
+          );
           productList = response.data.seasonalProducts;
         }
         // Trường hợp 3: sản phẩm nằm trong content trực tiếp
@@ -236,7 +230,16 @@ const WeatherRecommendationPage = () => {
           response.data.content &&
           Array.isArray(response.data.content)
         ) {
+          console.log("Sản phẩm ở dạng content:", response.data.content);
           productList = response.data.content;
+        }
+        // Trường hợp 4: response.data là mảng sản phẩm trực tiếp
+        else if (Array.isArray(response.data)) {
+          console.log(
+            "Response.data là mảng sản phẩm trực tiếp:",
+            response.data
+          );
+          productList = response.data;
         }
 
         console.log(`Tìm thấy ${productList.length} sản phẩm`);
@@ -258,10 +261,14 @@ const WeatherRecommendationPage = () => {
 
         setProducts(productList);
       } else {
-        console.error("Dữ liệu không đúng định dạng:", response);
-        setError("Dữ liệu trả về không đúng định dạng");
+        console.error(
+          "Dữ liệu không đúng định dạng hoặc API trả về lỗi:",
+          response
+        );
+        setError(response?.message || "Dữ liệu trả về không đúng định dạng");
         enqueueSnackbar(
-          "Không thể tải dữ liệu gợi ý sản phẩm từ máy chủ. Định dạng dữ liệu không hợp lệ.",
+          response?.message ||
+            "Không thể tải dữ liệu gợi ý sản phẩm từ máy chủ",
           {
             variant: "error",
           }

@@ -1,44 +1,80 @@
 /**
- * Format a number as a currency string (VND)
- * @param {number} amount - The amount to format
- * @returns {string} The formatted currency string
+ * Định dạng số tiền sang dạng tiền tệ Việt Nam
+ * @param {number} amount - Số tiền cần định dạng
+ * @returns {string} Chuỗi đã định dạng
  */
 export const formatCurrency = (amount) => {
-  if (amount === undefined || amount === null) return 'N/A';
+  if (amount == null) return '';
   
   return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    style: 'decimal',
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 
 /**
- * Format a date to a localized string
- * @param {string|Date} date - The date to format
- * @param {boolean} includeTime - Whether to include the time
- * @returns {string} The formatted date string
+ * Định dạng ngày giờ sang dạng dd/MM/yyyy HH:mm
+ * @param {string|Date} dateTime - Ngày giờ cần định dạng
+ * @returns {string} Chuỗi đã định dạng
  */
-export const formatDate = (date, includeTime = false) => {
-  if (!date) return 'N/A';
-  
-  const options = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  };
-  
-  if (includeTime) {
-    options.hour = '2-digit';
-    options.minute = '2-digit';
+export const formatDateTime = (dateTime) => {
+  if (!dateTime) {
+    console.warn("formatDateTime nhận giá trị trống:", dateTime);
+    return 'N/A';
   }
   
   try {
-    return new Date(date).toLocaleDateString('vi-VN', options);
-  } catch {
-    return 'Invalid Date';
+    // Xử lý dateTime dạng ISO string từ backend (2025-05-06T08:11:24)
+    // hoặc dạng Date object từ frontend
+    const date = new Date(dateTime);
+    
+    if (isNaN(date.getTime())) {
+      console.warn("formatDateTime không thể parse ngày tháng:", dateTime);
+      return 'N/A';
+    }
+    
+    // Định dạng dd/MM/yyyy HH:mm
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  } catch (error) {
+    console.error("Lỗi khi định dạng ngày giờ:", dateTime, error);
+    return 'N/A';
   }
+};
+
+/**
+ * Định dạng ngày sang dạng dd/MM/yyyy
+ * @param {string|Date} date - Ngày cần định dạng
+ * @returns {string} Chuỗi đã định dạng
+ */
+export const formatDate = (date) => {
+  if (!date) return '';
+  
+  const dateObj = new Date(date);
+  
+  if (isNaN(dateObj.getTime())) return '';
+  
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const year = dateObj.getFullYear();
+  
+  return `${day}/${month}/${year}`;
+};
+
+/**
+ * Định dạng số lượng (thêm dấu phẩy ngăn cách hàng nghìn)
+ * @param {number} value - Số cần định dạng
+ * @returns {string} Chuỗi đã định dạng
+ */
+export const formatNumber = (value) => {
+  if (value == null) return '';
+  
+  return new Intl.NumberFormat('vi-VN').format(value);
 };
 
 /**
@@ -54,17 +90,6 @@ export const formatFileSize = (bytes) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
-
-/**
- * Format a number with thousand separators
- * @param {number} value - The number to format
- * @returns {string} The formatted number
- */
-export const formatNumber = (value) => {
-  if (value === undefined || value === null) return 'N/A';
-  
-  return new Intl.NumberFormat('vi-VN').format(value);
 };
 
 /**
