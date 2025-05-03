@@ -1,27 +1,86 @@
 import api from './api';
 
+/**
+ * Dịch vụ quản lý marketplace (sản phẩm)
+ */
 const marketPlaceService = {
   /**
-   * Lấy danh sách sản phẩm (phân trang)
+   * Lấy danh sách tất cả sản phẩm
    * @param {number} page - Số trang (bắt đầu từ 0)
    * @param {number} size - Kích thước trang
-   * @param {string} sort - Trường cần sắp xếp
-   * @returns {Promise} - Promise chứa dữ liệu phân trang
+   * @returns {Promise} - Promise chứa danh sách sản phẩm
    */
-  getAllProducts: async (page = 0, size = 10, sort = 'id,desc') => {
+  getAllProducts: async (page = 0, size = 10) => {
+    console.log(`Gọi API lấy tất cả sản phẩm với page=${page}, size=${size}`);
     try {
-      const response = await api.get(`/marketplace/products`, {
-        params: { page, size, sort }
+      const response = await api.get('/marketplace/products', {
+        params: { page, size }
       });
-      return response.data;
+      
+      console.log("Dữ liệu trả về từ API getAllProducts:", response);
+      
+      if (!response || !response.data) {
+        console.error("API getAllProducts không trả về dữ liệu");
+        return {
+          success: false,
+          message: "API không trả về dữ liệu",
+          data: {
+            content: []
+          }
+        };
+      }
+      
+      // Kiểm tra cấu trúc response để trả về đúng định dạng
+      if (response.data.success !== undefined) {
+        console.log("API trả về cấu trúc ApiResponse");
+        return response.data;
+      }
+      
+      // Nếu response là Page<MarketPlaceDTO> trực tiếp
+      if (response.data.content !== undefined) {
+        console.log("API trả về cấu trúc Page trực tiếp");
+        console.log("Số lượng sản phẩm:", response.data.content ? response.data.content.length : 0);
+        return {
+          success: true,
+          message: "Lấy dữ liệu thành công",
+          data: response.data
+        };
+      }
+      
+      // Trường hợp còn lại, wrap dữ liệu
+      console.log("API trả về cấu trúc khác, wrap lại");
+      return {
+        success: true,
+        message: "Lấy dữ liệu thành công",
+        data: {
+          content: Array.isArray(response.data) ? response.data : [],
+          totalElements: Array.isArray(response.data) ? response.data.length : 0,
+          totalPages: 1,
+          page: page,
+          size: size
+        }
+      };
     } catch (error) {
-      console.error('Error fetching products:', error);
-      throw error;
+      console.error('Lỗi khi lấy danh sách sản phẩm:', error);
+      
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+      
+      // Trả về object thay vì throw error để không làm crash UI
+      return {
+        success: false,
+        message: `Lỗi: ${error.message}`,
+        data: {
+          content: []
+        }
+      };
     }
   },
 
   /**
-   * Lấy thông tin sản phẩm theo ID
+   * Lấy thông tin chi tiết của một sản phẩm
    * @param {number} id - ID của sản phẩm
    * @returns {Promise} - Promise chứa thông tin sản phẩm
    */
@@ -30,88 +89,34 @@ const marketPlaceService = {
       const response = await api.get(`/marketplace/product/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching product #${id}:`, error);
+      console.error(`Lỗi khi lấy thông tin sản phẩm có ID ${id}:`, error);
       throw error;
     }
   },
 
   /**
-   * Tạo sản phẩm mới
-   * @param {FormData} formData - FormData chứa thông tin sản phẩm
-   * @returns {Promise} - Promise chứa thông tin sản phẩm được tạo
-   */
-  createProduct: async (formData) => {
-    try {
-      const response = await api.post('/marketplace/create', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error creating product:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Cập nhật sản phẩm
-   * @param {number} id - ID của sản phẩm
-   * @param {FormData} formData - FormData chứa thông tin sản phẩm
-   * @returns {Promise} - Promise chứa thông tin sản phẩm sau khi cập nhật
-   */
-  updateProduct: async (id, formData) => {
-    try {
-      const response = await api.put(`/marketplace/update/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error(`Error updating product #${id}:`, error);
-      throw error;
-    }
-  },
-
-  /**
-   * Xóa sản phẩm
-   * @param {number} id - ID của sản phẩm cần xóa
-   * @returns {Promise} - Promise kết quả xóa
-   */
-  deleteProduct: async (id) => {
-    try {
-      const response = await api.delete(`/marketplace/delete/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error deleting product #${id}:`, error);
-      throw error;
-    }
-  },
-
-  /**
-   * Tìm kiếm sản phẩm
+   * Tìm kiếm sản phẩm theo tên
    * @param {string} keyword - Từ khóa tìm kiếm
-   * @param {number} page - Số trang
+   * @param {number} page - Số trang (bắt đầu từ 0)
    * @param {number} size - Kích thước trang
-   * @returns {Promise} - Promise chứa kết quả tìm kiếm
+   * @returns {Promise} - Promise chứa danh sách sản phẩm
    */
   searchProducts: async (keyword, page = 0, size = 10) => {
     try {
-      const response = await api.get(`/marketplace/search`, {
+      const response = await api.get('/marketplace/search', {
         params: { keyword, page, size }
       });
       return response.data;
     } catch (error) {
-      console.error('Error searching products:', error);
+      console.error(`Lỗi khi tìm kiếm sản phẩm với từ khóa "${keyword}":`, error);
       throw error;
     }
   },
 
   /**
-   * Lấy sản phẩm theo danh mục
+   * Lấy danh sách sản phẩm theo danh mục
    * @param {number} categoryId - ID của danh mục
-   * @param {number} page - Số trang
+   * @param {number} page - Số trang (bắt đầu từ 0)
    * @param {number} size - Kích thước trang
    * @returns {Promise} - Promise chứa danh sách sản phẩm
    */
@@ -122,91 +127,97 @@ const marketPlaceService = {
       });
       return response.data;
     } catch (error) {
-      console.error(`Error fetching products for category #${categoryId}:`, error);
+      console.error(`Lỗi khi lấy sản phẩm theo danh mục ${categoryId}:`, error);
       throw error;
     }
   },
 
   /**
-   * Tìm kiếm nâng cao
-   * @param {Object} filters - Bộ lọc tìm kiếm
-   * @param {number} page - Số trang
-   * @param {number} size - Kích thước trang
-   * @returns {Promise} - Promise chứa kết quả tìm kiếm
-   */
-  advancedSearch: async (filters, page = 0, size = 10) => {
-    try {
-      const response = await api.get(`/marketplace/advanced-search`, {
-        params: {
-          ...filters,
-          page,
-          size
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error in advanced search:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Lấy sản phẩm theo khoảng giá
-   * @param {number} minPrice - Giá tối thiểu
-   * @param {number} maxPrice - Giá tối đa
-   * @param {number} page - Số trang
-   * @param {number} size - Kích thước trang
-   * @returns {Promise} - Promise chứa danh sách sản phẩm
-   */
-  getProductsByPriceRange: async (minPrice, maxPrice, page = 0, size = 10) => {
-    try {
-      const response = await api.get(`/marketplace/price-range`, {
-        params: {
-          minPrice,
-          maxPrice,
-          page,
-          size
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching products by price range:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Lấy sản phẩm đang khuyến mãi
-   * @param {number} page - Số trang
+   * Lấy danh sách sản phẩm đang giảm giá
+   * @param {number} page - Số trang (bắt đầu từ 0)
    * @param {number} size - Kích thước trang
    * @returns {Promise} - Promise chứa danh sách sản phẩm
    */
   getOnSaleProducts: async (page = 0, size = 10) => {
     try {
-      const response = await api.get(`/marketplace/on-sale`, {
+      const response = await api.get('/marketplace/on-sale', {
         params: { page, size }
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching on sale products:', error);
+      console.error('Lỗi khi lấy danh sách sản phẩm đang giảm giá:', error);
       throw error;
     }
   },
 
   /**
-   * Lấy sản phẩm phổ biến
-   * @param {number} page - Số trang
+   * Lấy danh sách sản phẩm phổ biến
+   * @param {number} page - Số trang (bắt đầu từ 0)
    * @param {number} size - Kích thước trang
    * @returns {Promise} - Promise chứa danh sách sản phẩm
    */
   getPopularProducts: async (page = 0, size = 10) => {
     try {
-      const response = await api.get(`/marketplace/popular`, {
+      const response = await api.get('/marketplace/popular', {
         params: { page, size }
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching popular products:', error);
+      console.error('Lỗi khi lấy danh sách sản phẩm phổ biến:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Thêm sản phẩm mới
+   * @param {Object} productData - Dữ liệu sản phẩm mới
+   * @returns {Promise} - Promise chứa kết quả thêm sản phẩm
+   */
+  createProduct: async (productData) => {
+    try {
+      const response = await api.post('/marketplace/add', productData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi khi thêm sản phẩm mới:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Cập nhật thông tin sản phẩm
+   * @param {number} id - ID của sản phẩm cần cập nhật
+   * @param {Object} productData - Dữ liệu cập nhật
+   * @returns {Promise} - Promise chứa kết quả cập nhật
+   */
+  updateProduct: async (id, productData) => {
+    try {
+      const response = await api.put(`/marketplace/update/${id}`, productData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Lỗi khi cập nhật sản phẩm có ID ${id}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Xóa sản phẩm
+   * @param {number} id - ID của sản phẩm cần xóa
+   * @returns {Promise} - Promise chứa kết quả xóa
+   */
+  deleteProduct: async (id) => {
+    try {
+      const response = await api.delete(`/marketplace/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Lỗi khi xóa sản phẩm có ID ${id}:`, error);
       throw error;
     }
   }

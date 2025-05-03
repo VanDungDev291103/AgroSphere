@@ -468,8 +468,24 @@ const ProductsPage = () => {
 
   // Thêm hàm xử lý ảnh
   const handleImageError = (e, product) => {
-    console.error("Lỗi tải ảnh cho sản phẩm:", product.id, product.productName);
-    e.target.src = "/assets/images/avatar-placeholder.jpg";
+    console.log(`Lỗi tải ảnh cho sản phẩm ${product.id}:`, product.imageUrl);
+    if (e.target.src !== "/placeholder-image.png") {
+      e.target.src = "/placeholder-image.png";
+    }
+  };
+
+  // Thêm cache buster cho URLs hình ảnh
+  const getImageUrlWithCacheBuster = (url) => {
+    if (!url) return "/placeholder-image.png";
+
+    const cacheBuster = new Date().getTime();
+
+    // Kiểm tra nếu URL đã có tham số query
+    if (url.includes("?")) {
+      return `${url}&_t=${cacheBuster}`;
+    } else {
+      return `${url}?_t=${cacheBuster}`;
+    }
   };
 
   // Handle refresh stock status
@@ -666,10 +682,10 @@ const ProductsPage = () => {
               products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>
-                    <Box display="flex" alignItems="center">
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Avatar
                         variant="rounded"
-                        src={product.imageUrl}
+                        src={getImageUrlWithCacheBuster(product.imageUrl)}
                         alt={product.productName}
                         sx={{ width: 50, height: 50, mr: 2 }}
                         onError={(e) => handleImageError(e, product)}

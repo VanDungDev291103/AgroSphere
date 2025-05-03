@@ -8,7 +8,9 @@ const api = axios.create({
     'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
     'Expires': '0'
-  }
+  },
+  timeout: 10000, // Thêm timeout 10 giây để tránh treo khi API không phản hồi
+  withCredentials: false // Cho phép gửi cookie theo yêu cầu khi CORS
 });
 
 // Thêm interceptor để in ra log request cho việc debug

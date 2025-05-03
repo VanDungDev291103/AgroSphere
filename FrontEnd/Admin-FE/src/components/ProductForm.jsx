@@ -140,42 +140,48 @@ const ProductForm = ({ initialData, onSubmit, onCancel }) => {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      // Kiểm tra kích thước và loại file
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({
-          ...prev,
-          image: "Kích thước file không được vượt quá 5MB",
-        }));
-        return;
-      }
 
-      // Kiểm tra định dạng file
-      const validTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-      if (!validTypes.includes(file.type)) {
-        setErrors((prev) => ({
-          ...prev,
-          image: "Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)",
-        }));
-        return;
-      }
+    if (!file) return;
 
-      console.log(
-        "Đã chọn file:",
-        file.name,
-        "Loại:",
-        file.type,
-        "Kích thước:",
-        file.size
-      );
-      setFormData((prev) => ({ ...prev, image: file }));
-      setPreviewImage(URL.createObjectURL(file));
+    console.log("File đã chọn:", file);
 
-      // Xóa lỗi nếu có
-      if (errors.image) {
-        setErrors((prev) => ({ ...prev, image: null }));
-      }
+    if (!file.type.match("image.*")) {
+      setAlertInfo({
+        show: true,
+        message: "Vui lòng chọn tệp ảnh hợp lệ",
+        severity: "error",
+      });
+      return;
     }
+
+    // Giới hạn kích thước file (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setAlertInfo({
+        show: true,
+        message: "Kích thước ảnh không được vượt quá 5MB",
+        severity: "error",
+      });
+      return;
+    }
+
+    // Lưu file vào state
+    setFormData((prev) => ({
+      ...prev,
+      image: file,
+    }));
+
+    // Tạo URL xem trước cho ảnh
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewImage(e.target.result);
+      console.log(
+        "Đã tạo URL xem trước cho ảnh:",
+        e.target.result.substring(0, 50) + "..."
+      );
+    };
+    reader.readAsDataURL(file);
+
+    console.log("Đã chọn file:", file.name, file.type, file.size);
   };
 
   const handleAdditionalImageChange = (event) => {
@@ -334,10 +340,26 @@ const ProductForm = ({ initialData, onSubmit, onCancel }) => {
         }
       }
 
-      // Xử lý trường image - SỬA TÊN TRƯỜNG TỪ imageFile THÀNH image
+      // XỬ LÝ TRƯỜNG IMAGE - ĐẢM BẢO ĐÚNG TÊN TRƯỜNG
       if (formData.image instanceof File) {
-        console.log("Đang gửi file ảnh:", formData.image.name);
-        productFormData.append("image", formData.image); // Dùng đúng tên trường "image"
+        console.log(
+          "Đang gửi file ảnh:",
+          formData.image.name,
+          "Loại:",
+          formData.image.type,
+          "Kích thước:",
+          formData.image.size
+        );
+        productFormData.append("imageFile", formData.image); // Đổi tên trường thành 'imageFile' để phù hợp với backend
+        console.log("ĐÃ THÊM FILE ẢNH MỚI VỚI TÊN TRƯỜNG: imageFile");
+      } else if (
+        isEditMode &&
+        !formData.image &&
+        previewImage &&
+        !previewImage.startsWith("blob:")
+      ) {
+        // Nếu đang chỉnh sửa và không có file ảnh mới, giữ lại ảnh cũ
+        console.log("Giữ nguyên ảnh cũ, không gửi file mới");
       }
 
       // XỬ LÝ CÁC TRƯỜNG LIÊN QUAN ĐẾN GIẢM GIÁ
@@ -410,11 +432,10 @@ const ProductForm = ({ initialData, onSubmit, onCancel }) => {
       } else {
         // Khi TẮT chế độ giảm giá, gửi giá trị rõ ràng là null
         console.log("Đã TẮT chế độ giảm giá, đặt các giá trị sale = null");
-        // Không thêm các trường này để backend tự hiểu là null
-        // Không cần gửi gì cả, backend sẽ tự hiểu là null
-        productFormData.delete("salePrice");
-        productFormData.delete("saleStartDate");
-        productFormData.delete("saleEndDate");
+        productFormData.append("salePrice", "null");
+        productFormData.append("saleStartDate", "null");
+        productFormData.append("saleEndDate", "null");
+        console.log("ĐÃ THÊM CÁC TRƯỜNG SALE VỚI GIÁ TRỊ NULL");
       }
 
       // Log lại thông tin sau khi xử lý
@@ -433,9 +454,12 @@ const ProductForm = ({ initialData, onSubmit, onCancel }) => {
         await productService.refreshAllStockStatus();
         console.log("Đã làm mới trạng thái thành công!");
 
-        // Force reload lại trang ngay lập tức để thấy thay đổi
-        console.log("Làm mới trang để thấy thay đổi...");
-        window.location.reload();
+        // Đợi 1 giây sau khi cập nhật xong để đảm bảo server đã xử lý
+        setTimeout(() => {
+          // Force reload lại trang ngay lập tức để thấy thay đổi
+          console.log("Làm mới trang để thấy thay đổi...");
+          window.location.reload();
+        }, 1000);
       } catch (err) {
         console.error("Lỗi khi làm mới trạng thái:", err);
         // Vẫn reload trang dù có lỗi
