@@ -5,45 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/AgriculturalAdviceMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/AgriculturalAdviceMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/CartMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/CartMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/MarketPlaceMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/MarketPlaceMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderDetailMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderDetailMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderTrackingMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/OrderTrackingMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductCategoryMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductCategoryMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductImageMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductImageMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductVariantMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ProductVariantMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserAddressMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserAddressMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserWeatherSubscriptionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/UserWeatherSubscriptionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/WeatherDataMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/WeatherDataMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/WeatherMonitoredLocationMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/WeatherMonitoredLocationMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/application.YML" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.YML" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/MarketPlaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/MarketPlaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/MarketPlaceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/MarketPlaceDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/MarketPlace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/MarketPlace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/MarketPlaceMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/MarketPlaceMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/FlashSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/FlashSaleScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/IMarketPlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/IMarketPlaceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CloudinaryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CloudinaryServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.YML" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.YML" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/CartItem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +149,8 @@
       <workItem from="1745776970323" duration="6668000" />
       <workItem from="1745869657965" duration="3715000" />
       <workItem from="1746036005976" duration="2469000" />
-      <workItem from="1746165696664" duration="13307000" />
+      <workItem from="1746165696664" duration="14047000" />
+      <workItem from="1746243658167" duration="291000" />
     </task>
     <servers />
   </component>
