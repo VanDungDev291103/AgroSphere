@@ -29,7 +29,17 @@ import {
   ListAlt as ListAltIcon,
   Notifications as NotificationsIcon,
   Home as HomeIcon,
+  Cloud as CloudIcon,
+  LocationOn as LocationOnIcon,
+  WbSunny as SunnyIcon,
+  Spa as SpaIcon,
+  Assessment as AssessmentIcon,
+  Warning as WarningIcon,
 } from "@mui/icons-material";
+import SubscriptionIcon from "@mui/icons-material/Subscriptions";
+import PaymentIcon from "@mui/icons-material/Payment";
+import PersonIcon from "@mui/icons-material/Person";
+import RecommendIcon from "@mui/icons-material/Recommend";
 
 // Styled components
 const SidebarContainer = styled(Box)(({ theme }) => ({
@@ -72,6 +82,10 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
   const location = useLocation();
   const [openProductSubmenu, setOpenProductSubmenu] = useState(false);
   const [openOrderSubmenu, setOpenOrderSubmenu] = useState(false);
+  const [openWeatherSubmenu, setOpenWeatherSubmenu] = useState(false);
+  const [openSubscriptionSubmenu, setOpenSubscriptionSubmenu] = useState(false);
+  const [openRecommendationSubmenu, setOpenRecommendationSubmenu] =
+    useState(false);
 
   const handleProductClick = () => {
     setOpenProductSubmenu(!openProductSubmenu);
@@ -79,6 +93,18 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
 
   const handleOrderClick = () => {
     setOpenOrderSubmenu(!openOrderSubmenu);
+  };
+
+  const handleWeatherClick = () => {
+    setOpenWeatherSubmenu(!openWeatherSubmenu);
+  };
+
+  const handleSubscriptionClick = () => {
+    setOpenSubscriptionSubmenu(!openSubscriptionSubmenu);
+  };
+
+  const handleRecommendationClick = () => {
+    setOpenRecommendationSubmenu(!openRecommendationSubmenu);
   };
 
   const isActive = (path) => {
@@ -109,6 +135,83 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
         {
           text: "Flash Sale",
           path: "/flash-sales",
+        },
+      ],
+    },
+    {
+      text: "Thời Tiết",
+      icon: <CloudIcon />,
+      submenu: true,
+      onClick: handleWeatherClick,
+      open: openWeatherSubmenu,
+      items: [
+        {
+          text: "Địa Điểm Theo Dõi",
+          path: "/weather/locations",
+          icon: <LocationOnIcon fontSize="small" />,
+        },
+        {
+          text: "Dữ Liệu Thời Tiết",
+          path: "/weather/data",
+          icon: <SunnyIcon fontSize="small" />,
+        },
+        {
+          text: "Lời Khuyên Nông Nghiệp",
+          path: "/weather/advice",
+          icon: <SpaIcon fontSize="small" />,
+        },
+        {
+          text: "Đăng Ký Theo Dõi",
+          path: "/weather/subscriptions",
+          icon: <NotificationsIcon fontSize="small" />,
+        },
+      ],
+    },
+    {
+      text: "Gợi Ý Sản Phẩm",
+      icon: <RecommendIcon />,
+      submenu: true,
+      onClick: handleRecommendationClick,
+      open: openRecommendationSubmenu,
+      items: [
+        {
+          text: "Gợi Ý Theo Thời Tiết",
+          path: "/weather-recommendations/by-weather",
+          icon: <SunnyIcon fontSize="small" />,
+        },
+        {
+          text: "Gợi Ý Theo Cây Trồng",
+          path: "/weather-recommendations/by-crop",
+          icon: <SpaIcon fontSize="small" />,
+        },
+        {
+          text: "Chuẩn Bị Thời Tiết Xấu",
+          path: "/weather-recommendations/extreme-weather",
+          icon: <WarningIcon fontSize="small" />,
+        },
+        {
+          text: "Phân Tích Hiệu Suất",
+          path: "/weather-recommendations/performance",
+          icon: <AssessmentIcon fontSize="small" />,
+        },
+      ],
+    },
+    {
+      text: "Đăng Ký Dịch Vụ",
+      icon: <SubscriptionIcon />,
+      submenu: true,
+      onClick: handleSubscriptionClick,
+      open: openSubscriptionSubmenu,
+      items: [
+        {
+          text: "Gói Đăng Ký",
+          path: "/subscription-plans",
+          icon: <PaymentIcon fontSize="small" />,
+        },
+        {
+          text: "Đăng Ký Người Dùng",
+          path: "/user-subscriptions",
+          icon: <PersonIcon fontSize="small" />,
         },
       ],
     },

@@ -8,7 +8,11 @@ export default defineConfig({
     include: [
       '@mui/x-date-pickers/AdapterDateFns',
       '@mui/x-date-pickers/DateTimePicker',
-      '@mui/x-date-pickers/LocalizationProvider'
+      '@mui/x-date-pickers/LocalizationProvider',
+      '@mui/icons-material/Search',
+      '@mui/icons-material/Refresh',
+      '@mui/icons-material/Cloud',
+      '@mui/icons-material/Warning'
     ]
   },
   resolve: {
@@ -19,5 +23,10 @@ export default defineConfig({
       '@mui/icons-material',
       '@mui/x-date-pickers'
     ]
+  },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   }
 })

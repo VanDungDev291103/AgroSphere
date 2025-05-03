@@ -11,6 +11,15 @@ import LoginPage from "./pages/LoginPage.jsx";
 import UserAddressPage from "./pages/UserAddressPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
+import WeatherLocationsPage from "./pages/WeatherLocationsPage.jsx";
+import WeatherDataPage from "./pages/WeatherDataPage.jsx";
+import WeatherSubscriptionsPage from "./pages/WeatherSubscriptionsPage.jsx";
+import SubscriptionPlansPage from "./pages/SubscriptionPlansPage.jsx";
+import UserSubscriptionsPage from "./pages/UserSubscriptionsPage.jsx";
+import WeatherRecommendationPage from "./pages/WeatherRecommendationPage.jsx";
+import CropWeatherRecommendationPage from "./pages/CropWeatherRecommendationPage.jsx";
+import ExtremeWeatherPage from "./pages/ExtremeWeatherPage.jsx";
+import ProductPerformancePage from "./pages/ProductPerformancePage.jsx";
 import Layout from "./components/layout/Layout";
 
 createRoot(document.getElementById("root")).render(
@@ -26,6 +35,47 @@ createRoot(document.getElementById("root")).render(
             <Route path="/user-addresses" element={<UserAddressPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
+
+            {/* Weather Routes */}
+            <Route
+              path="/weather/locations"
+              element={<WeatherLocationsPage />}
+            />
+            <Route path="/weather/data" element={<WeatherDataPage />} />
+            <Route path="/weather/advice" element={<WeatherDataPage />} />
+            <Route
+              path="/weather/subscriptions"
+              element={<WeatherSubscriptionsPage />}
+            />
+
+            {/* Weather Recommendation Routes */}
+            <Route
+              path="/weather-recommendations/by-weather"
+              element={<WeatherRecommendationPage />}
+            />
+            <Route
+              path="/weather-recommendations/by-crop"
+              element={<CropWeatherRecommendationPage />}
+            />
+            <Route
+              path="/weather-recommendations/extreme-weather"
+              element={<ExtremeWeatherPage />}
+            />
+            <Route
+              path="/weather-recommendations/performance"
+              element={<ProductPerformancePage />}
+            />
+
+            {/* Subscription Routes */}
+            <Route
+              path="/subscription-plans"
+              element={<SubscriptionPlansPage />}
+            />
+            <Route
+              path="/user-subscriptions"
+              element={<UserSubscriptionsPage />}
+            />
+
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Route>
         </Routes>

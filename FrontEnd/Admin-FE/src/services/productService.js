@@ -179,6 +179,10 @@ const productService = {
       
       console.log("===== DEBUG: productData trước khi xử lý =====");
       
+      // Thêm timestamp để đảm bảo không bị cache
+      const timestamp = new Date().getTime();
+      formData.append("timestamp", timestamp.toString());
+      
       // Chuyển đổi FormData đã nhận được
       for (let [key, value] of productData.entries()) {
         console.log(`${key}: ${value instanceof File ? 'File: ' + value.name : value}`);
@@ -220,7 +224,7 @@ const productService = {
         if (key === 'salePrice') {
           if (value === "" || value === "0" || value === 0) {
             console.log(`${key} = ${value} => Gửi null để backend xử lý TẮT giảm giá`);
-            formData.append(key, null); // Gửi giá trị null để tắt giảm giá
+            formData.append(key, "null"); // Gửi chuỗi "null" để tắt giảm giá
           } else {
             const priceValue = parseFloat(value) || 0;
             console.log(`Đảm bảo ${key} là số: ${priceValue}`);
@@ -255,24 +259,25 @@ const productService = {
           continue;
         }
         
-        // Xử lý trường image
-        if (key === 'imageFile' || key === 'image') {
+        // XỬ LÝ TRƯỜNG IMAGE - ĐẢM BẢO ĐÚNG TÊN TRƯỜNG 
+        if (key === 'image' || key === 'imageFile') {
           if (value instanceof File) {
-            console.log("Đang xử lý file ảnh:", value.name, "Loại:", value.type);
-            formData.append('image', value); // Đảm bảo tên trường đúng là "image"
+            console.log("Đang xử lý file ảnh:", value.name, "Loại:", value.type, "Kích thước:", value.size);
+            formData.append('imageFile', value);  // Đổi tên trường thành 'imageFile' để phù hợp với backend
+            console.log("ĐÃ THÊM FILE ẢNH MỚI");
           } else {
             console.log(`Dữ liệu ${key} không phải File, bỏ qua`);
           }
           continue;
-        } 
+        }
         
         // Xử lý các trường khác
         console.log(`Đang thêm ${key}: ${value}`);
         formData.append(key, value);
       }
       
-      // Log tất cả các trường trong FormData để debug
-      console.log("===== DEBUG: FormData sau khi xử lý =====");
+      // Thêm log chi tiết
+      console.log("===== DEBUG: FormData sau khi xử lý cho cập nhật =====");
       for (let [key, value] of formData.entries()) {
         if (value instanceof File) {
           console.log(`${key}: File - ${value.name} (${value.type}, ${value.size} bytes)`);
@@ -281,22 +286,21 @@ const productService = {
         }
       }
       
-      // ===== GỌI API BACKEND =====
-      console.log(`Gọi API endpoint POST /marketplace/product/${id}`);
-      const response = await api.post(`/marketplace/product/${id}`, formData, {
+      // Gửi yêu cầu cập nhật với cache-busting headers và endpoint đúng
+      const response = await api.put(`/marketplace/update/${id}?_t=${timestamp}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       });
       
-      // Log dữ liệu trả về
-      console.log("===== DEBUG: Server response =====");
+      console.log("===== DEBUG: Kết quả cập nhật từ server =====");
       console.log("Status:", response.status);
       console.log("Data:", response.data);
       
-      // Sau khi cập nhật thành công, làm mới trạng thái hàng
+      // Sau khi cập nhật thành công, làm mới trạng thái
       try {
         console.log("Làm mới trạng thái sản phẩm sau khi cập nhật...");
         await this.refreshAllStockStatus();
@@ -526,6 +530,20 @@ const productService = {
       
       // Xóa cache của các API khác bằng cách gọi với query param mới
       await this.forceRefreshProducts(0, 10);
+      
+      // Nếu có bất kỳ ảnh sản phẩm nào đang hiển thị trên trang, thêm tham số timestamp vào URL
+      // để buộc trình duyệt tải lại ảnh mới
+      const productImages = document.querySelectorAll('img[src*="cloudinary"]');
+      productImages.forEach(img => {
+        const currentSrc = img.src;
+        // Nếu URL đã có tham số query, thêm timestamp
+        if (currentSrc.includes('?')) {
+          img.src = `${currentSrc}&_t=${timestamp}`;
+        } else {
+          img.src = `${currentSrc}?_t=${timestamp}`;
+        }
+        console.log(`Đã thêm timestamp cho ảnh: ${img.src}`);
+      });
       
       return response.data;
     } catch (error) {
