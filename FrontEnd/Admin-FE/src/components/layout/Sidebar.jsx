@@ -56,6 +56,7 @@ const SidebarLogo = styled(Box)(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2),
   borderBottom: `1px solid ${theme.palette.divider}`,
+  backgroundColor: "#ffffff",
   "& img": {
     width: 40,
     height: 40,
@@ -63,7 +64,7 @@ const SidebarLogo = styled(Box)(({ theme }) => ({
   },
   "& h3": {
     margin: 0,
-    color: theme.palette.primary.main,
+    color: "#1976d2",
     fontSize: 18,
     fontWeight: 600,
   },
@@ -72,10 +73,10 @@ const SidebarLogo = styled(Box)(({ theme }) => ({
 const SidebarItem = styled(ListItemButton)(({ theme, active }) => ({
   borderRadius: 8,
   marginBottom: 4,
-  color: active ? theme.palette.primary.main : theme.palette.text.secondary,
-  backgroundColor: active ? theme.palette.action.selected : "transparent",
+  color: active ? "#1565c0" : theme.palette.text.secondary,
+  backgroundColor: active ? "#e3f2fd" : "transparent",
   "&:hover": {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: "#f5f9ff",
   },
 }));
 
@@ -87,6 +88,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
   const [openSubscriptionSubmenu, setOpenSubscriptionSubmenu] = useState(false);
   const [openRecommendationSubmenu, setOpenRecommendationSubmenu] =
     useState(false);
+  const [openPaymentSubmenu, setOpenPaymentSubmenu] = useState(false);
 
   const handleProductClick = () => {
     setOpenProductSubmenu(!openProductSubmenu);
@@ -106,6 +108,10 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
 
   const handleRecommendationClick = () => {
     setOpenRecommendationSubmenu(!openRecommendationSubmenu);
+  };
+
+  const handlePaymentClick = () => {
+    setOpenPaymentSubmenu(!openPaymentSubmenu);
   };
 
   const isActive = (path) => {
@@ -258,6 +264,25 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
       text: "Địa chỉ người dùng",
       icon: <HomeIcon />,
       path: "/user-addresses",
+    },
+    {
+      text: "Thanh toán",
+      icon: <PaymentIcon />,
+      submenu: true,
+      onClick: handlePaymentClick,
+      open: openPaymentSubmenu,
+      items: [
+        {
+          text: "Quản lý giao dịch",
+          path: "/payments",
+          icon: <MonetizationOnIcon fontSize="small" />,
+        },
+        {
+          text: "Thống kê doanh thu",
+          path: "/payment-statistics",
+          icon: <AssessmentIcon fontSize="small" />,
+        },
+      ],
     },
     {
       text: "Mã giảm giá",

@@ -10,7 +10,7 @@
   line-height: 1.5;
   font-weight: 400;
   color: #213547;
-  background-color: #ffffff;
+  background-color: #e3f2fd;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,24 +24,24 @@ html, body, #root {
 
 body {
   margin: 0;
-  background-color: #f8f9fc;
+  background-color: #e3f2fd;
 }
 
 a {
   font-weight: 500;
-  color: #4e73df;
+  color: #1976d2;
   text-decoration: none;
 }
 
 a:hover {
-  color: #2e59d9;
+  color: #1565c0;
   text-decoration: underline;
 }
 
 /* Lớp phủ nền mặc định cho trang login */
 .login-background {
-  background-color: #4e73df;
-  background-image: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  background-color: #1976d2;
+  background-image: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
 }
 
 h1 {
@@ -61,7 +61,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #1976d2;
 }
 button:focus,
 button:focus-visible {
@@ -71,10 +71,10 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #e3f2fd;
   }
   a:hover {
-    color: #747bff;
+    color: #1565c0;
   }
   button {
     background-color: #f9f9f9;

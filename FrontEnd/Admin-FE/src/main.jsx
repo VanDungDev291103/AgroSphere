@@ -23,6 +23,7 @@ import ProductPerformancePage from "./pages/ProductPerformancePage.jsx";
 import CouponsPage from "./pages/CouponsPage.jsx";
 import FlashSalesPage from "./pages/FlashSalesPage.jsx";
 import Layout from "./components/layout/Layout";
+import PaymentsPage from "./pages/PaymentsPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -78,6 +79,13 @@ createRoot(document.getElementById("root")).render(
             <Route
               path="/user-subscriptions"
               element={<UserSubscriptionsPage />}
+            />
+
+            {/* Payment Routes */}
+            <Route path="/payments" element={<PaymentsPage />} />
+            <Route
+              path="/payment-statistics"
+              element={<PaymentsPage showStatisticsTab={true} />}
             />
 
             <Route path="/" element={<Navigate to="/dashboard" />} />
