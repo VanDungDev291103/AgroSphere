@@ -20,6 +20,8 @@ import WeatherRecommendationPage from "./pages/WeatherRecommendationPage.jsx";
 import CropWeatherRecommendationPage from "./pages/CropWeatherRecommendationPage.jsx";
 import ExtremeWeatherPage from "./pages/ExtremeWeatherPage.jsx";
 import ProductPerformancePage from "./pages/ProductPerformancePage.jsx";
+import CouponsPage from "./pages/CouponsPage.jsx";
+import FlashSalesPage from "./pages/FlashSalesPage.jsx";
 import Layout from "./components/layout/Layout";
 
 createRoot(document.getElementById("root")).render(
@@ -35,6 +37,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/user-addresses" element={<UserAddressPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/coupons" element={<CouponsPage />} />
+            <Route path="/flash-sales" element={<FlashSalesPage />} />
 
             {/* Weather Routes */}
             <Route

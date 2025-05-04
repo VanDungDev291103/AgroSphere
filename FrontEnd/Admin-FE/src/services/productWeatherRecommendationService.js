@@ -27,49 +27,27 @@ const productWeatherRecommendationService = {
         throw new Error('API không trả về dữ liệu');
       }
       
-      console.log("Chi tiết response.data:", response.data);
+      console.log("Dữ liệu trả về từ API:", response.data);
       
-      // Debug: kiểm tra cấu trúc dữ liệu
-      if (typeof response.data === 'object') {
-        console.log("Thuộc tính của response.data:", Object.keys(response.data));
-        
-        // Kiểm tra từng cấu trúc có thể có
-        console.log("Kiểm tra cấu trúc 1 - ApiResponse:", {
-          hasSuccess: 'success' in response.data,
-          hasMessage: 'message' in response.data,
-          hasData: 'data' in response.data,
-          dataType: response.data.data ? typeof response.data.data : 'không có'
-        });
-        
-        // Kiểm tra cấu trúc 2 - Trực tiếp
-        console.log("Kiểm tra cấu trúc 2 - Direct:", {
-          hasWeatherData: 'weatherData' in response.data,
-          hasSeasonalProducts: 'seasonalProducts' in response.data
-        });
-        
-        // Kiểm tra chi tiết seasonalProducts
-        if (response.data.data && response.data.data.seasonalProducts) {
-          console.log("Chi tiết seasonalProducts (cấu trúc 1):", response.data.data.seasonalProducts);
-        } else if (response.data.seasonalProducts) {
-          console.log("Chi tiết seasonalProducts (cấu trúc 2):", response.data.seasonalProducts);
-        }
-        
-        // Kiểm tra code và content
-        console.log("Kiểm tra cấu trúc 3 - Advanced:", {
-          hasCode: 'code' in response.data,
-          hasContent: response.data.data && 'content' in response.data.data
-        });
+      // Xử lý theo cấu trúc 1: {code: 200, message: string, data: {...}}
+      if (response.data.code === 200 && response.data.data) {
+        console.log("API trả về cấu trúc code-message-data");
+        return {
+          success: true,
+          message: response.data.message || "Lấy dữ liệu thành công",
+          data: response.data.data
+        };
       }
       
-      // Xử lý theo cấu trúc 1: {success: true, message: string, data: {...}}
+      // Xử lý theo cấu trúc 2: {success: true, message: string, data: {...}}
       if ('success' in response.data && 'data' in response.data) {
-        console.log("Nhận diện API trả về cấu trúc ApiResponse");
+        console.log("API trả về cấu trúc success-message-data");
         return response.data;
       }
       
-      // Xử lý theo cấu trúc 2: {weatherData: {...}, seasonalProducts: {...}}
+      // Xử lý theo cấu trúc 3: {weatherData: {...}, seasonalProducts: {...}}
       if ('weatherData' in response.data && 'seasonalProducts' in response.data) {
-        console.log("Nhận diện API trả về cấu trúc trực tiếp");
+        console.log("API trả về cấu trúc weatherData-seasonalProducts");
         return {
           success: true,
           message: "Lấy dữ liệu thành công",
@@ -77,17 +55,7 @@ const productWeatherRecommendationService = {
         };
       }
       
-      // Xử lý theo cấu trúc 3: {code: 200, message: string, data: {...}}
-      if ('code' in response.data && 'data' in response.data) {
-        console.log("Nhận diện API trả về cấu trúc code-message-data");
-        return {
-          success: response.data.code === 200,
-          message: response.data.message,
-          data: response.data.data
-        };
-      }
-      
-      // Nếu không khớp với bất kỳ cấu trúc nào, trả về nguyên dạng nhưng được wrap
+      // Fallback: trả về dữ liệu nguyên mẫu nếu không khớp với bất kỳ cấu trúc nào đã biết
       console.log("API trả về cấu trúc không xác định, trả về nguyên dạng được wrap");
       return {
         success: true,
@@ -102,7 +70,14 @@ const productWeatherRecommendationService = {
         console.error('Response data:', error.response.data);
       }
       
-      throw error;
+      return {
+        success: false,
+        message: error.message || "Không thể kết nối đến server",
+        data: {
+          weatherData: null,
+          seasonalProducts: []
+        }
+      };
     }
   },
 

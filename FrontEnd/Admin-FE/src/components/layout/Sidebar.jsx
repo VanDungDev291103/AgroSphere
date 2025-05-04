@@ -35,6 +35,7 @@ import {
   Spa as SpaIcon,
   Assessment as AssessmentIcon,
   Warning as WarningIcon,
+  FlashOn as FlashOnIcon,
 } from "@mui/icons-material";
 import SubscriptionIcon from "@mui/icons-material/Subscriptions";
 import PaymentIcon from "@mui/icons-material/Payment";
@@ -131,6 +132,10 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
         {
           text: "Danh mục",
           path: "/categories",
+        },
+        {
+          text: "Mã giảm giá",
+          path: "/coupons",
         },
         {
           text: "Flash Sale",
