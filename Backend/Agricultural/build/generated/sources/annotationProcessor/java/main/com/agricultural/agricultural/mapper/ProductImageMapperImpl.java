@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-02T16:00:12+0700",
+    date = "2025-05-03T11:29:46+0700",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -62,9 +62,9 @@ public class ProductImageMapperImpl implements ProductImageMapper {
 
         productImage.id( productImageDTO.getId() );
         productImage.imageUrl( productImageDTO.getImageUrl() );
-        productImage.displayOrder( productImageDTO.getDisplayOrder() );
         productImage.altText( productImageDTO.getAltText() );
         productImage.title( productImageDTO.getTitle() );
+        productImage.displayOrder( productImageDTO.getDisplayOrder() );
 
         return productImage.build();
     }
@@ -77,9 +77,9 @@ public class ProductImageMapperImpl implements ProductImageMapper {
 
         entity.setId( dto.getId() );
         entity.setImageUrl( dto.getImageUrl() );
-        entity.setDisplayOrder( dto.getDisplayOrder() );
         entity.setAltText( dto.getAltText() );
         entity.setTitle( dto.getTitle() );
+        entity.setDisplayOrder( dto.getDisplayOrder() );
     }
 
     private Integer productImageProductId(ProductImage productImage) {
