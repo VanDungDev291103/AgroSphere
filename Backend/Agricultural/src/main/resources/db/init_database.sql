@@ -1672,3 +1672,50 @@ VALUES
     (@flash_sale_1, 23, 50, 5, 37500, 50000, 25, NOW(), NOW()),
     (@flash_sale_1, 24, 50, 8, 112500, 150000, 25, NOW(), NOW()),
     (@flash_sale_1, 25, 50, 12, 67500, 90000, 25, NOW(), NOW());
+
+-- Tạo bảng chat_sessions
+CREATE TABLE IF NOT EXISTS chat_sessions (
+                                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                             session_id VARCHAR(255) NOT NULL UNIQUE,
+    user_id VARCHAR(255),
+    title VARCHAR(255),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    model VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_user_id (user_id),
+    INDEX idx_session_id (session_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tạo bảng chat_messages
+CREATE TABLE IF NOT EXISTS chat_messages (
+                                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                             session_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    content TEXT NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    source VARCHAR(50),
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    metadata TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_session_id (session_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_timestamp (timestamp),
+    CONSTRAINT fk_chat_message_session FOREIGN KEY (session_id)
+    REFERENCES chat_sessions(session_id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tạo bảng forum_post_images
+CREATE TABLE IF NOT EXISTS forum_post_images (
+                                                 id INT AUTO_INCREMENT PRIMARY KEY,
+                                                 post_id INT NOT NULL,
+                                                 image_url VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255),
+    display_order INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_forum_post_images_post FOREIGN KEY (post_id)
+    REFERENCES forum_posts (id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

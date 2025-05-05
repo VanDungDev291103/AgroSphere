@@ -7,10 +7,12 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-01T01:10:58+0700",
+    date = "2025-05-05T19:22:48+0700",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 23.0.2 (Oracle Corporation)"
 )
 public class ForumPostMapperImpl implements ForumPostMapper {
+
+    private final ForumPostImageMapper forumPostImageMapper = ForumPostImageMapper.INSTANCE;
 
     @Override
     public ForumPostDTO toDTO(ForumPost forumPost) {
@@ -21,6 +23,7 @@ public class ForumPostMapperImpl implements ForumPostMapper {
         ForumPostDTO forumPostDTO = new ForumPostDTO();
 
         forumPostDTO.setUserId( forumPostUserId( forumPost ) );
+        forumPostDTO.setImages( forumPostImageMapper.toDTOList( forumPost.getImages() ) );
         forumPostDTO.setId( forumPost.getId() );
         forumPostDTO.setTitle( forumPost.getTitle() );
         forumPostDTO.setContent( forumPost.getContent() );
