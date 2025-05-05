@@ -1621,3 +1621,54 @@ UPDATE market_place
 SET description = CONCAT(description,
                          '\n\nĐây là giải pháp hiệu quả để ứng phó với thời tiết khắc nghiệt, bảo vệ cây trồng và nâng cao năng suất nông nghiệp.')
 WHERE category_id = (SELECT id FROM product_categories WHERE name = 'Vật tư ứng phó thời tiết');
+
+
+-- Thêm các chương trình Flash Sale
+INSERT INTO flash_sales
+(name, description, start_time, end_time, status, discount_percentage, max_discount_amount)
+VALUES
+-- Flash Sale đang diễn ra
+('Khuyến mãi mùa vụ Xuân Hè', 'Giảm giá đặc biệt cho các sản phẩm nông nghiệp mùa vụ Xuân Hè',
+ NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'ACTIVE', 25, 500000),
+
+-- Flash Sale sắp diễn ra
+('Khuyến mãi cuối tuần', 'Giảm giá sốc cuối tuần cho tất cả sản phẩm hạt giống',
+ DATE_ADD(NOW(), INTERVAL 2 DAY), DATE_ADD(NOW(), INTERVAL 4 DAY), 'UPCOMING', 30, 300000),
+
+('Khuyến mãi phân bón hữu cơ', 'Giảm giá lớn cho tất cả các sản phẩm phân bón hữu cơ',
+ DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 7 DAY), 'UPCOMING', 20, 200000),
+
+('Tuần lễ nông cụ', 'Giảm giá đặc biệt cho tất cả nông cụ và dụng cụ làm vườn',
+ DATE_ADD(NOW(), INTERVAL 10 DAY), DATE_ADD(NOW(), INTERVAL 17 DAY), 'UPCOMING', 15, 1000000),
+
+-- Flash Sale đã kết thúc
+('Khuyến mãi đầu vụ', 'Giảm giá khi bắt đầu mùa vụ mới',
+ DATE_SUB(NOW(), INTERVAL 10 DAY), DATE_SUB(NOW(), INTERVAL 5 DAY), 'ENDED', 20, 250000),
+
+('Flash Sale hạt giống cao cấp', 'Giảm giá đặc biệt cho hạt giống chất lượng cao',
+ DATE_SUB(NOW(), INTERVAL 15 DAY), DATE_SUB(NOW(), INTERVAL 10 DAY), 'ENDED', 35, 150000),
+
+-- Flash Sale đã hủy
+('Khuyến mãi thuốc BVTV', 'Giảm giá đặc biệt cho thuốc bảo vệ thực vật',
+ DATE_ADD(NOW(), INTERVAL 20 DAY), DATE_ADD(NOW(), INTERVAL 25 DAY), 'CANCELLED', 10, 100000);
+
+-- Giả sử bạn đã insert thành công vào bảng flash_sales và có các ID
+-- Tìm ID của các flash sale đã tạo
+SELECT @flash_sale_1 := id FROM flash_sales ORDER BY id DESC LIMIT 1;
+SELECT @flash_sale_2 := id FROM flash_sales ORDER BY id DESC LIMIT 1, 1;
+SELECT @flash_sale_3 := id FROM flash_sales ORDER BY id DESC LIMIT 2, 1;
+
+-- Cách 1: Chọn trực tiếp các sản phẩm theo ID cụ thể
+-- Giả sử bạn biết một số ID sản phẩm trong bảng market_place
+-- Đầu tiên, lấy danh sách một số sản phẩm để biết ID
+SELECT id, product_name, price FROM market_place LIMIT 20;
+
+-- Thêm các trường created_at và updated_at trong câu lệnh INSERT
+INSERT INTO flash_sale_items
+(flash_sale_id, product_id, stock_quantity, sold_quantity, discount_price, original_price, discount_percentage, created_at, updated_at)
+VALUES
+    (@flash_sale_1, 21, 50, 10, 75000, 100000, 25, NOW(), NOW()),
+    (@flash_sale_1, 22, 50, 15, 150000, 200000, 25, NOW(), NOW()),
+    (@flash_sale_1, 23, 50, 5, 37500, 50000, 25, NOW(), NOW()),
+    (@flash_sale_1, 24, 50, 8, 112500, 150000, 25, NOW(), NOW()),
+    (@flash_sale_1, 25, 50, 12, 67500, 90000, 25, NOW(), NOW());

@@ -12,6 +12,10 @@ import {
   MenuItem,
   Badge,
   InputBase,
+  Button,
+  Divider,
+  Tooltip,
+  Chip,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -21,13 +25,18 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Person as PersonIcon,
+  Dashboard as DashboardIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Help as HelpIcon,
+  Add as AddIcon,
+  Home as HomeIcon,
 } from "@mui/icons-material";
 import authService from "../../services/authService";
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  color: theme.palette.text.primary,
+  backgroundColor: "#1976d2",
+  color: "#ffffff",
   boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
   zIndex: theme.zIndex.drawer + 1,
 }));
@@ -35,15 +44,17 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const SearchContainer = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.grey[100],
+  backgroundColor: "rgba(255, 255, 255, 0.15)",
   "&:hover": {
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
   },
   marginLeft: theme.spacing(2),
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     width: "auto",
   },
+  display: "flex",
+  alignItems: "center",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -54,14 +65,21 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  color: "rgba(255, 255, 255, 0.7)",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
+    color: "#ffffff",
+    "&::placeholder": {
+      color: "rgba(255, 255, 255, 0.7)",
+      opacity: 1,
+    },
     [theme.breakpoints.up("md")]: {
       width: "20ch",
       "&:focus": {
@@ -71,9 +89,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const SearchButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  backgroundColor: "rgba(255, 255, 255, 0.2)",
+  color: "#ffffff",
+  "&:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+  },
+}));
+
 const ActionIcons = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
+  "& .MuiIconButton-root": {
+    color: "#ffffff",
+  },
+}));
+
+const LogoContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  marginRight: theme.spacing(2),
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
+
+const QuickActions = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  marginLeft: theme.spacing(2),
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
 }));
 
 const Header = ({ handleDrawerToggle }) => {
@@ -185,23 +233,60 @@ const Header = ({ handleDrawerToggle }) => {
             <MenuIcon />
           </IconButton>
 
-          {/* Logo for mobile */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/dashboard"
-            sx={{
-              display: { xs: "flex", sm: "none" },
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            AgroSphere
-          </Typography>
+          {/* Logo và tiêu đề */}
+          <LogoContainer>
+            <img
+              src="/vite.svg"
+              alt="Logo"
+              style={{ width: 35, height: 35, marginRight: 10 }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component={Link}
+              to="/dashboard"
+              sx={{
+                fontWeight: 700,
+                color: "inherit",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              AgroSphere Admin
+            </Typography>
+          </LogoContainer>
 
-          {/* Search */}
+          {/* Phím tắt nhanh */}
+          <QuickActions>
+            <Tooltip title="Dashboard">
+              <IconButton color="inherit" component={Link} to="/dashboard">
+                <DashboardIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Đơn hàng">
+              <IconButton color="inherit" component={Link} to="/orders">
+                <ShoppingCartIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Trang chủ">
+              <IconButton color="inherit" component={Link} to="/">
+                <HomeIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Thêm mới">
+              <IconButton color="inherit">
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ mx: 1, backgroundColor: "rgba(255,255,255,0.3)" }}
+            />
+          </QuickActions>
+
+          {/* Search với nút tìm kiếm */}
           <SearchContainer>
             <SearchIconWrapper>
               <SearchIcon />
@@ -210,12 +295,32 @@ const Header = ({ handleDrawerToggle }) => {
               placeholder="Tìm kiếm..."
               inputProps={{ "aria-label": "search" }}
             />
+            <SearchButton variant="contained" size="small">
+              Tìm
+            </SearchButton>
           </SearchContainer>
 
           <Box sx={{ flexGrow: 1 }} />
 
+          {/* Trạng thái hệ thống */}
+          <Chip
+            label="Hệ thống: Online"
+            size="small"
+            sx={{
+              backgroundColor: "rgba(0,255,0,0.2)",
+              color: "#fff",
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+            }}
+          />
+
           {/* Action icons */}
           <ActionIcons>
+            <Tooltip title="Trợ giúp">
+              <IconButton size="large" color="inherit">
+                <HelpIcon />
+              </IconButton>
+            </Tooltip>
             <IconButton
               size="large"
               aria-label="show 4 new mails"

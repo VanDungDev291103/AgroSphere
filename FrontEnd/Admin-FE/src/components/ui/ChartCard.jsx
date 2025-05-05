@@ -40,6 +40,19 @@ const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: 16,
   boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
   overflow: "hidden",
+  backgroundColor: "#ffffff",
+  border: "1px solid #e0e0e0",
+  "& .MuiCardHeader-root": {
+    borderBottom: "1px solid #e3f2fd",
+    backgroundColor: "#f5f9ff",
+  },
+  "& .MuiCardHeader-title": {
+    fontWeight: 600,
+    color: "#1565c0",
+  },
+  "& .MuiCardHeader-subheader": {
+    color: "#5c93ce",
+  },
 }));
 
 const ChartContainer = styled("div")({

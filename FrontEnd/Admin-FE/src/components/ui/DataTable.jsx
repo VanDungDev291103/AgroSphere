@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Table,
@@ -16,12 +16,19 @@ import {
   Typography,
   Tooltip,
   alpha,
+  TextField,
+  InputAdornment,
+  styled,
+  CircularProgress,
 } from "@mui/material";
 import {
   Delete as DeleteIcon,
   FilterList as FilterListIcon,
   Edit as EditIcon,
   Visibility as VisibilityIcon,
+  Search as SearchIcon,
+  Add as AddIcon,
+  Refresh as RefreshIcon,
 } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
@@ -232,33 +239,70 @@ EnhancedTableToolbar.propTypes = {
   filterComponent: PropTypes.node,
 };
 
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
+  borderRadius: "16px",
+  overflow: "hidden",
+  border: "1px solid #e0e0e0",
+}));
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  backgroundColor: "#1976d2",
+  "& .MuiTableCell-head": {
+    color: "#ffffff",
+    fontWeight: "bold",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: "#f5f9ff",
+  },
+  "&:hover": {
+    backgroundColor: "#e3f2fd",
+  },
+  // Hiệu ứng màu khi chọn hàng
+  "&.Mui-selected": {
+    backgroundColor: "#bbdefb",
+    "&:hover": {
+      backgroundColor: "#90caf9",
+    },
+  },
+}));
+
 // Component DataTable chính
 const DataTable = ({
   columns,
-  rows,
-  title = "Danh sách",
-  onEdit,
-  onView,
-  onDelete,
-  enableSelection = true,
-  filterComponent,
-  defaultSortColumn = "id",
-  defaultSortOrder = "asc",
-  rowsPerPageOptions = [5, 10, 25, 50],
-  renderActionButtons = null,
-  totalItems,
-  page,
-  rowsPerPage,
-  onPageChange,
-  onRowsPerPageChange,
+  data,
+  title,
+  selectable = false,
+  onSelectionChange,
+  onRowClick,
+  loading = false,
+  pagination = true,
+  rowsPerPageOptions = [5, 10, 25],
+  defaultRowsPerPage = 10,
+  orderBy: defaultOrderBy = "",
+  order: defaultOrder = "asc",
+  // Các props đặc biệt
+  toolbarActions = null,
+  refreshData = null,
+  addAction = null,
+  searchable = false,
+  searchPlaceholder = "Tìm kiếm...",
+  onSearch = null,
+  filterComponent = null,
 }) => {
   // Debug log
-  console.log("DataTable received rows:", rows);
+  console.log("DataTable received data:", data);
   console.log("DataTable columns:", columns);
 
-  const [order, setOrder] = useState(defaultSortOrder);
-  const [orderBy, setOrderBy] = useState(defaultSortColumn);
+  const [order, setOrder] = useState(defaultOrder);
+  const [orderBy, setOrderBy] = useState(defaultOrderBy);
   const [selected, setSelected] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -268,7 +312,7 @@ const DataTable = ({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = data.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -276,7 +320,7 @@ const DataTable = ({
   };
 
   const handleClick = (event, id) => {
-    if (!enableSelection) return;
+    if (!selectable) return;
 
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -298,220 +342,307 @@ const DataTable = ({
   };
 
   const handleChangePage = (event, newPage) => {
-    onPageChange(event, newPage);
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    onRowsPerPageChange(event);
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const sortedData = () => {
+    return stableSort(data, getComparator(order, orderBy));
+  };
 
-  const handleDeleteSelected = () => {
-    if (onDelete) {
-      onDelete(selected);
-    }
-    setSelected([]);
+  const paginatedData = () => {
+    const sorted = sortedData();
+    const start = page * rowsPerPage;
+    const end = start + rowsPerPage;
+    return sorted.slice(start, end);
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2, borderRadius: 2, overflow: "hidden" }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          title={title}
-          onDelete={handleDeleteSelected}
-          filterComponent={filterComponent}
-        />
-        <TableContainer sx={{ maxHeight: "calc(100vh - 320px)" }}>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size="medium"
-            stickyHeader
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      {/* Toolbar khi có hàng được chọn */}
+      {selectable && selected.length > 0 && (
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
+          }}
+        >
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
           >
-            <EnhancedTableHead
-              columns={columns}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              enableSelection={enableSelection}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+            {selected.length} đã chọn
+          </Typography>
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{
-                        "&:nth-of-type(odd)": {
-                          backgroundColor: "rgba(0, 0, 0, 0.02)",
-                        },
-                        "&.Mui-selected, &.Mui-selected:hover": {
-                          backgroundColor: "rgba(25, 118, 210, 0.08)",
-                        },
-                      }}
-                    >
-                      {enableSelection && (
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            onClick={(event) => handleClick(event, row.id)}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-                      )}
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align={column.numeric ? "right" : "left"}
-                            padding={column.disablePadding ? "none" : "normal"}
-                          >
-                            {column.format ? column.format(value, row) : value}
-                          </TableCell>
-                        );
-                      })}
-                      <TableCell align="right">
-                        {renderActionButtons ? (
-                          renderActionButtons(row)
-                        ) : (
-                          <>
-                            {onView && (
-                              <Tooltip title="Xem chi tiết">
-                                <IconButton
-                                  color="info"
-                                  onClick={() => onView(row.id)}
-                                  size="small"
-                                >
-                                  <VisibilityIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                            {onEdit && (
-                              <Tooltip title="Chỉnh sửa">
-                                <IconButton
-                                  color="primary"
-                                  onClick={() => onEdit(row.id)}
-                                  size="small"
-                                >
-                                  <EditIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                            {onDelete && (
-                              <Tooltip title="Xóa">
-                                <IconButton
-                                  color="error"
-                                  onClick={() => onDelete([row.id])}
-                                  size="small"
-                                >
-                                  <DeleteIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell
-                    colSpan={columns.length + (enableSelection ? 2 : 1)}
+          <Tooltip title="Xóa">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      )}
+
+      {/* Toolbar mặc định */}
+      {!selectable || selected.length === 0 ? (
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            justifyContent: "space-between",
+            backgroundColor: "#f5f9ff",
+            borderBottom: "1px solid #e3f2fd",
+          }}
+        >
+          <Typography variant="h6" id="tableTitle" component="div">
+            {title}
+          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {/* Thành phần tìm kiếm tùy chọn */}
+            {searchable && onSearch && (
+              <TextField
+                size="small"
+                variant="outlined"
+                placeholder={searchPlaceholder}
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  if (onSearch) onSearch(e.target.value);
+                }}
+                sx={{ mr: 1, minWidth: "200px" }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+
+            {/* Thành phần lọc tùy chọn */}
+            {filterComponent && <Box sx={{ mr: 1 }}>{filterComponent}</Box>}
+
+            {/* Các action tùy chọn */}
+            {toolbarActions}
+
+            {/* Nút làm mới dữ liệu */}
+            {refreshData && (
+              <Tooltip title="Làm mới">
+                <IconButton onClick={refreshData}>
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+
+            {/* Nút thêm mới */}
+            {addAction && (
+              <Tooltip title="Thêm mới">
+                <IconButton color="primary" onClick={addAction}>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+        </Toolbar>
+      ) : null}
+
+      {/* Bảng dữ liệu */}
+      <StyledTableContainer>
+        <Table
+          sx={{ minWidth: 750 }}
+          size="medium"
+          aria-labelledby="tableTitle"
+        >
+          <StyledTableHead>
+            <TableRow>
+              {selectable && (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    indeterminate={
+                      selected.length > 0 && selected.length < data.length
+                    }
+                    checked={data.length > 0 && selected.length === data.length}
+                    onChange={handleSelectAllClick}
+                    inputProps={{
+                      "aria-label": "select all",
+                    }}
                   />
-                </TableRow>
+                </TableCell>
               )}
-              {rows.length === 0 && (
-                <TableRow style={{ height: 200 }}>
-                  <TableCell
-                    colSpan={columns.length + (enableSelection ? 2 : 1)}
-                    align="center"
-                    sx={{ py: 4 }}
-                  >
-                    <Box
-                      sx={{
-                        p: 3,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.numeric ? "right" : "left"}
+                  padding={column.disablePadding ? "none" : "normal"}
+                  sortDirection={orderBy === column.id ? order : false}
+                  sx={{ minWidth: column.minWidth }}
+                >
+                  {column.sortable !== false ? (
+                    <TableSortLabel
+                      active={orderBy === column.id}
+                      direction={orderBy === column.id ? order : "asc"}
+                      onClick={handleRequestSort}
                     >
-                      <Typography variant="h6" color="text.secondary">
-                        Không có dữ liệu
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        Chưa có thông tin người dùng nào trong hệ thống.
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      {column.label}
+                      {orderBy === column.id ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === "desc"
+                            ? "sorted descending"
+                            : "sorted ascending"}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  ) : (
+                    column.label
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          </StyledTableHead>
+          <TableBody>
+            {loading ? (
+              // Hiển thị trạng thái đang tải
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length + (selectable ? 1 : 0)}
+                  align="center"
+                  sx={{ py: 5 }}
+                >
+                  <CircularProgress color="primary" />
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    Đang tải dữ liệu...
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : sortedData().length === 0 ? (
+              // Hiển thị khi không có dữ liệu
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length + (selectable ? 1 : 0)}
+                  align="center"
+                  sx={{ py: 5 }}
+                >
+                  <Typography variant="body1">Không có dữ liệu</Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              // Hiển thị dữ liệu
+              paginatedData().map((row, index) => {
+                const isItemSelected = isSelected(row.id);
+                const labelId = `data-table-checkbox-${index}`;
+
+                return (
+                  <StyledTableRow
+                    hover
+                    onClick={(event) => {
+                      if (onRowClick) {
+                        onRowClick(row);
+                      }
+                      if (selectable) {
+                        handleClick(event, row.id);
+                      }
+                    }}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
+                    sx={{
+                      cursor: selectable || onRowClick ? "pointer" : "default",
+                    }}
+                  >
+                    {selectable && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                    )}
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell
+                          key={column.id}
+                          align={column.numeric ? "right" : "left"}
+                        >
+                          {column.format && typeof value === "number"
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </StyledTableRow>
+                );
+              })
+            )}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
+
+      {/* Phân trang */}
+      {pagination && (
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
           component="div"
-          count={totalItems || rows.length}
+          count={sortedData().length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Số hàng mỗi trang:"
           labelDisplayedRows={({ from, to, count }) =>
-            `${from}-${to} của ${count}`
+            `${from}-${to} / ${count}`
           }
+          sx={{
+            backgroundColor: "#f5f9ff",
+            borderTop: "1px solid #e3f2fd",
+          }}
         />
-      </Paper>
-    </Box>
+      )}
+    </Paper>
   );
 };
 
 // Kiểm tra kiểu dữ liệu cho props
 DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
-  rows: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
   title: PropTypes.string,
-  onEdit: PropTypes.func,
-  onView: PropTypes.func,
-  onDelete: PropTypes.func,
-  enableSelection: PropTypes.bool,
-  filterComponent: PropTypes.node,
-  defaultSortColumn: PropTypes.string,
-  defaultSortOrder: PropTypes.oneOf(["asc", "desc"]),
+  selectable: PropTypes.bool,
+  onSelectionChange: PropTypes.func,
+  onRowClick: PropTypes.func,
+  loading: PropTypes.bool,
+  pagination: PropTypes.bool,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number),
-  renderActionButtons: PropTypes.func,
-  totalItems: PropTypes.number,
-  page: PropTypes.number,
-  rowsPerPage: PropTypes.number,
-  onPageChange: PropTypes.func,
-  onRowsPerPageChange: PropTypes.func,
+  defaultRowsPerPage: PropTypes.number,
+  orderBy: PropTypes.string,
+  order: PropTypes.oneOf(["asc", "desc"]),
+  toolbarActions: PropTypes.node,
+  refreshData: PropTypes.func,
+  addAction: PropTypes.func,
+  searchable: PropTypes.bool,
+  searchPlaceholder: PropTypes.string,
+  onSearch: PropTypes.func,
+  filterComponent: PropTypes.node,
 };
 
 export default DataTable;

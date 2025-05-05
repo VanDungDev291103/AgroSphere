@@ -7,6 +7,7 @@ const StyledCard = styled(Card)(({ theme, color = "primary" }) => ({
   overflow: "hidden",
   borderRadius: 16,
   boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
+  backgroundColor: "#ffffff",
   transition: "transform 0.3s ease, box-shadow 0.3s ease",
   "&:hover": {
     transform: "translateY(-5px)",
@@ -19,11 +20,13 @@ const StyledCard = styled(Card)(({ theme, color = "primary" }) => ({
     left: 0,
     width: "100%",
     height: "5px",
-    backgroundColor: theme.palette[color].main,
+    backgroundColor:
+      color === "primary" ? "#1976d2" : theme.palette[color].main,
   },
+  border: "1px solid #e0e0e0",
 }));
 
-const IconWrapper = styled(Box)(({ theme }) => ({
+const IconWrapper = styled(Box)(({ theme, color = "primary" }) => ({
   position: "absolute",
   right: 20,
   top: 20,
@@ -33,7 +36,9 @@ const IconWrapper = styled(Box)(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   borderRadius: "50%",
-  opacity: 0.12,
+  opacity: 0.15,
+  backgroundColor:
+    color === "primary" ? "#1976d2" : theme.palette[color]?.main || "#1976d2",
 }));
 
 const StatCard = ({
