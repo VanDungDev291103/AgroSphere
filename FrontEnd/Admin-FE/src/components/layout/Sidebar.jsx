@@ -36,6 +36,7 @@ import {
   Assessment as AssessmentIcon,
   Warning as WarningIcon,
   FlashOn as FlashOnIcon,
+  Newspaper as NewspaperIcon,
 } from "@mui/icons-material";
 import SubscriptionIcon from "@mui/icons-material/Subscriptions";
 import PaymentIcon from "@mui/icons-material/Payment";
@@ -89,6 +90,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
   const [openRecommendationSubmenu, setOpenRecommendationSubmenu] =
     useState(false);
   const [openPaymentSubmenu, setOpenPaymentSubmenu] = useState(false);
+  const [openNewsSubmenu, setOpenNewsSubmenu] = useState(false);
 
   const handleProductClick = () => {
     setOpenProductSubmenu(!openProductSubmenu);
@@ -112,6 +114,10 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
 
   const handlePaymentClick = () => {
     setOpenPaymentSubmenu(!openPaymentSubmenu);
+  };
+
+  const handleNewsClick = () => {
+    setOpenNewsSubmenu(!openNewsSubmenu);
   };
 
   const isActive = (path) => {
@@ -146,6 +152,23 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
         {
           text: "Flash Sale",
           path: "/flash-sales",
+        },
+      ],
+    },
+    {
+      text: "Tin tức",
+      icon: <NewspaperIcon />,
+      submenu: true,
+      onClick: handleNewsClick,
+      open: openNewsSubmenu,
+      items: [
+        {
+          text: "Quản lý tin tức",
+          path: "/news",
+        },
+        {
+          text: "Nguồn tin tức",
+          path: "/news-sources",
         },
       ],
     },
