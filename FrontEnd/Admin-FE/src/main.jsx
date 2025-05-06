@@ -24,6 +24,8 @@ import CouponsPage from "./pages/CouponsPage.jsx";
 import FlashSalesPage from "./pages/FlashSalesPage.jsx";
 import Layout from "./components/layout/Layout";
 import PaymentsPage from "./pages/PaymentsPage.jsx";
+import NewsPage from "./pages/NewsPage.jsx";
+import NewsSourcesRedirect from "./pages/NewsSourcesRedirect.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -40,6 +42,10 @@ createRoot(document.getElementById("root")).render(
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/coupons" element={<CouponsPage />} />
             <Route path="/flash-sales" element={<FlashSalesPage />} />
+
+            {/* News Routes */}
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news-sources" element={<NewsSourcesRedirect />} />
 
             {/* Weather Routes */}
             <Route

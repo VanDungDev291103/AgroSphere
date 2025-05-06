@@ -1719,3 +1719,45 @@ CREATE TABLE IF NOT EXISTS forum_post_images (
     CONSTRAINT fk_forum_post_images_post FOREIGN KEY (post_id)
     REFERENCES forum_posts (id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+--UPDATE LẦN 8
+
+-- Cập nhật bảng news hiện tại để đáp ứng cấu trúc entity mới
+ALTER TABLE news
+    ADD COLUMN summary VARCHAR(1000),
+    ADD COLUMN image_url VARCHAR(500),
+    ADD COLUMN source_url VARCHAR(500),
+    ADD COLUMN source_name VARCHAR(255),
+    ADD COLUMN published_date TIMESTAMP,
+    ADD COLUMN active BOOLEAN DEFAULT TRUE,
+    ADD COLUMN tags VARCHAR(500),
+    ADD COLUMN unique_id VARCHAR(255) UNIQUE;
+
+-- Tạo bảng news_sources mới
+CREATE TABLE news_sources (
+                              id INT PRIMARY KEY AUTO_INCREMENT,
+                              name VARCHAR(255) NOT NULL,
+                              url VARCHAR(500) NOT NULL,
+                              article_selector VARCHAR(500) NOT NULL,
+                              title_selector VARCHAR(255) NOT NULL,
+                              summary_selector VARCHAR(255),
+                              content_selector VARCHAR(255),
+                              image_selector VARCHAR(255),
+                              date_selector VARCHAR(255),
+                              date_format VARCHAR(500),
+                              category VARCHAR(255) NOT NULL,
+                              active BOOLEAN NOT NULL DEFAULT TRUE,
+                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tạo chỉ mục để tối ưu hiệu suất
+CREATE INDEX idx_news_category ON news(category);
+CREATE INDEX idx_news_active ON news(active);
+CREATE INDEX idx_news_published_date ON news(published_date);
+CREATE INDEX idx_news_unique_id ON news(unique_id);
+CREATE INDEX idx_news_sources_active ON news_sources(active);
+CREATE INDEX idx_news_sources_category ON news_sources(category);
+
+ALTER TABLE news_sources MODIFY id INT AUTO_INCREMENT;
