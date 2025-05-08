@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/App.jsx" afterDir="false" />
@@ -160,6 +162,8 @@
       <workItem from="1746243658167" duration="30431000" />
       <workItem from="1746343164519" duration="15804000" />
       <workItem from="1746431397884" duration="7956000" />
+      <workItem from="1746467936002" duration="3542000" />
+      <workItem from="1746596959115" duration="792000" />
     </task>
     <servers />
   </component>
