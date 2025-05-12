@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import FarmHub from "./pages/FarmHub";
 import ChatAI from "./pages/ChatAI";
@@ -21,6 +16,9 @@ import FarmHub2 from "./pages/FarmHub2";
 import CategoryPage from "./pages/CategoryPage ";
 import ProductDetail from "./pages/ProductDetail";
 import Coupons from "./pages/Coupons";
+import UserProfile from "./pages/UserProfile";
+import UserSearchPage from "./pages/UserSearchPage";
+import EditProfile from "./pages/EditProfile";
 
 import Category from "./components/farmhub2/Category";
 import NewProducts from "./components/farmhub2/NewProducts";
@@ -45,7 +43,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main />}>
-            <Route index element={<Navigate to="home" />} />
+            <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="about" element={<AboutUs />} />
             <Route path="news" element={<News />} />
@@ -57,6 +55,9 @@ function App() {
               <Route path="reset-password" element={<ResetPassword />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+              <Route path="profile/:userId" element={<UserProfile />} />
+              <Route path="profile/edit" element={<EditProfile />} />
+              <Route path="users/search" element={<UserSearchPage />} />
               <Route path="farmhub2" element={<FarmHub2 />}>
                 <Route
                   index

@@ -16,7 +16,6 @@ const login = async ({ email, password }) => {
       password,
     });
     console.log("Response đăng nhập:", res.data);
-    toast.success("Đăng nhập thành công");
     return res.data;
   } catch (error) {
     console.error("Lỗi đăng nhập:", error);
@@ -60,16 +59,27 @@ const Login = () => {
     mutationFn: login,
     onSuccess: (data) => {
       console.log("Login success, data:", data);
+      toast.success("Đăng nhập thành công");
+
+      // Lưu thông tin xác thực
       const accessToken = data.token;
       const user = data.user;
       const roleName = data.user.roleName;
       const authData = { accessToken, user, roleName };
+
+      // Cập nhật trạng thái và lưu vào session storage
       setAuth(authData);
       sessionStorage.setItem("auth", JSON.stringify(authData));
+
+      // Reset form
       setEmail("");
       setPassword("");
-      // Navigate to the intended destination or home
-      navigate(from, { replace: true });
+
+      // Trì hoãn chuyển hướng một chút để đảm bảo state đã được cập nhật
+      setTimeout(() => {
+        console.log("Điều hướng từ login đến:", from);
+        navigate(from, { replace: true });
+      }, 100);
     },
     onError: (error) => {
       console.error("Login error:", error);

@@ -114,24 +114,27 @@ export const axiosPrivate = axios.create({
   timeout: API_TIMEOUT,
 });
 
-// Thêm interceptor request cho axiosPrivate
+// Thêm log cho tất cả các request
 axiosPrivate.interceptors.request.use(
-  (config) => {
+  config => {
     // Cập nhật baseURL mới nhất cho mỗi request
     config.baseURL = API_URL;
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
-  (error) => {
+  error => {
+    console.error('Request Error:', error);
     return Promise.reject(error);
   }
 );
 
-// Thêm interceptor response cho axiosPrivate
+// Thêm log cho tất cả các response
 axiosPrivate.interceptors.response.use(
-  (response) => {
+  response => {
+    console.log(`API Response from ${response.config.url}:`, response.status);
     return response;
   },
-  (error) => {
+  error => {
     // Xem xét lỗi kết nối
     if (error.code === 'ECONNABORTED' || error.message === 'Network Error') {
       console.warn("Lỗi kết nối (Private):", error.message);
@@ -151,7 +154,7 @@ axiosPrivate.interceptors.response.use(
       }
     }
     
-    // Các lỗi khác sẽ được xử lý bởi useAxiosPrivate hook
+    console.error('Response Error:', error.response?.status, error.response?.data || error.message);
     return Promise.reject(error);
   }
 );

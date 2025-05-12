@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 // Danh sách các trang không yêu cầu đăng nhập
 const PUBLIC_ROUTES = [
+  "/",
+  "/home",
   "/farmhub2",
   "/search",
   "/category",

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import PropTypes from "prop-types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +13,22 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useAuth from "@/hooks/useAuth";
 import { Globe, ChevronDown, Lock, Users } from "lucide-react";
+import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
+
+// Hàm hỗ trợ trích xuất hashtag từ nội dung
+const extractHashtags = (content) => {
+  if (!content) return [];
+
+  const hashtagRegex =
+    /#[a-zA-Z0-9_\u00C0-\u017Fàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]+/g;
+  const matches = content.match(hashtagRegex);
+
+  if (!matches) return [];
+
+  // Trích xuất chỉ tên hashtag (bỏ ký tự #)
+  return matches.map((tag) => tag.substring(1));
+};
 
 const backgrounds = [
   { id: "default", color: "bg-white text-black", label: "Mặc định" },
@@ -69,6 +86,7 @@ const CreatePostForm = ({
 
   const fileInputRef = useRef(null);
   const addMoreFileInputRef = useRef(null);
+  const editorRef = useRef(null);
 
   // Map initialPost background_color if it's an ID to the actual color class
   const getInitialBackground = () => {
@@ -92,16 +110,16 @@ const CreatePostForm = ({
   const [location, setLocation] = useState(initialPost?.location || "");
   const [feeling, setFeeling] = useState(initialPost?.feeling || "");
   const [privacy, setPrivacy] = useState(
-    initialPost?.privacy_level || "PUBLIC"
+    initialPost?.privacyLevel || initialPost?.privacy_level || "PUBLIC"
   );
   const [backgroundCssClass, setBackgroundCssClass] = useState(
     getInitialBackground()
   );
   const [selectedBackgroundId, setSelectedBackgroundId] = useState(
-    initialPost?.background_color || "default"
+    initialPost?.backgroundColor || initialPost?.background_color || "default"
   );
   const [fileType, setFileType] = useState(
-    initialPost?.attachment_type || "NONE"
+    initialPost?.attachmentType || initialPost?.attachment_type || "NONE"
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -211,74 +229,125 @@ const CreatePostForm = ({
     setLocation(value);
   };
 
+  // Handle editor content change
+  const handleEditorChange = (content) => {
+    setContent(content);
+  };
+
   // Validate form
   const validateForm = () => {
     const newErrors = {};
 
-    if (!title.trim() || title.trim().length < 5 || title.trim().length > 200) {
-      newErrors.title = "Tiêu đề phải từ 5 đến 200 ký tự";
+    if (!title.trim() || title.length < 5 || title.length > 200) {
+      newErrors.title = "Tiêu đề phải có từ 5 đến 200 ký tự";
     }
 
+    // Kiểm tra nội dung từ trình soạn thảo
+    // Loại bỏ các thẻ HTML để đếm ký tự thuần văn bản
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = content;
+    const textContent = tempDiv.textContent || tempDiv.innerText || "";
+
     if (
-      !content.trim() ||
-      content.trim().length < 10 ||
-      content.trim().length > 5000
+      !textContent.trim() ||
+      textContent.length < 10 ||
+      textContent.length > 5000
     ) {
-      newErrors.content = "Nội dung phải từ 10 đến 5000 ký tự";
+      newErrors.content = "Nội dung phải có từ 10 đến 5000 ký tự";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
+  // Handle submit
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      console.log("Đang chuẩn bị dữ liệu bài đăng...");
+      // Lấy nội dung từ trình soạn thảo nếu đang sử dụng
+      const finalContent =
+        backgroundCssClass === "bg-white text-black" && editorRef.current
+          ? editorRef.current.getContent()
+          : content;
 
-      const postData = {
-        title,
-        content,
-        privacy_level: privacy,
-        background_color:
-          selectedBackgroundId === "default" ? null : selectedBackgroundId,
-        location,
-        feeling,
-        attachment_type: fileType,
-        attachment_url: previewURLs.length > 0 ? previewURLs[0] : null,
-      };
-
-      console.log("Dữ liệu bài đăng:", postData);
-      console.log("Files đính kèm:", selectedFiles);
-      console.log("Số lượng file:", selectedFiles.length);
-
-      // Kiểm tra nếu có hình ảnh được chọn
-      if (selectedFiles.length > 0) {
-        console.log("Gửi bài đăng với " + selectedFiles.length + " hình ảnh");
-
-        // Lọc bỏ các file null/undefined nếu có
-        const validFiles = selectedFiles.filter((file) => file);
-
-        if (validFiles.length > 0) {
-          // Truyền toàn bộ mảng files vào hàm API
-          await onSubmit(postData, validFiles);
-        } else {
-          // Nếu không có file hợp lệ, gửi bài đăng không có hình ảnh
-          await onSubmit(postData, null);
-        }
-      } else {
-        // Không có hình ảnh, gửi bài đăng bình thường
-        console.log("Gửi bài đăng không có hình ảnh");
-        await onSubmit(postData, null);
+      // Kiểm tra dữ liệu trước khi gửi
+      const trimmedTitle = title.trim();
+      if (!trimmedTitle) {
+        setErrors({ ...errors, title: "Tiêu đề không được để trống" });
+        setIsSubmitting(false);
+        return;
       }
 
-      console.log("Bài đăng đã được gửi thành công");
+      // Kiểm tra nội dung từ trình soạn thảo
+      if (
+        !finalContent ||
+        finalContent === "<p></p>" ||
+        finalContent === "<p><br></p>"
+      ) {
+        setErrors({ ...errors, content: "Nội dung không được để trống" });
+        setIsSubmitting(false);
+        return;
+      }
 
-      // Reset form if not editing
+      // Tạo đối tượng JSON để gửi đi theo đúng định dạng backend mong đợi
+      const postData = {
+        title: trimmedTitle,
+        content: finalContent,
+        privacyLevel: privacy,
+        location: location || null,
+        feeling: feeling || null,
+        backgroundColor:
+          selectedBackgroundId !== "default" ? selectedBackgroundId : null,
+        attachmentType: fileType || "NONE",
+        attachmentUrl: null,
+      };
+
+      console.log("Dữ liệu gửi đi:", postData);
+
+      // Nếu có files, sử dụng FormData
+      if (selectedFiles.length > 0) {
+        const formData = new FormData();
+
+        // Tạo object theo định dạng mà backend mong đợi
+        const postRequestData = {
+          title: trimmedTitle,
+          content: finalContent,
+          privacyLevel: privacy,
+          location: location || null,
+          feeling: feeling || null,
+          backgroundColor:
+            selectedBackgroundId !== "default" ? selectedBackgroundId : null,
+          attachmentType: fileType || "IMAGE",
+          attachmentUrl: null,
+          hashtags: extractHashtags(finalContent),
+        };
+
+        // Thêm dữ liệu JSON vào FormData với key 'post' theo yêu cầu của backend
+        formData.append(
+          "post",
+          new Blob([JSON.stringify(postRequestData)], {
+            type: "application/json",
+          })
+        );
+
+        // Thêm các file với key 'images' theo yêu cầu của backend
+        selectedFiles.forEach((file) => {
+          formData.append("images", file);
+        });
+
+        // Gọi API với FormData
+        await onSubmit(formData);
+      } else {
+        // Không có file, gửi trực tiếp JSON
+        await onSubmit(postData);
+      }
+
+      // Reset form nếu không phải chế độ chỉnh sửa
       if (!editMode) {
         setTitle("");
         setContent("");
@@ -290,11 +359,10 @@ const CreatePostForm = ({
         setBackgroundCssClass("bg-white text-black");
         setSelectedBackgroundId("default");
         setFileType("NONE");
-        setErrors({});
       }
     } catch (error) {
-      console.error("Lỗi chi tiết khi tạo bài viết:", error);
-      // Hiển thị thông báo lỗi tại đây nếu cần
+      console.error("Lỗi khi đăng bài viết:", error);
+      toast.error("Có lỗi xảy ra khi đăng bài viết. Vui lòng thử lại sau.");
     } finally {
       setIsSubmitting(false);
     }
@@ -372,17 +440,75 @@ const CreatePostForm = ({
         )}
       </div>
 
-      <div className={`mb-4 rounded-lg p-3 ${backgroundCssClass}`}>
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Nội dung bài viết (10-5000 ký tự)"
-          className={`min-h-[100px] border-none bg-transparent resize-none focus-visible:ring-0 text-lg ${
-            backgroundCssClass.includes("text-white")
-              ? "text-white placeholder:text-gray-200"
-              : "text-black placeholder:text-gray-500"
-          } ${errors.content ? "border-red-500" : ""}`}
-        />
+      <div
+        className={`mb-4 rounded-lg ${
+          backgroundCssClass !== "bg-white text-black" ? "p-3" : ""
+        }`}
+      >
+        {backgroundCssClass === "bg-white text-black" ? (
+          <Editor
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            value={content}
+            onEditorChange={handleEditorChange}
+            apiKey="hhl2i2ucsjujs5x82jxlr5p8kwidgqklbk61yxnit36i33kh"
+            init={{
+              height: 300,
+              menubar: false,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+              ],
+              toolbar:
+                "undo redo | bold italic underline strikethrough | " +
+                "link image | alignleft aligncenter alignright alignjustify | " +
+                "bullist numlist outdent indent | " +
+                "removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              entity_encoding: "raw",
+              forced_root_block: "p",
+              valid_elements: "*[*]",
+              valid_children:
+                "+body[style],+div[p|h1|h2|h3|h4|h5|h6|blockquote|div|img|table|ol|ul|li],+li[ol|ul]",
+              setup: (editor) => {
+                editor.on("init", () => {
+                  // Nếu đang trong chế độ chỉnh sửa, set nội dung của editor
+                  if (editMode && initialPost?.content) {
+                    editor.setContent(initialPost.content);
+                  }
+                });
+              },
+            }}
+          />
+        ) : (
+          <Textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Nội dung bài viết (10-5000 ký tự)"
+            className={`min-h-[100px] border-none bg-transparent resize-none focus-visible:ring-0 text-lg ${
+              backgroundCssClass.includes("text-white")
+                ? "text-white placeholder:text-gray-200"
+                : "text-black placeholder:text-gray-500"
+            } ${errors.content ? "border-red-500" : ""}`}
+          />
+        )}
+
         {errors.content && (
           <p
             className={`text-sm ${
@@ -697,6 +823,14 @@ const CreatePostForm = ({
       </div>
     </div>
   );
+};
+
+// Định nghĩa PropTypes
+CreatePostForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  editMode: PropTypes.bool,
+  initialPost: PropTypes.object,
+  onCancel: PropTypes.func,
 };
 
 export default CreatePostForm;

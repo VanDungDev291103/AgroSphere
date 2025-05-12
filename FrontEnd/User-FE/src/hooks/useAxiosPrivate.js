@@ -1,7 +1,6 @@
+import { axiosPrivate } from "@/services/api/axios";
 import { useEffect } from "react";
 import useAuth from "./useAuth";
-import { axiosPrivate } from "../services/api/axios";
-import { toast } from "react-toastify";
 
 const useAxiosPrivate = () => {
   const { auth } = useAuth();
@@ -11,43 +10,39 @@ const useAxiosPrivate = () => {
     if (auth?.accessToken) {
       console.log("Auth token in useAxiosPrivate: Có token");
     } else {
-      console.log("Auth token in useAxiosPrivate: Không có token");
+      console.log("Auth token in useAxiosPrivate: Không có token", auth);
     }
     
     const requestIntercept = axiosPrivate.interceptors.request.use(
-      (config) => {
-        if (!config.headers["Authorization"] && auth?.accessToken) {
-          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
-          console.log("Đã gắn token vào request");
+      config => {
+        // Luôn đặt token mới nhất vào header, bất kể đã có trước đó hay không
+        if (auth?.accessToken) {
+          config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
+          console.log(`Đã thêm token vào request: ${config.method} ${config.url}`);
+        } else {
+          console.warn(`Request không có token: ${config.method} ${config.url}`);
         }
+        
         return config;
-      },
-      (error) => {
-        console.error("Lỗi khi gửi request:", error);
+      }, (error) => {
+        console.error("Request interceptor error:", error);
         return Promise.reject(error);
       }
     );
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
-      (response) => response,
+      response => {
+        console.log("Response from:", response.config.url, "Status:", response.status);
+        return response;
+      },
       async (error) => {
-        // Ghi log lỗi có kiểm tra
-        if (error?.response) {
-          console.error("Lỗi response:", error.response.status, error.response.data);
-        } else {
-          console.error("Lỗi không có response:", error.message);
+        // Xử lý lỗi 401 Unauthorized
+        if (error.response?.status === 401) {
+          console.error("Lỗi 401 Unauthorized - Token không hợp lệ hoặc đã hết hạn");
+          // Tùy chọn: Có thể thêm logic chuyển hướng đến trang đăng nhập
+          // window.location.href = '/account/login';
         }
-        
-        // Kiểm tra lỗi 401 Unauthorized
-        if (error?.response?.status === 401) {
-          console.log("Phát hiện lỗi 401, chuyển hướng về trang đăng nhập");
-          // Hiển thị thông báo
-          toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-          // Delay đôi chút trước khi chuyển hướng
-          setTimeout(() => {
-            window.location.href = "/account/login";
-          }, 1000);
-        }
+        console.error("Response error:", error);
         return Promise.reject(error);
       }
     );
