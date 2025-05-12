@@ -16,11 +16,43 @@ export const getAllUsers = async (axiosPrivate) => {
 // Lấy chi tiết người dùng
 export const getUserById = async (axiosPrivate, userId) => {
   try {
+    if (!userId) {
+      console.error("getUserById: userId không hợp lệ:", userId);
+      return { 
+        success: false, 
+        message: "ID người dùng không hợp lệ", 
+        data: null 
+      };
+    }
+    
+    console.log(`Đang gọi API lấy thông tin người dùng ID ${userId}`);
     const response = await axiosPrivate.get(`/users/${userId}`);
-    return response.data;
+    console.log("Dữ liệu trả về từ API:", response.data);
+    
+    // Kiểm tra cấu trúc dữ liệu trả về
+    if (response.data && response.data.success === true && response.data.data) {
+      return response.data;
+    } else if (response.data && response.data.id) {
+      // Trường hợp API trả về trực tiếp đối tượng user mà không có wrapper
+      return {
+        success: true,
+        message: "Lấy thông tin người dùng thành công",
+        data: response.data
+      };
+    } else {
+      // Nếu không có dữ liệu hoặc sai định dạng, ném lỗi
+      console.error("Dữ liệu API không đúng định dạng:", response.data);
+      throw new Error("Dữ liệu người dùng không hợp lệ");
+    }
   } catch (error) {
     console.error(`Lỗi khi lấy thông tin người dùng ID ${userId}:`, error);
-    throw error;
+    
+    // Trả về đối tượng lỗi để component xử lý hiển thị thông báo lỗi
+    return { 
+      success: false, 
+      message: error.response?.data?.message || "Không tìm thấy người dùng", 
+      data: null 
+    };
   }
 };
 
@@ -126,15 +158,39 @@ export const unblockUser = async (axiosPrivate, targetUserId) => {
 };
 
 // Lấy danh sách kết nối của người dùng hiện tại
-export const getUserConnections = async (axiosPrivate, page = 0, size = 10) => {
+export const getUserConnections = async (axiosPrivate, userId = null, page = 0, size = 20) => {
   try {
-    const response = await axiosPrivate.get('/connections', {
-      params: { page, size }
+    // URL endpoint tùy thuộc vào việc có truyền userId hay không
+    const url = userId ? `/users/${userId}/connections` : '/connections';
+    
+    // Gọi API từ UserConnectionController để lấy danh sách người đã kết nối
+    const response = await axiosPrivate.get(url, {
+      params: { 
+        page, 
+        size, 
+        onlyConnected: true,
+        status: 'ACCEPTED'
+      }
     });
-    return response.data.data;
+    
+    console.log('Response từ API connections:', response.data);
+    
+    if (response.data && response.data.data && response.data.data.content) {
+      // Trường hợp API trả về dạng Page<> từ Spring Boot
+      return response.data.data.content;
+    } else if (response.data && response.data.data) {
+      // Trường hợp API trả về list bọc trong data
+      return response.data.data;
+    } else if (response.data && Array.isArray(response.data)) {
+      // Trường hợp API trả về array trực tiếp
+      return response.data;
+    } else {
+      console.warn('API trả về cấu trúc dữ liệu không xác định:', response.data);
+      return [];
+    }
   } catch (error) {
     console.error('Lỗi khi lấy danh sách kết nối:', error);
-    throw error;
+    return [];
   }
 };
 
@@ -156,7 +212,14 @@ export const checkConnectionStatus = async (axiosPrivate, targetUserId) => {
     return response.data.data;
   } catch (error) {
     console.error(`Lỗi khi kiểm tra trạng thái kết nối với người dùng ID ${targetUserId}:`, error);
-    return false;
+    // Trả về trạng thái mặc định khi có lỗi
+    return {
+      status: "NONE",
+      isConnected: false,
+      isPendingSent: false,
+      isPendingReceived: false,
+      isBlocked: false
+    };
   }
 };
 
@@ -179,5 +242,146 @@ export const getConnectedUserIds = async (axiosPrivate) => {
   } catch (error) {
     console.error('Lỗi khi lấy ID của tất cả người dùng đã kết nối:', error);
     return [];
+  }
+};
+
+// Tìm kiếm người dùng với bộ lọc nâng cao
+export const searchUsers = async (axiosPrivate, params) => {
+  try {
+    const { keyword, role, location, specialty, page = 0, size = 10 } = params;
+    
+    // Xây dựng query params
+    const queryParams = new URLSearchParams();
+    if (keyword) queryParams.append('keyword', keyword);
+    if (role) queryParams.append('role', role);
+    if (location) queryParams.append('location', location);
+    if (specialty) queryParams.append('specialty', specialty);
+    queryParams.append('page', page);
+    queryParams.append('size', size);
+    
+    const response = await axiosPrivate.get(`/users/search?${queryParams.toString()}`);
+    
+    return {
+      content: response.data.data || [],
+      totalElements: response.data.totalElements || 0,
+      totalPages: response.data.totalPages || 0,
+      page: response.data.page || 0,
+      size: response.data.size || 10
+    };
+  } catch (error) {
+    console.error('Lỗi khi tìm kiếm người dùng:', error);
+    return {
+      content: [],
+      totalElements: 0,
+      totalPages: 0,
+      page: 0,
+      size: 10
+    };
+  }
+};
+
+// Thêm hàm updateUserProfile để gọi API từ UserController
+export const updateUserProfile = async (axios, userId, userData) => {
+  try {
+    // Chỉ gửi các trường mà entity User có hỗ trợ
+    const updateData = {
+      userName: userData.userName || "",
+      phone: userData.phone || "",
+      email: userData.email || "",
+      password: userData.password || "********" // Sử dụng mật khẩu từ userData
+      // Không gửi trường role vì backend không chấp nhận trong UserDTO
+      // Không gửi các trường bio, specialty, location vì chúng không tồn tại trong entity User
+    };
+
+    console.log('Dữ liệu cập nhật hồ sơ (chỉ gửi các trường hợp lệ):', {
+      ...updateData,
+      password: '******' // Ẩn mật khẩu trong log
+    });
+    
+    const response = await axios.put(`/users/${userId}`, updateData);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+    throw error;
+  }
+};
+
+// Thêm hàm uploadProfileImage để upload ảnh đại diện
+export const uploadProfileImage = async (axios, userId, imageFile) => {
+  try {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    
+    const response = await axios.post(`/users/${userId}/upload-image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi upload ảnh đại diện:', error);
+    throw error;
+  }
+};
+
+// Đổi mật khẩu
+export const changePassword = async (axios, userId, passwordData) => {
+  try {
+    const response = await axios.post(`/users/${userId}/change-password`, passwordData);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi đổi mật khẩu:', error);
+    throw error;
+  }
+};
+
+// Xác thực email khi thay đổi
+export const requestEmailVerification = async (axios, userId, newEmail) => {
+  try {
+    const response = await axios.post(`/users/${userId}/request-email-verification`, { newEmail });
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi gửi yêu cầu xác thực email:', error);
+    throw error;
+  }
+};
+
+// Xác nhận mã xác thực email
+export const verifyEmailChange = async (axios, userId, verificationCode) => {
+  try {
+    const response = await axios.post(`/users/${userId}/verify-email-change`, { verificationCode });
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi xác thực mã:', error);
+    throw error;
+  }
+};
+
+// Cắt ảnh đại diện (gửi lên phiên bản đã cắt)
+export const uploadCroppedProfileImage = async (axios, userId, croppedImageBlob) => {
+  try {
+    const formData = new FormData();
+    formData.append('image', croppedImageBlob);
+    
+    const response = await axios.post(`/users/${userId}/upload-image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi upload ảnh đại diện đã cắt:', error);
+    throw error;
+  }
+};
+
+// Xóa tài khoản người dùng
+export const deleteUserAccount = async (axios, userId, confirmationData) => {
+  try {
+    const response = await axios.post(`/users/${userId}/deactivate`, confirmationData);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi xóa tài khoản:', error);
+    throw error;
   }
 };
