@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Header from "@/layout/Header";
+import Footer from "@/layout/Footer";
 
 const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -26,8 +28,12 @@ const Main = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Phần nội dung từ các route con */}
-      <Outlet />
+      <Header />
+      <div className="pt-20">
+        {/* Phần nội dung từ các route con */}
+        <Outlet />
+      </div>
+      <Footer />
     </div>
   );
 };
