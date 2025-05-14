@@ -25,6 +25,8 @@ import SubscriptionDetails from "./pages/SubscriptionDetails";
 import SubscriptionPayment from "./pages/SubscriptionPayment";
 import SubscriptionPlans from "./pages/admin/SubscriptionPlans";
 import PaymentResult from "./pages/PaymentResult";
+import ReviewNotification from "./components/product/ReviewNotification";
+import { getUnreviewedProducts } from "./services/feedbackService";
 
 import Category from "./components/farmhub2/Category";
 import NewProducts from "./components/farmhub2/NewProducts";
@@ -48,6 +50,12 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Route path="account">
+            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+          </Route>
           <Route path="/" element={<Main />}>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
@@ -57,12 +65,6 @@ function App() {
             <Route path="weather" element={<WeatherDashboard />} />
             <Route path="subscriptions" element={<Subscriptions />} />
             <Route path="subscriptions/:id" element={<SubscriptionDetails />} />
-            <Route path="account">
-              <Route path="register" element={<Register />} />
-              <Route path="login" element={<Login />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="reset-password" element={<ResetPassword />} />
-            </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route path="profile/:userId" element={<UserProfile />} />
               <Route path="profile/edit" element={<EditProfile />} />
@@ -107,6 +109,9 @@ function App() {
             <Route path="*" element={<NoFoundPage />} />
           </Route>
         </Routes>
+
+        {/* Thông báo đánh giá sản phẩm */}
+        <ReviewNotification getUnreviewedProducts={getUnreviewedProducts} />
       </Router>
 
       {/* Add React Query Devtools - only in development */}
