@@ -6,7 +6,7 @@ app:
 
 # Cấu hình VNPAY cho ngrok 
 vnpay:
-  return-url: ${app.backend-url}/api/v1/payment/vnpay-return
+  return-url: http://localhost:5173/payment/result
   ipn-url: ${app.backend-url}/api/v1/payment/vnpay-ipn
 
 # Cấu hình Momo cho ngrok
