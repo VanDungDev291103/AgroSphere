@@ -288,14 +288,18 @@ export const updateUserProfile = async (axios, userId, userData) => {
       userName: userData.userName || "",
       phone: userData.phone || "",
       email: userData.email || "",
-      password: userData.password || "********" // Sử dụng mật khẩu từ userData
-      // Không gửi trường role vì backend không chấp nhận trong UserDTO
-      // Không gửi các trường bio, specialty, location vì chúng không tồn tại trong entity User
+      keepExistingPassword: true // Luôn gửi keepExistingPassword=true để giữ mật khẩu cũ
     };
+
+    // Chỉ gửi password nếu người dùng thực sự thay đổi mật khẩu
+    if (userData.password && userData.password !== "********" && userData.password.length >= 6) {
+      updateData.password = userData.password;
+      updateData.keepExistingPassword = false; // Nếu có mật khẩu mới thì không giữ mật khẩu cũ
+    }
 
     console.log('Dữ liệu cập nhật hồ sơ (chỉ gửi các trường hợp lệ):', {
       ...updateData,
-      password: '******' // Ẩn mật khẩu trong log
+      password: updateData.password ? '******' : undefined // Ẩn mật khẩu trong log
     });
     
     const response = await axios.put(`/users/${userId}`, updateData);
@@ -327,7 +331,12 @@ export const uploadProfileImage = async (axios, userId, imageFile) => {
 // Đổi mật khẩu
 export const changePassword = async (axios, userId, passwordData) => {
   try {
-    const response = await axios.post(`/users/${userId}/change-password`, passwordData);
+    // Sửa endpoint thành /auth/change-password thay vì /users/{userId}/change-password
+    const response = await axios.post(`/auth/change-password`, {
+      userId: userId,
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
+    });
     return response.data;
   } catch (error) {
     console.error('Lỗi khi đổi mật khẩu:', error);

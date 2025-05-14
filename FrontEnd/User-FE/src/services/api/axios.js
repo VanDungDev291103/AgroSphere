@@ -7,10 +7,11 @@ const isDevelopment = window.location.hostname === 'localhost' || window.locatio
 // Các URL API có thể dùng (để thử kết nối)
 const API_URLS = {
   dev: [
-    "http://localhost:8080/api/v1"   // Chỉ dùng port 8080
+    "http://localhost:8080/api/v1",
+    "http://127.0.0.1:8080/api/v1"
   ],
   prod: [
-    "https://e42a-14-191-241-100.ngrok-free.app/api/v1"
+    "http://localhost:8080/api/v1"
   ]
 };
 
@@ -22,7 +23,18 @@ let currentApiUrlIndex = 0;
 let API_URL = apiUrlsToTry[currentApiUrlIndex];
 const API_TIMEOUT = 20000; // Tăng timeout lên 20 giây
 
-console.log(`API URL: ${API_URL}`);
+console.log(`Initial API URL: ${API_URL}`);
+
+// Hàm thử URL kết nối tiếp theo
+const tryNextApiUrl = () => {
+  currentApiUrlIndex = (currentApiUrlIndex + 1) % apiUrlsToTry.length;
+  API_URL = apiUrlsToTry[currentApiUrlIndex];
+  console.log(`Switching to next API URL: ${API_URL}`);
+  // Cập nhật URL cho cả 2 instance
+  axiosInstance.defaults.baseURL = API_URL;
+  axiosPrivate.defaults.baseURL = API_URL;
+  return API_URL;
+};
 
 // Cấu hình Axios instance
 const axiosInstance = axios.create({
@@ -62,18 +74,22 @@ axiosInstance.interceptors.response.use(
     if (error.code === 'ECONNABORTED' || error.message === 'Network Error') {
       console.warn("Lỗi kết nối:", error.message);
       
+      // Thử URL tiếp theo
+      const newUrl = tryNextApiUrl();
+      console.log(`Đang thử kết nối đến URL tiếp theo: ${newUrl}`);
+      
       // Hiển thị thông báo lỗi chỉ một lần thay vì cho mỗi request
       if (!window.hasShownConnectionError) {
         window.hasShownConnectionError = true;
         toast.error(
-          "Không thể kết nối đến máy chủ Backend tại " + API_URL + ". Vui lòng kiểm tra nếu server đã được khởi động.",
-          { autoClose: 10000 } // Hiển thị lâu hơn (10 giây)
+          "Đang thử kết nối lại đến máy chủ khác. Vui lòng đợi trong giây lát...",
+          { autoClose: 5000 } // Hiển thị trong 5 giây
         );
         
-        // Reset flag sau 10 giây để cho phép hiển thị lại thông báo nếu vẫn lỗi
+        // Reset flag sau 5 giây để cho phép hiển thị lại thông báo nếu vẫn lỗi
         setTimeout(() => {
           window.hasShownConnectionError = false;
-        }, 10000);
+        }, 5000);
       }
     } else if (error.response) {
       // Có phản hồi từ server nhưng status code không phải 2xx
@@ -96,6 +112,8 @@ axiosInstance.interceptors.response.use(
       // Xử lý các lỗi phổ biến
       if (error.response.status === 401) {
         console.warn("Lỗi xác thực, cần đăng nhập lại");
+        // Có thể thêm xử lý chuyển hướng đến trang đăng nhập
+        // window.location.href = '/account/login';
       } else if (error.response.status === 403) {
         toast.error("Bạn không có quyền thực hiện thao tác này.");
       }
@@ -114,47 +132,32 @@ export const axiosPrivate = axios.create({
   timeout: API_TIMEOUT,
 });
 
-// Thêm log cho tất cả các request
+// Thêm interceptor mặc định cho debug
 axiosPrivate.interceptors.request.use(
-  config => {
-    // Cập nhật baseURL mới nhất cho mỗi request
-    config.baseURL = API_URL;
-    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+  (config) => {
+    console.log(`[Request] ${config.method?.toUpperCase() || 'GET'} ${config.url}`);
     return config;
   },
-  error => {
-    console.error('Request Error:', error);
+  (error) => {
+    console.error("[Request Error]", error);
     return Promise.reject(error);
   }
 );
 
-// Thêm log cho tất cả các response
 axiosPrivate.interceptors.response.use(
-  response => {
-    console.log(`API Response from ${response.config.url}:`, response.status);
+  (response) => {
+    console.log(`[Response] ${response.config.method?.toUpperCase() || 'GET'} ${response.config.url}`);
     return response;
   },
-  error => {
-    // Xem xét lỗi kết nối
-    if (error.code === 'ECONNABORTED' || error.message === 'Network Error') {
-      console.warn("Lỗi kết nối (Private):", error.message);
-      
-      // Hiển thị thông báo lỗi chỉ một lần thay vì cho mỗi request
-      if (!window.hasShownConnectionError) {
-        window.hasShownConnectionError = true;
-        toast.error(
-          "Không thể kết nối đến máy chủ Backend tại " + API_URL + ". Vui lòng kiểm tra nếu server đã được khởi động.",
-          { autoClose: 10000 } // Hiển thị lâu hơn (10 giây)
-        );
-        
-        // Reset flag sau 10 giây để cho phép hiển thị lại thông báo nếu vẫn lỗi
-        setTimeout(() => {
-          window.hasShownConnectionError = false;
-        }, 10000);
-      }
+  (error) => {
+    // Xử lý lỗi mạng
+    if (!error.response) {
+      console.error("[Network Error]", error.message);
+      return Promise.reject(new Error("Lỗi kết nối mạng. Vui lòng kiểm tra kết nối hoặc thử lại sau."));
     }
     
-    console.error('Response Error:', error.response?.status, error.response?.data || error.message);
+    // Lỗi từ server
+    console.error(`[Response Error] ${error.response.status}:`, error.response.data);
     return Promise.reject(error);
   }
 );

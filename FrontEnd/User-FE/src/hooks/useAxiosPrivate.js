@@ -6,11 +6,11 @@ const useAxiosPrivate = () => {
   const { auth } = useAuth();
 
   useEffect(() => {
-    // Tránh log token đầy đủ ra console
+    // Hạn chế log token ra console cho vấn đề bảo mật
     if (auth?.accessToken) {
-      console.log("Auth token in useAxiosPrivate: Có token");
+      console.log("Auth token available in useAxiosPrivate");
     } else {
-      console.log("Auth token in useAxiosPrivate: Không có token", auth);
+      console.warn("No auth token in useAxiosPrivate");
     }
     
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -18,9 +18,9 @@ const useAxiosPrivate = () => {
         // Luôn đặt token mới nhất vào header, bất kể đã có trước đó hay không
         if (auth?.accessToken) {
           config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
-          console.log(`Đã thêm token vào request: ${config.method} ${config.url}`);
+          console.log(`Request with token: ${config.method} ${config.url}`);
         } else {
-          console.warn(`Request không có token: ${config.method} ${config.url}`);
+          console.warn(`Request without token: ${config.method} ${config.url}`);
         }
         
         return config;
@@ -32,17 +32,27 @@ const useAxiosPrivate = () => {
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
       response => {
-        console.log("Response from:", response.config.url, "Status:", response.status);
+        console.log(`Response from ${response.config.url}: Status ${response.status}`);
         return response;
       },
       async (error) => {
-        // Xử lý lỗi 401 Unauthorized
-        if (error.response?.status === 401) {
-          console.error("Lỗi 401 Unauthorized - Token không hợp lệ hoặc đã hết hạn");
-          // Tùy chọn: Có thể thêm logic chuyển hướng đến trang đăng nhập
-          // window.location.href = '/account/login';
-        }
         console.error("Response error:", error);
+        
+        // Chi tiết lỗi để debug
+        if (error.response) {
+          console.error(`Response error ${error.response.status}:`, error.response.data);
+          
+          // Xử lý lỗi 401 Unauthorized
+          if (error.response.status === 401) {
+            console.error("Unauthorized error - Invalid or expired token");
+            // Thêm xử lý refresh token ở đây nếu cần
+          }
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+        } else {
+          console.error("Request setup error:", error.message);
+        }
+        
         return Promise.reject(error);
       }
     );

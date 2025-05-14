@@ -139,6 +139,9 @@ const EditProfile = () => {
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
 
+  // Thêm hidden password state để giữ mật khẩu thực tế
+  const [hiddenPassword, setHiddenPassword] = useState("");
+
   // Thêm state cho xóa tài khoản
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
@@ -169,8 +172,10 @@ const EditProfile = () => {
           userName: userData.data.userName || "",
           email: userData.data.email || "",
           phone: userData.data.phone || "",
-          password: userData.data.password || "********",
+          password: "********", // Hiển thị dấu sao cho password
         });
+        // Lưu trữ một trường ẩn để đánh dấu có mật khẩu
+        setHiddenPassword("has-password");
         setImagePreview(userData.data.imageUrl || "");
       } catch (error) {
         console.error("Lỗi khi tải thông tin người dùng:", error);
@@ -263,10 +268,21 @@ const EditProfile = () => {
         userName: formData.userName,
         phone: formData.phone,
         email: formData.email,
-        password: formData.password,
       };
 
-      console.log("Dữ liệu gửi lên server:", userDataToUpdate);
+      // Chỉ gửi mật khẩu mới nếu người dùng nhập vào trường mật khẩu và khác dấu sao (mật khẩu mới)
+      if (formData.password && formData.password !== "********") {
+        userDataToUpdate.password = formData.password;
+      } else if (hiddenPassword === "has-password") {
+        // Nếu có mật khẩu hiện tại và người dùng không thay đổi, gửi dấu hiệu giữ nguyên mật khẩu
+        userDataToUpdate.keepExistingPassword = true;
+      }
+
+      console.log("Dữ liệu gửi lên server:", {
+        ...userDataToUpdate,
+        password: userDataToUpdate.password ? "******" : undefined,
+        keepExistingPassword: userDataToUpdate.keepExistingPassword,
+      });
 
       const response = await updateUserProfile(
         axiosPrivate,
@@ -281,7 +297,9 @@ const EditProfile = () => {
         ...prev,
         user: {
           ...prev.user,
-          ...userDataToUpdate,
+          userName: userDataToUpdate.userName,
+          phone: userDataToUpdate.phone,
+          email: userDataToUpdate.email,
         },
       }));
 
@@ -361,7 +379,9 @@ const EditProfile = () => {
       console.error("Lỗi khi đổi mật khẩu:", error);
 
       // Hiển thị thông báo lỗi chi tiết từ server nếu có
-      if (error.response?.data?.errors) {
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.message || "Không thể đổi mật khẩu");
+      } else if (error.response?.data?.errors) {
         // Lỗi validation từ Spring Boot
         const errorMessages = Object.values(error.response.data.errors).flat();
         errorMessages.forEach((msg) => toast.error(msg));
@@ -1044,7 +1064,7 @@ const EditProfile = () => {
                       </p>
                     </div>
 
-                    <div className="space-y-2 hidden">
+                    <div className="space-y-2">
                       <Label htmlFor="password">Mật khẩu</Label>
                       <Input
                         id="password"
@@ -1054,6 +1074,9 @@ const EditProfile = () => {
                         readOnly
                         className="bg-gray-100"
                       />
+                      <p className="text-xs text-gray-500">
+                        Sử dụng nút "Đổi mật khẩu" để thay đổi mật khẩu
+                      </p>
                     </div>
                   </div>
                 </form>

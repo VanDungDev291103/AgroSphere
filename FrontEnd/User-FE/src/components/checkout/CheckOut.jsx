@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "@/layout/Header";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/shared/Loading";
 import { useCartActions } from "@/hooks/useCartActions";
-import useAuth from "@/hooks/useAuth";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { getProductById } from "@/services/productService";
+import { createPayment } from "../services/PaymentService";
+import { createOrder } from "../services/OrderService";
 
 // Mock data cho địa chỉ
 const MOCK_ADDRESSES = [
@@ -23,16 +24,9 @@ const MOCK_ADDRESSES = [
   },
 ];
 
-// Mock QR code images - Sử dụng mã QR thực tế hơn
-const MOCK_QR_CODES = {
-  MOMO: "https://img.vietqr.io/image/MoMo-0123456789-compact.png",
-  VNPAY: "https://img.vietqr.io/image/VNPAY-0123456789-compact.png",
-};
-
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   // Kiểm tra xem có phải đang mua ngay không
@@ -96,12 +90,6 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [note, setNote] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showQRCode, setShowQRCode] = useState(false);
-  const [qrCodeData, setQRCodeData] = useState({
-    qrImage: "",
-    amount: 0,
-    expiry: null,
-  });
 
   // State cho việc thêm địa chỉ mới
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -136,7 +124,7 @@ const Checkout = () => {
   useEffect(() => {
     // Ẩn QR khi chuyển sang COD
     if (paymentMethod === "COD") {
-      setShowQRCode(false);
+      // Không cần làm gì - QR đã được loại bỏ
     }
   }, [paymentMethod]);
 
@@ -231,7 +219,7 @@ const Checkout = () => {
   };
 
   // Xử lý đặt hàng
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!selectedAddress) {
       toast.error("Vui lòng chọn địa chỉ giao hàng");
       return;
@@ -244,55 +232,188 @@ const Checkout = () => {
 
     setIsProcessing(true);
 
-    // Tạo mã đơn hàng mới
-    const orderId = "ORDER" + Date.now();
+    try {
+      // Chuẩn bị dữ liệu đơn hàng để gửi lên server
+      const orderRequest = {
+        orderDate: new Date().toISOString(),
+        totalAmount: total,
+        status: "PENDING",
+        orderDetails: cartItems.map((item) => ({
+          productId: item.productId || item.id,
+          quantity: item.quantity,
+          price: item.unitPrice || 0,
+          originalPrice: item.originalPrice || item.unitPrice || 0,
+          discountAmount: item.discountAmount || 0,
+          totalPrice: (item.unitPrice || 0) * (item.quantity || 1),
+          productName: item.productName || "Sản phẩm",
+          productImage: item.productImage || item.imageUrl || "",
+          status: "PENDING",
+        })),
+        // Dữ liệu địa chỉ giao hàng - gửi dưới dạng chuỗi thay vì đối tượng
+        shippingName: addresses.find((addr) => addr.id === selectedAddress)
+          .recipientName,
+        shippingPhone: addresses.find((addr) => addr.id === selectedAddress)
+          .phone,
+        shippingAddress: `${
+          addresses.find((addr) => addr.id === selectedAddress).streetAddress
+        }, ${addresses.find((addr) => addr.id === selectedAddress).ward}, ${
+          addresses.find((addr) => addr.id === selectedAddress).district || ""
+        }, ${
+          addresses.find((addr) => addr.id === selectedAddress).province
+        }`.replace(/, ,/g, ","), // Xóa dấu phẩy dư thừa nếu không có quận/huyện
+        notes: note,
+        couponCode: couponFromCart || "",
+        paymentMethod: paymentMethod,
+        shippingFee: shipping,
+        discountAmount: discountFromCart,
+      };
 
-    // Tạo dữ liệu đơn hàng
-    const orderData = {
-      id: orderId,
-      orderDate: new Date().toISOString(),
-      totalAmount: total,
-      status: paymentMethod === "COD" ? "PENDING" : "PAID",
-      items: cartItems.map((item) => ({
-        productId: item.productId || item.id,
-        productName: item.productName,
-        productImage: item.productImage,
-        quantity: item.quantity,
-        price: item.unitPrice,
-      })),
-      shippingAddress: addresses.find((addr) => addr.id === selectedAddress),
-      paymentMethod: paymentMethod,
-      note: note,
-      shippingFee: shipping,
-      couponCode: couponFromCart,
-      discountAmount: discountFromCart,
-    };
+      console.log("Đang gửi đơn hàng đến server:", orderRequest);
+      console.log("Thông tin chi tiết sản phẩm:", orderRequest.orderDetails);
 
-    // Lưu đơn hàng vào localStorage
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    existingOrders.unshift(orderData); // Thêm đơn hàng mới vào đầu mảng
-    localStorage.setItem("orders", JSON.stringify(existingOrders));
+      // Gọi API để tạo đơn hàng trong database
+      let orderId;
+      let savedOrderData;
 
-    console.log("Đã lưu đơn hàng vào localStorage:", orderData);
+      try {
+        // Dùng service createOrder để tạo đơn hàng trong database
+        const orderResponse = await createOrder(axiosPrivate, orderRequest);
+        console.log("Tạo đơn hàng thành công:", orderResponse);
 
-    // Xử lý theo phương thức thanh toán
-    setTimeout(() => {
-      if (paymentMethod === "COD") {
-        toast.success("Đặt hàng thành công!");
-      } else {
-        toast.success(`Thanh toán qua ${paymentMethod} thành công!`);
+        if (orderResponse && orderResponse.data) {
+          // Lấy ID đơn hàng mới tạo từ response
+          orderId = orderResponse.data.id;
+          savedOrderData = orderResponse.data;
+
+          console.log("Đơn hàng đã được lưu vào database với ID:", orderId);
+        } else {
+          throw new Error("Không nhận được ID đơn hàng từ server");
+        }
+      } catch (error) {
+        console.error("Lỗi khi tạo đơn hàng trong database:", error);
+
+        // Không dùng ID ngẫu nhiên nữa - thông báo lỗi rõ ràng và dừng quá trình
+        toast.error("Không thể tạo đơn hàng. Vui lòng thử lại sau.");
+        setIsProcessing(false);
+        return; // Dừng quá trình ngay lập tức nếu không tạo được đơn hàng
       }
 
-      navigate("/order-success", {
-        state: {
+      // Cập nhật thông tin đơn hàng với ID đã có
+      const orderData = {
+        ...savedOrderData,
+        id: orderId,
+        items: cartItems.map((item) => ({
+          productId: item.productId || item.id,
+          productName: item.productName,
+          productImage: item.productImage,
+          quantity: item.quantity,
+          price: item.unitPrice,
+        })),
+        shippingAddress: addresses.find((addr) => addr.id === selectedAddress),
+      };
+
+      // Xử lý theo phương thức thanh toán
+      if (paymentMethod === "VNPAY") {
+        // Tạo yêu cầu thanh toán qua VNPAY
+        const paymentRequest = {
           orderId: orderId,
-          buyNow: isBuyNow,
-          fromCart: isFromCart,
-          isPaid: paymentMethod !== "COD",
-        },
-      });
+          amount: total,
+          description: `Thanh toán đơn hàng #${orderId}`,
+          paymentMethod: "VNPAY",
+        };
+
+        console.log("Gửi yêu cầu thanh toán VNPAY:", paymentRequest);
+
+        // Hiển thị loading
+        toast.loading("Đang kết nối đến cổng thanh toán...");
+
+        try {
+          // Gọi API backend để tạo URL thanh toán
+          const response = await createPayment(axiosPrivate, paymentRequest);
+
+          if (response && response.paymentUrl) {
+            // Lưu đơn hàng vào localStorage trước khi chuyển hướng
+            const existingOrders = JSON.parse(
+              localStorage.getItem("orders") || "[]"
+            );
+            existingOrders.unshift(orderData);
+            localStorage.setItem("orders", JSON.stringify(existingOrders));
+
+            // Chuyển hướng đến trang thanh toán của VNPAY
+            console.log(
+              "Chuyển hướng đến cổng thanh toán VNPAY:",
+              response.paymentUrl
+            );
+            window.location.href = response.paymentUrl;
+          } else {
+            toast.dismiss();
+            toast.error("Không thể tạo URL thanh toán");
+            setIsProcessing(false);
+          }
+        } catch (error) {
+          toast.dismiss();
+          console.error("Chi tiết lỗi thanh toán:", error);
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            "Có lỗi xảy ra khi tạo URL thanh toán";
+          toast.error(errorMessage);
+          setIsProcessing(false);
+        }
+
+        return; // Không thực hiện các bước tiếp theo
+      } else if (paymentMethod === "MOMO") {
+        // Xử lý tương tự cho MoMo (sẽ thực hiện sau)
+        // Lưu đơn hàng vào localStorage
+        const existingOrders = JSON.parse(
+          localStorage.getItem("orders") || "[]"
+        );
+        existingOrders.unshift(orderData);
+        localStorage.setItem("orders", JSON.stringify(existingOrders));
+
+        // Mô phỏng thanh toán MoMo thành công
+        setTimeout(() => {
+          toast.success("Thanh toán qua MoMo thành công!");
+          navigate("/order-success", {
+            state: {
+              orderId: orderId,
+              buyNow: isBuyNow,
+              fromCart: isFromCart,
+              isPaid: true,
+            },
+          });
+          setIsProcessing(false);
+        }, 2000);
+        return;
+      } else {
+        // Thanh toán COD
+        // Lưu đơn hàng vào localStorage
+        const existingOrders = JSON.parse(
+          localStorage.getItem("orders") || "[]"
+        );
+        existingOrders.unshift(orderData);
+        localStorage.setItem("orders", JSON.stringify(existingOrders));
+
+        setTimeout(() => {
+          toast.success("Đặt hàng thành công!");
+          navigate("/order-success", {
+            state: {
+              orderId: orderId,
+              buyNow: isBuyNow,
+              fromCart: isFromCart,
+              isPaid: false,
+            },
+          });
+          setIsProcessing(false);
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Lỗi khi xử lý thanh toán:", error);
+      toast.error(
+        "Có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại."
+      );
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
   // Xử lý quay lại trang trước đó
