@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-13T12:52:36+0700",
+    date = "2025-05-15T17:41:25+0700",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +28,7 @@ public class ForumReplyMapperImpl implements ForumReplyMapper {
         forumReplyDTO.userName( entityUserUsername( entity ) );
         forumReplyDTO.userImageUrl( entityUserImageUrl( entity ) );
         forumReplyDTO.parentId( entityParentId( entity ) );
+        forumReplyDTO.isInappropriate( entity.getIsInappropriate() );
         forumReplyDTO.replies( mapReplies( entity.getReplies() ) );
         forumReplyDTO.id( entity.getId() );
         forumReplyDTO.content( entity.getContent() );

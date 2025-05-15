@@ -6,8 +6,45 @@
   <component name="ChangeListManager">
     <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/dto/ForumReplyDTO$ForumReplyDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/dto/ForumReplyDTO$ForumReplyDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/dto/ForumReplyDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/dto/ForumReplyDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/entity/ForumReply$ForumReplyBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/entity/ForumReply$ForumReplyBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/entity/ForumReply.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/entity/ForumReply.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumPostMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumPostMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumReplyMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumReplyMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/ForumReplyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/ForumReplyService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/NotificationServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/NotificationServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumPostMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/com/agricultural/agricultural/mapper/ForumReplyMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/CouponController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/CouponController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumReplyDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ForumReplyDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/NotificationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/NotificationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/FlashSaleRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/request/FlashSaleRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/response/FlashSaleResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/response/FlashSaleResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/ForumReply.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/ForumReply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/ForumPostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/ForumPostMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/ForumReplyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/ForumReplyMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/NotificationMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/NotificationMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/IOrderCouponRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/IOrderCouponRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/ICouponService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/ICouponService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CouponServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/CouponServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/FlashSaleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/FlashSaleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumReplyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ForumReplyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NotificationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/PaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/components/forum/PostCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/components/forum/PostCard.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +196,8 @@
       <workItem from="1746935867824" duration="258000" />
       <workItem from="1747020496139" duration="14369000" />
       <workItem from="1747114300022" duration="17937000" />
-      <workItem from="1747194937281" duration="855000" />
+      <workItem from="1747194937281" duration="21596000" />
+      <workItem from="1747284942656" duration="13055000" />
     </task>
     <servers />
   </component>
