@@ -6,72 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8f96a2cf-e96c-4bc5-ac1e-4e9603339301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.12.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5f3fd27f-f2da-4e31-97fb-cfd7ede1c221.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/IUserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/IUserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/agricultural/agricultural/service/impl/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/application.YML" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.YML" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/db/init_database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/db/init_database.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/bootstrap/NewsSourceDataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/bootstrap/NewsSourceDataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/config/AiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/config/AiConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/config/BeanConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/config/BeanConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/GeminiAiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/GeminiAiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/NewsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/NewsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/NewsSourceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/controller/NewsSourceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/SubscriptionPlanDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/SubscriptionPlanDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/ChatBotRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/request/ChatBotRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/ChatRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/request/ChatRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/ChatResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/response/ChatResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/MessageHistoryRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/request/MessageHistoryRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/MessageHistoryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/dto/ai/response/MessageHistoryResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/SubscriptionPlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/entity/SubscriptionPlan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/SubscriptionPlanMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/mapper/SubscriptionPlanMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/NewsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/NewsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/NewsSourceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/repository/NewsSourceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/NewsScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/scheduler/NewsScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/AiChatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/AiChatService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/ChatHistoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/ChatHistoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/GeminiAiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/GeminiAiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/IUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/NewsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/NewsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/AiChatServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ChatHistoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/ChatHistoryServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/GeminiAiServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/GeminiAiServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/KeywordValidatorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/KeywordValidatorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/MarketPlaceServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NewsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/NewsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/SubscriptionPlanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/SubscriptionPlanService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agricultural/agricultural/service/impl/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.YML" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.YML" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/init_database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/init_database.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/components/layout/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/components/layout/Sidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/SubscriptionPlansPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/SubscriptionPlansPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/UserSubscriptionsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/pages/UserSubscriptionsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/services/authService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/services/subscriptionPlanService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/Admin-FE/src/services/subscriptionPlanService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/hooks/useAxiosPrivate.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/hooks/useAxiosPrivate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/News.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/News.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/NewsDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/NewsDetail.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/SellerProductForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/SellerProductForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/Subscriptions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/Subscriptions.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/UserSellerDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/pages/UserSellerDashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/routes/router.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/routes/router.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/services/api/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../FrontEnd/User-FE/src/services/api/axios.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,7 +161,7 @@
       <workItem from="1747194937281" duration="21596000" />
       <workItem from="1747284942656" duration="14488000" />
       <workItem from="1747332705658" duration="6567000" />
-      <workItem from="1747368048798" duration="25448000" />
+      <workItem from="1747368048798" duration="25844000" />
     </task>
     <servers />
   </component>
