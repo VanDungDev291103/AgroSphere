@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-13T12:52:36+0700",
+    date = "2025-05-17T15:04:35+0700",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -95,6 +95,8 @@ public class CartMapperImpl implements CartMapper {
         }
         cartItemDTO.variantId( cartItemVariantId( cartItem ) );
         cartItemDTO.variantName( cartItemVariantName( cartItem ) );
+        cartItemDTO.shopId( cartItem.getShopId() );
+        cartItemDTO.shopName( cartItem.getShopName() );
         cartItemDTO.id( cartItem.getId() );
         cartItemDTO.quantity( cartItem.getQuantity() );
         cartItemDTO.unitPrice( cartItem.getUnitPrice() );
@@ -118,6 +120,8 @@ public class CartMapperImpl implements CartMapper {
         CartItem.CartItemBuilder cartItem = CartItem.builder();
 
         cartItem.id( cartItemDTO.getId() );
+        cartItem.shopId( cartItemDTO.getShopId() );
+        cartItem.shopName( cartItemDTO.getShopName() );
         cartItem.quantity( cartItemDTO.getQuantity() );
         cartItem.unitPrice( cartItemDTO.getUnitPrice() );
         cartItem.totalPrice( cartItemDTO.getTotalPrice() );
@@ -179,6 +183,8 @@ public class CartMapperImpl implements CartMapper {
         }
 
         entity.setId( dto.getId() );
+        entity.setShopId( dto.getShopId() );
+        entity.setShopName( dto.getShopName() );
         entity.setQuantity( dto.getQuantity() );
         entity.setUnitPrice( dto.getUnitPrice() );
         entity.setTotalPrice( dto.getTotalPrice() );
