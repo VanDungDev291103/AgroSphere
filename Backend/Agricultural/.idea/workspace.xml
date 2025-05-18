@@ -88,6 +88,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.agricultural.agricultural.entity.enumeration" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="AgriculturalApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="agricultural.main" />
@@ -161,7 +166,8 @@
       <workItem from="1747284942656" duration="14488000" />
       <workItem from="1747332705658" duration="6567000" />
       <workItem from="1747368048798" duration="25844000" />
-      <workItem from="1747464678652" duration="318000" />
+      <workItem from="1747464678652" duration="20322000" />
+      <workItem from="1747549173428" duration="3000" />
     </task>
     <servers />
   </component>
