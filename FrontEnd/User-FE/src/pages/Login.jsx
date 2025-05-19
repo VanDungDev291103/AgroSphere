@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"; // eslint-disable-line no-unused-vars
 import backgroundImage from "../assets/page-signup-signin/sign-in.jpg";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
 import Input from "../components/shared/Input";
 import axiosInstance from "../services/api/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { loginWithGoogle } from "../services/userService";
 
 const login = async ({ email, password }) => {
   try {
@@ -55,6 +55,7 @@ const Login = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Xử lý đăng nhập thông thường
   const { mutate, isPending, error } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
@@ -102,6 +103,117 @@ const Login = () => {
       }
     },
   });
+
+  // Xử lý đăng nhập Google
+  const googleLoginMutation = useMutation({
+    mutationFn: (idToken) => loginWithGoogle(axiosInstance, idToken),
+    onSuccess: (data) => {
+      console.log("Google login success:", data);
+      toast.success("Đăng nhập bằng Google thành công");
+
+      // Lưu thông tin xác thực
+      const accessToken = data.token;
+      const user = data.user;
+      const roleName = data.user.roleName;
+      const authData = { accessToken, user, roleName };
+
+      // Cập nhật trạng thái và lưu vào session storage
+      setAuth(authData);
+      sessionStorage.setItem("auth", JSON.stringify(authData));
+
+      // Điều hướng người dùng
+      setTimeout(() => {
+        navigate(from, { replace: true });
+      }, 100);
+    },
+    onError: (error) => {
+      console.error("Google login error:", error);
+      toast.error("Đăng nhập bằng Google thất bại. Vui lòng thử lại sau.");
+    },
+  });
+
+  // Khởi tạo Google Sign-In khi component được tạo
+  useEffect(() => {
+    // Tải script Google Platform API
+    const loadGoogleScript = () => {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => {
+        console.log("Google GSI script loaded successfully");
+        initializeGoogleSignIn();
+      };
+
+      script.onerror = () => {
+        console.error("Failed to load Google GSI script");
+        toast.error(
+          "Không thể tải Google Sign-In. Vui lòng làm mới trang và thử lại."
+        );
+      };
+
+      document.body.appendChild(script);
+    };
+
+    // Khởi tạo Google Sign-In
+    const initializeGoogleSignIn = () => {
+      if (window.google && window.google.accounts) {
+        console.log("Initializing Google Sign-In");
+        try {
+          window.google.accounts.id.initialize({
+            client_id:
+              "469623797523-2i2fne97posh1c7hgn66tn1fukl69rhn.apps.googleusercontent.com",
+            callback: handleGoogleLoginCallback,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          });
+
+          // Render nút đăng nhập Google trong container
+          window.google.accounts.id.renderButton(
+            document.getElementById("google-signin-button"),
+            {
+              type: "standard",
+              size: "large",
+              text: "signin_with",
+              shape: "rectangular",
+              logo_alignment: "left",
+              locale: "vi_VN",
+              theme: "outline",
+            }
+          );
+
+          console.log("Google Sign-In initialized successfully");
+        } catch (error) {
+          console.error("Error initializing Google Sign-In:", error);
+        }
+      } else {
+        console.error("Google accounts API not available");
+      }
+    };
+
+    // Tải Google script
+    loadGoogleScript();
+
+    return () => {
+      // Dọn dẹp khi component unmount
+      const scriptTag = document.querySelector(
+        'script[src="https://accounts.google.com/gsi/client"]'
+      );
+      if (scriptTag) {
+        scriptTag.remove();
+      }
+    };
+  }, []);
+
+  // Callback khi đăng nhập Google thành công
+  const handleGoogleLoginCallback = (response) => {
+    console.log("Google credential response:", response);
+    if (response && response.credential) {
+      // Gọi mutation để xác thực với backend
+      googleLoginMutation.mutate(response.credential);
+    }
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -173,12 +285,13 @@ const Login = () => {
             </Link>
           </div>
           <div className="flex items-center justify-center mt-3">
-            <p className="text-gray-600 text-sm mr-2">Hoặc đăng nhập với</p>
-            <div className="flex space-x-4">
-              <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
-              <FaGoogle className="text-red-600 text-2xl cursor-pointer" />
-            </div>
+            <p className="text-gray-600 text-sm">Hoặc đăng nhập với</p>
           </div>
+
+          <div
+            id="google-signin-button"
+            className="mt-2 flex justify-center w-full"
+          ></div>
 
           <p className="text-center text-gray-500 mt-3 text-sm">
             Bạn chưa có tài khoản?{" "}
