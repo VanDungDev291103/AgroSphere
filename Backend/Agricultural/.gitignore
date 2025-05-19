@@ -5,34 +5,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# IDE - Intellij IDEA
-.idea/
-*.iws
-*.iml
-*.ipr
+# Compiled class file
+*.class
 
-# IDE - Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-# IDE - VS Code
-.vscode/
-
-# Logs
+# Log files
 logs/
-*.log
 log/
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+*.log
 
 # Package Files
 *.jar
@@ -42,29 +21,51 @@ log/
 *.zip
 *.tar.gz
 *.rar
-
-# virtual machine crash logs
-hs_err_pid*
-replay_pid*
-
-# Maven Wrapper
 !maven-wrapper.jar
+!gradle-wrapper.jar
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# IDE - Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# IDE - NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# IDE - VS Code
+.vscode/
 
 # Gradle
 .gradle
 **/build/
 !src/**/build/
 gradle-app.setting
-!gradle-wrapper.jar
 .gradletasknamecache
 
 # Node modules
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# Miscellaneous
-*.class
 
 # OS specific files
 .DS_Store
@@ -75,90 +76,22 @@ yarn-error.log
 ehthumbs.db
 Thumbs.db
 
-# Các thư mục build và biên dịch
-**/target/
-**/bin/
-**/build/
-**/out/
-
-# Logs
-**/logs/
-**/*.log
-
-# Các file hệ thống
-.DS_Store
-Thumbs.db
-
-# IntelliJ IDEA
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-# Eclipse
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-# NetBeans
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-# Spring Boot
-.spring-boot-devtools
-
 # Application properties with sensitive data
 src/main/resources/application-local.yml
 src/main/resources/application-local.properties
-
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# Package Files
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Maven
-target/
-.mvn/
-mvnw
-mvnw.cmd
-
-# Eclipse
-.settings/
-.project
-.classpath
-
-# IntelliJ IDEA
-.idea/
-*.iws
-*.iml
-*.ipr
-
-# VS Code
-.vscode/
-
-# Spring Boot
 application-dev.yml
 application-prod.yml
 application-local.yml
 
+# Spring Boot specific
+.spring-boot-devtools
+
 # Database
 *.db
 
-# OS
-.DS_Store
-Thumbs.db
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
 
-# App
-log/
-logs/
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*

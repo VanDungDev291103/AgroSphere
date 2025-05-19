@@ -17,30 +17,31 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        
+
         // Cho phép cookies
         config.setAllowCredentials(true);
-        
+
         // Cho phép các origins cụ thể
         config.addAllowedOrigin("http://localhost:5173"); // Frontend URL
+        config.addAllowedOrigin("http://localhost:5174"); // Frontend URL
         config.addAllowedOrigin("http://127.0.0.1:5173");
         config.addAllowedOrigin("http://localhost:3000"); // Frontend URL cũ
         config.addAllowedOrigin("http://127.0.0.1:3000");
         // Không cần URL ngrok nữa
-        
+
         // Cho phép tất cả headers
         config.addAllowedHeader("*");
-        
+
         // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
         config.addAllowedMethod("*");
-        
+
         // Cho phép truy cập headers cụ thể trong response
         config.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
-        
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-    
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -48,8 +49,8 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                            "http://localhost:5173", 
-                            "http://127.0.0.1:5173"
+                                "http://localhost:5173",
+                                "http://127.0.0.1:5173"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
